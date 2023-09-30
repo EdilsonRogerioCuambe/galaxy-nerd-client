@@ -1,46 +1,38 @@
-# Getting Started with Create React App
+# Galaxy Nerd - Plataforma de E-learning com Inteligência Artificial
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+![Galaxy Nerd](./src/assets/images/tela_1.png)
 
-## Available Scripts
+## Sobre o Projeto
 
-In the project directory, you can run:
+Galaxy Nerd é uma plataforma de e-learning inovadora construída com ReactJS e alimentada por poderosas técnicas de Inteligência Artificial (IA). Nosso objetivo é revolucionar a forma como os estudantes aprendem, oferecendo uma experiência personalizada e enriquecedora.
 
-### `npm start`
+## Recursos Principais
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+- Recomendações Inteligentes: Galaxy Nerd utiliza IA avançada para sugerir cursos com base no histórico de busca e preferências do estudante. Isso garante que cada usuário tenha acesso a conteúdo relevante e personalizado.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+- Conexão com o Backend: Nossa plataforma é perfeitamente integrada com um robusto backend que armazena dados de cursos, usuários e interações. Isso garante um desempenho confiável e escalabilidade.
 
-### `npm test`
+- Interface Intuitiva: A interface do Galaxy Nerd foi projetada para ser amigável e fácil de usar, proporcionando uma experiência de aprendizado sem atritos.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Como Começar
+Para começar a usar o Galaxy Nerd, siga estas etapas:
 
-### `npm run build`
+1. Clone este repositório para o seu ambiente de desenvolvimento local.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+2. Instale as dependências executando ```npm install``` ou ```yarn install```.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+3. Configure a conexão com o backend nos arquivos apropriados (consulte a documentação do backend para obter detalhes).
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+4. Inicie o aplicativo com npm start ou yarn start.
 
-### `npm run eject`
+5. Acesse o aplicativo no seu navegador e comece a explorar o vasto mundo do conhecimento!
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+## Contribuição
+Se você deseja contribuir para o desenvolvimento do Galaxy Nerd, estamos ansiosos para receber suas contribuições. Basta seguir as diretrizes de contribuição em nosso repositório e enviar suas solicitações de pull.
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## Contato
+Para obter mais informações sobre o Galaxy Nerd ou para entrar em contato conosco, pelo email: edilson@aluno.unilab.edu.br
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+Explore o universo do conhecimento com Galaxy Nerd - A plataforma de e-learning que coloca você no centro da aprendizagem!
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+![Galaxy Nerd](./src/assets/images/smalllog.png)

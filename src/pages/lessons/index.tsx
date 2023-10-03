@@ -15,7 +15,12 @@ import {
   AccordionItem,
   AccordionButton,
   AccordionPanel,
+  ListIcon,
+  List,
+  ListItem,
 } from '@chakra-ui/react'
+import { MdCheckCircle, MdRadioButtonUnchecked } from 'react-icons/md'
+import { Box } from '@chakra-ui/layout'
 import video from '../../assets/images/video.mp4'
 
 export function Lessons() {
@@ -93,16 +98,16 @@ export function Lessons() {
             </div>
             <div className="w-full md:w-1/4 mt-4 md:mt-0 md:pl-4">
               <div className="md:flex flex-col">
-                <div className="w-full h-14 px-6 py-4 bg-blue-500 rounded-lg flex justify-center items-center gap-2.5">
-                  <BsDiscord className="w-6 h-6 text-white" />
+                <div className="w-full h-14 px-6 py-4 bg-purple-800 rounded-lg flex justify-center items-center gap-2.5">
+                  <BsDiscord className="w-6 h-6 text-[#e1e1e6]" />
                   <Link
                     to="/discord"
-                    className="text-white text-sm font-bold uppercase leading-snug"
+                    className="text-[#c4c4cc] text-sm font-bold uppercase leading-snug"
                   >
                     Comunidade no Discord
                   </Link>
                 </div>
-                <div className="w-full h-14 mt-4 md:mt-4 py-4 border-green-300 border-2 rounded-lg flex justify-center items-center gap-2.5">
+                <div className="w-full h-14 mt-4 md:mt-4 py-4 px-2 border-green-300 border-2 rounded-lg flex justify-center items-center gap-2.5">
                   <SiApachestorm className="w-6 h-6 text-green-300" />
                   <Link
                     to="/challenge"
@@ -200,6 +205,54 @@ export function Lessons() {
             ))}
           </Accordion>
         </div>
+      </div>
+
+      {/** PERGUNTAS */}
+      <div className="bg-secondary relative container mx-auto rounded-md text-[#c4c4cc] p-6 mt-8 h-[calc(100vh-17rem)] overflow-y-auto">
+        <Accordion allowToggle>
+          {fakeQuestions.map((question, index) => (
+            <AccordionItem key={index}>
+              <List spacing={3}>
+                <ListItem>
+                  <AccordionButton
+                    className="flex justify-between items-center py-2 px-4"
+                    _expanded={{ bg: 'gray.800', color: 'white' }}
+                    _focus={{ boxShadow: 'none' }}
+                  >
+                    <div className="flex gap-2 items-center">
+                      <img
+                        className="w-10 h-10 rounded-full"
+                        src={question.avatar}
+                        alt={question.username}
+                      />
+                      <div className="flex flex-col">
+                        <span className="font-bold text-sm">
+                          {question.username}
+                        </span>
+                        <span className="text-xs">{question.createdAt}</span>
+                      </div>
+                    </div>
+                    <div className="flex gap-2 items-center">
+                      <span className="text-xs">
+                        {question.answered ? 'Respondida' : 'Sem resposta'}
+                      </span>
+                      <span className="text-xs">
+                        {question.answered ? (
+                          <MdCheckCircle className="text-green-500" />
+                        ) : (
+                          <MdRadioButtonUnchecked className="text-red-500" />
+                        )}
+                      </span>
+                    </div>
+                  </AccordionButton>
+                </ListItem>
+                <AccordionPanel pb={4} className="text-gray-400 px-4 py-2 mb-2">
+                  {question.questionTitle}
+                </AccordionPanel>
+              </List>
+            </AccordionItem>
+          ))}
+        </Accordion>
       </div>
     </Layout>
   )

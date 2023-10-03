@@ -4,7 +4,7 @@ import { FaHeart } from 'react-icons/fa'
 export function Course({ course }: any) {
   return (
     <>
-      <Link to={`/course/${course.id}`} className="w-full">
+      <Link to={`/course/${course.slug}`} className="w-full">
         <div className="border border-border p-1 hover:scale-95 transitions relative rounded overflow-hidden">
           <Link to={`/course/${course.id}`} className="w-full">
             <img

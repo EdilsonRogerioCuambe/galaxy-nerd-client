@@ -1,5 +1,5 @@
 import { Banner } from '../../components/banner'
-import { MostRatedCourses } from '../../components/mostRatedCourses'
+import { MostRatedCourses } from '../../components/most-rated-courses'
 import { PopularCourses } from '../../components/popularCourses'
 import { Promos } from '../../components/promos'
 import { Layout } from '../../layout'

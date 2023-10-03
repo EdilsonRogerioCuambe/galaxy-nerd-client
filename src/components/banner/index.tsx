@@ -4,7 +4,7 @@ import { Cursos } from '../../data/Cursos'
 import { Link } from 'react-router-dom'
 import { FaHeart } from 'react-icons/fa'
 import { BsFillPlayFill } from 'react-icons/bs'
-import { FlexCourseItens } from '../flexCourseItens'
+import { FlexCourseItens } from '../flex-course-itens'
 
 export function Banner() {
   return (

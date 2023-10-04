@@ -1,10 +1,9 @@
-export function Message({
-  label,
-  placeholder,
-}: {
+interface IMessageProps {
   label: string
   placeholder: string
-}) {
+}
+
+export function Message({ label, placeholder }: IMessageProps) {
   return (
     <>
       <div className="text-sm w-full">
@@ -22,15 +21,18 @@ export function Message({
   )
 }
 
-export function Select({
-  label,
-  options,
-  onChange,
-}: {
+interface ISelectProps {
   label: string
-  options: any
-  onChange: any
-}) {
+  options: Array<{
+    id: number
+    cor?: string
+    descricao?: string
+    titulo?: string
+  }>
+  onChange: (event: React.ChangeEvent<HTMLSelectElement>) => void
+}
+
+export function Select({ label, options, onChange }: ISelectProps) {
   return (
     <>
       <label htmlFor={label} className="font-semibold text-text">
@@ -41,12 +43,49 @@ export function Select({
         className="w-full mt-2 px-6 py-4 border bg-main border-border rounded text-text"
         onChange={onChange}
       >
-        {options.map((option: any, index: number) => (
+        {options.map((option, index) => (
           <option key={index} value={option.id} className={`${option?.cor}`}>
             {option.descricao || option.titulo}
           </option>
         ))}
       </select>
+    </>
+  )
+}
+
+interface IInputProps {
+  label: string
+  bg?: boolean
+  type: string
+  value: string | undefined
+  placeholder: string
+  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void
+}
+
+export const Input = ({
+  label,
+  bg,
+  type,
+  value,
+  placeholder,
+  onChange,
+}: IInputProps) => {
+  return (
+    <>
+      <div className="text-sm w-full">
+        <label htmlFor={label} className="text-[#e1e1e6] font-bold">
+          {label}
+        </label>
+        <input
+          type={type}
+          value={value}
+          placeholder={placeholder}
+          onChange={onChange}
+          className={`w-full text-sm mt-2 p-4 rounded text-[#c4c4cc] border-quaternary border-2 ${
+            bg ? 'bg-main' : 'bg-secondary'
+          }`}
+        />
+      </div>
     </>
   )
 }

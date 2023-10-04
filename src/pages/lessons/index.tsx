@@ -15,19 +15,15 @@ import {
   AccordionItem,
   AccordionButton,
   AccordionPanel,
-  ListIcon,
   List,
   ListItem,
 } from '@chakra-ui/react'
 import { MdCheckCircle, MdRadioButtonUnchecked } from 'react-icons/md'
-import { Box } from '@chakra-ui/layout'
 import video from '../../assets/images/video.mp4'
 
 export function Lessons() {
   const { slug } = useParams()
   const [course, setCourse] = useState<any>(undefined)
-
-  const [videoPlayed, setVideoPlayed] = useState<any>({})
 
   useEffect(() => {
     const course = Cursos.find((course) => course.slug === slug)
@@ -168,7 +164,7 @@ export function Lessons() {
         <div className="w-full md:w-2/6 right-0 top-18 mx-2 bg-opacity-40 mt-4 md:mt-0">
           <Accordion
             allowMultiple
-            className="overflow-y-auto h-[calc(100vh-17rem)] bg-main rounded-md"
+            className="overflow-y-auto h-[calc(100vh-1rem)] bg-main rounded-md"
           >
             {course?.topicos?.map((topico: any, index: number) => (
               <AccordionItem

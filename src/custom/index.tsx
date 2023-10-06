@@ -23,9 +23,9 @@ export function Message({ label, placeholder }: IMessageProps) {
 
 interface ISelectProps {
   label: string
+  value?: string | undefined
   options: Array<{
-    id: number
-    cor?: string
+    id: string
     descricao?: string
     titulo?: string
   }>
@@ -44,7 +44,7 @@ export function Select({ label, options, onChange }: ISelectProps) {
         onChange={onChange}
       >
         {options.map((option, index) => (
-          <option key={index} value={option.id} className={`${option?.cor}`}>
+          <option key={index} value={option.id}>
             {option.descricao || option.titulo}
           </option>
         ))}
@@ -54,6 +54,7 @@ export function Select({ label, options, onChange }: ISelectProps) {
 }
 
 interface IInputProps {
+  name?: string
   label: string
   bg?: boolean
   type: string
@@ -69,6 +70,7 @@ export const Input = ({
   value,
   placeholder,
   onChange,
+  name,
 }: IInputProps) => {
   return (
     <>
@@ -77,6 +79,8 @@ export const Input = ({
           {label}
         </label>
         <input
+          title={label}
+          name={name}
           type={type}
           value={value}
           placeholder={placeholder}

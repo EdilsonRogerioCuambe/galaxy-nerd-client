@@ -37,12 +37,12 @@ export function Categories() {
             </button>
           </div>
 
-          <UsersOrCategoriesTable
+          {/* <UsersOrCategoriesTable
             data={CourseCategories}
             index={0}
             users={false}
             handleEdit={handleEdit}
-          />
+          /> */}
         </div>
       </SideBar>
     </>

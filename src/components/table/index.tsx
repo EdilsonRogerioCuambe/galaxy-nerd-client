@@ -3,13 +3,20 @@ import { FaEdit, FaPlay } from 'react-icons/fa'
 import { Link } from 'react-router-dom'
 
 interface Curso {
-  id?: number
+  id?: string
   imagem?: string
   thumbnail?: string
-  nome?: string
+  title?: string
   slug?: string
-  descricao?: string
-  categoria?: string
+  description?: string
+  category?: {
+    id?: string
+    name?: string
+  }
+  instructor?: {
+    id?: string
+    name?: string
+  }
   linguagem?: string
   duracao?: string
   nivel?: string
@@ -24,6 +31,7 @@ interface Curso {
       concluido?: boolean
     }>
   }>
+  price?: string
 }
 
 interface LinesProps {
@@ -41,17 +49,24 @@ export function Lines({ curso, index, admin }: LinesProps) {
         <td className={`${Text}`}>
           <div className="w-12 p-1 bg-main boder border h-12 rounded overflow-hidden">
             <img
-              src={curso.thumbnail || curso.imagem}
-              alt={curso.nome}
+              src={curso?.thumbnail}
+              alt={curso?.title}
               className="w-full h-full object-cover"
             />
           </div>
         </td>
-        <td className={`${Text} truncate`}>{curso.nome}</td>
-        <td className={`${Text}`}>{curso.duracao}</td>
-        <td className={`${Text}`}>{curso.nivel}</td>
-        <td className={`${Text}`}>{curso.categoria}</td>
-        <td className={`${Text} float-right flex-rows gap-2`}>
+        <td className={`${Text} truncate`}>{curso?.title}</td>
+        <td className={`${Text}`}>{curso?.instructor?.name}</td>
+        <td className={`${Text}`}>{curso?.category?.name}</td>
+        <td className={`${Text}`}>
+          {new Intl.NumberFormat('pt-BR', {
+            style: 'currency',
+            currency: 'BRL',
+          }).format(Number(curso?.price))}
+        </td>
+        <td
+          className={`${Text} float-right align-middle items-center justify-center flex-rows gap-2`}
+        >
           {admin ? (
             <>
               <button
@@ -71,7 +86,7 @@ export function Lines({ curso, index, admin }: LinesProps) {
             </>
           ) : (
             <>
-              <Link to={`/curso/${curso.id}`}>
+              <Link to={`/curso/${curso?.id}`}>
                 <button
                   type="button"
                   title="Reproduzir"
@@ -103,19 +118,19 @@ export function Table({ data, admin }: TableProps) {
           <thead>
             <tr className="bg-dryGray">
               <th scope="col" className={`${Head}`}>
-                Imagem
+                Thumbnail
               </th>
               <th scope="col" className={`${Head}`}>
-                Nome
+                Titulo
               </th>
               <th scope="col" className={`${Head}`}>
-                Ano
+                Instrutor
               </th>
               <th scope="col" className={`${Head}`}>
-                Duração
+                Categoria
               </th>
-              <th scope="col" className={`${Head}`}>
-                Gênero
+              <th scope="col" className={`${Head} text-end`}>
+                Preço
               </th>
               <th scope="col" className={`${Head} text-end`}>
                 Ações
@@ -123,7 +138,7 @@ export function Table({ data, admin }: TableProps) {
             </tr>
           </thead>
           <tbody className="bg-main divide-gray-800">
-            {data.map((curso, index) => (
+            {data?.map((curso, index) => (
               <Lines key={index} curso={curso} index={index} admin={admin} />
             ))}
           </tbody>

@@ -3,8 +3,11 @@ import { BiSearchAlt2 } from 'react-icons/bi'
 import { AiFillHeart } from 'react-icons/ai'
 import { FaUserAlt } from 'react-icons/fa'
 import logo from '../../assets/images/logo.png'
-
+import { useSelector, useDispatch } from 'react-redux'
+import { RootState } from '../../store'
 export function NavigationBar() {
+  const { user: admin } = useSelector((state: RootState) => state.adminAuth)
+  const dispatch = useDispatch()
   const hover = 'hover:text-[#c4c4cc] transition duration-300 ease-in-out'
 
   const Hover = ({ isActive }: { isActive: boolean }) =>
@@ -50,15 +53,30 @@ export function NavigationBar() {
             <NavLink className={Hover} to="/contact">
               Contato
             </NavLink>
-            <NavLink className={`${Hover} relative`} to="/favorites">
-              <AiFillHeart className="w-6 h-6 text-quinary" />
-              <div className="absolute flex justify-center items-center bg-secondary text-white w-4 h-4 rounded-full -top-1 -right-1 text-xs">
-                0
-              </div>
-            </NavLink>
-            <NavLink className={Hover} to="/entrar">
-              <FaUserAlt className="w-6 h-6" />
-            </NavLink>
+            {admin ? (
+              <>
+                <NavLink className={`${Hover} relative`} to="/favorites">
+                  <AiFillHeart className="w-6 h-6 text-quinary" />
+                  <div className="absolute flex justify-center items-center bg-secondary text-white w-4 h-4 rounded-full -top-1 -right-1 text-xs">
+                    0
+                  </div>
+                </NavLink>
+                <NavLink className={`${Hover} relative`} to="/admin-dashboard">
+                  <img
+                    src={admin.avatar}
+                    alt="avatar"
+                    className="w-10 h-10 rounded-full"
+                  />
+                </NavLink>
+              </>
+            ) : (
+              <NavLink className={`${Hover} relative`} to="/login">
+                <FaUserAlt className="w-6 h-6 text-quinary" />
+                <div className="absolute flex justify-center items-center bg-secondary text-white w-4 h-4 rounded-full -top-1 -right-1 text-xs">
+                  0
+                </div>
+              </NavLink>
+            )}
           </div>
         </div>
       </div>

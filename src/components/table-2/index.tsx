@@ -9,6 +9,8 @@ interface Category {
   id: string
   name: string
   icon?: string
+  description: string
+  createdAt: string
 }
 
 type Data = (User | Category)[]
@@ -28,31 +30,35 @@ export function Lines({ data, index, users, handleEdit }: Props) {
       const user = item as User
       return (
         <>
-          <td className={`${Body}`}>{user.id}</td>
+          <td className={`${Body}`}>{user?.id}</td>
           <td className={`${Body}`}>
             <img
-              src={user.avatar}
-              alt={user.name}
+              src={user?.avatar}
+              alt={user?.name}
               className="w-8 h-8 rounded-full"
             />
           </td>
-          <td className={`${Body}`}>{user.name}</td>
-          <td className={`${Body}`}>{user.email}</td>
+          <td className={`${Body}`}>{user?.name}</td>
+          <td className={`${Body}`}>{user?.email}</td>
         </>
       )
     } else {
       const category = item as Category
       return (
         <>
-          <td className={`${Body}`}>{category.id}</td>
+          <td className={`${Body}`}>{category?.id}</td>
           <td className={`${Body}`}>
             <img
-              src={category.icon}
-              alt={category.name}
-              className="w-8 h-8 rounded-full"
+              src={category?.icon}
+              alt={category?.name}
+              className="w-8 h-8 object-cover"
             />
           </td>
-          <td className={`${Body}`}>{category.name}</td>
+          <td className={`${Body}`}>{category?.name}</td>
+          <td className={`${Body}`}>{category?.description}</td>
+          <td className={`${Body}`}>
+            {new Date(category?.createdAt).toLocaleDateString('pt-BR')}
+          </td>
         </>
       )
     }
@@ -66,7 +72,7 @@ export function Lines({ data, index, users, handleEdit }: Props) {
           title="Editar"
           type="button"
           onClick={() => handleEdit(data[index].id)} // Assuming 'id' always exists
-          className="text-main hover:text-secondary"
+          className="text-[#c4c4cc] rounded py-1 px-1 hover:text-green-500]"
         >
           Editar
         </button>
@@ -81,8 +87,8 @@ export function UsersOrCategoriesTable({ data, users, handleEdit }: Props) {
 
   return (
     <>
-      <div className="overflow-x-scroll overflow-hidden relative w-full">
-        <table className="w-full table-auto">
+      <div className="overflow-x-scroll relative w-full">
+        <table className="w-max table-auto">
           <thead>
             <tr className="bg-secondary">
               {users ? (
@@ -111,6 +117,12 @@ export function UsersOrCategoriesTable({ data, users, handleEdit }: Props) {
                   <th scope="col" className={`${Head}`}>
                     Nome
                   </th>
+                  <th scope="col" className={`${Head}`}>
+                    Descrição
+                  </th>
+                  <th scope="col" className={`${Head}`}>
+                    Criado em
+                  </th>
                 </>
               )}
 
@@ -120,7 +132,7 @@ export function UsersOrCategoriesTable({ data, users, handleEdit }: Props) {
             </tr>
           </thead>
           <tbody className="bg-main divide-gray-800">
-            {data.map((item, index) => (
+            {data?.map((item, index) => (
               <Lines
                 key={index}
                 data={data}

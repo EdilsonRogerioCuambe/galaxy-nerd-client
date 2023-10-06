@@ -1,22 +1,26 @@
-import { SideBar } from '../../layout/sidebar'
 import { FaRegListAlt, FaUsers } from 'react-icons/fa'
 import { HiViewGrid } from 'react-icons/hi'
-import { Table } from '../../components/table'
-import { Cursos } from '../../data/Cursos'
+import { Table } from '../../../components/table'
+import { AdminSideBar } from '../../../layout/sidebar/admin'
+import { useGetCategoriesQuery } from '../../../slices/categorySlices/categoryApiSlice'
+import { useGetCoursesQuery } from '../../../slices/courseSlices/courseApiSlice'
 
-export function Dashboard() {
+export function AdminDashboard() {
+  const { data: categories } = useGetCategoriesQuery({})
+  const { data: courses } = useGetCoursesQuery({})
+
   const data = [
     {
       bg: 'bg-purple-300',
       icon: <FaRegListAlt className="text-2xl" />,
-      titulo: 'Total de Filmes',
-      total: 90,
+      titulo: 'Total de Cursos',
+      total: courses?.courses.length || 0,
     },
     {
       bg: 'bg-green-300',
       icon: <HiViewGrid className="text-2xl" />,
       titulo: 'Total de Categorias',
-      total: 10,
+      total: categories?.categories.length || 0,
     },
     {
       bg: 'bg-yellow-300',
@@ -25,10 +29,15 @@ export function Dashboard() {
       total: 100,
     },
   ]
+
+  console.log(courses)
+
   return (
     <>
-      <SideBar>
-        <h2>Dashboard</h2>
+      <AdminSideBar>
+        <div className="flex-betweens gap-2">
+          <h2 className="text-xl font-bold">Dashboard</h2>
+        </div>
         <div className="grid sm:grid-cols-2 lg:grid-col-3 gap-6 mt-4">
           {data.map((item, index) => (
             <div
@@ -50,8 +59,8 @@ export function Dashboard() {
         <h3 className="text-md font-medium italic my-6 text-[#e1e1e6]">
           Últimos Cursos
         </h3>
-        {/* <Table data={Cursos.slice(0, 5)} admin={true} /> */}
-      </SideBar>
+        <Table data={courses?.courses} admin={true} />
+      </AdminSideBar>
     </>
   )
 }

@@ -25,37 +25,37 @@ type Curso = {
 export function RatingCourse({ course }: { course: Curso }) {
   const Pontuacoes = [
     {
-      id: 0,
+      id: '0',
       titulo: 'Nenhuma',
       descricao: '0 estrelas',
       icone: <FaRegStar />,
     },
     {
-      id: 1,
+      id: '1',
       titulo: 'Muito Ruim',
       descricao: '1 estrela',
       icone: <FaRegStar />,
     },
     {
-      id: 2,
+      id: '2',
       titulo: 'Ruim',
       descricao: '2 estrelas',
       icone: <FaStarHalfAlt />,
     },
     {
-      id: 3,
+      id: '3',
       titulo: 'Bom',
       descricao: '3 estrelas',
       icone: <FaStar />,
     },
     {
-      id: 4,
+      id: '4',
       titulo: 'Muito Bom',
       descricao: '4 estrelas',
       icone: <FaStar />,
     },
     {
-      id: 5,
+      id: '5',
       titulo: 'Excelente',
       descricao: '5 estrelas',
       icone: <FaStar />,
@@ -82,6 +82,7 @@ export function RatingCourse({ course }: { course: Curso }) {
                 label="Pontuação"
                 options={Pontuacoes}
                 onChange={(e: any) => setPontuacao(e.target.value)}
+                key={course ? course.id : ''}
               />
               <div className="flex mt-4 text-lg gap-2 text-yellow-500">
                 <Stars stars={pontuacao} />

@@ -1,6 +1,6 @@
 import { Banner } from '../../components/banner'
 import { MostRatedCourses } from '../../components/most-rated-courses'
-import { PopularCourses } from '../../components/popularCourses'
+import { PopularCourses } from '../../components/popular-courses'
 import { Promos } from '../../components/promos'
 import { Layout } from '../../layout'
 

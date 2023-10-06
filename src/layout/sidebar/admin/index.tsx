@@ -2,50 +2,50 @@ import { BsFillGridFill } from 'react-icons/bs'
 import { FaHeart, FaList, FaUsers } from 'react-icons/fa'
 import { RiLockPasswordLine, RiMovie2Fill } from 'react-icons/ri'
 import { HiViewGrid } from 'react-icons/hi'
-import { Layout } from '..'
+import { Layout } from '../..'
 import { NavLink } from 'react-router-dom'
 import React from 'react'
 
-export function SideBar({ children }: { children: React.ReactNode }) {
+export function AdminSideBar({ children }: { children: React.ReactNode }) {
   const links = [
     {
       title: 'Dashboard',
-      link: '/dashboard',
+      link: '/admin-dashboard',
       icon: <BsFillGridFill className="w-6 h-6" />,
     },
     {
       title: 'Cursos',
-      link: '/courses-list',
+      link: '/admin-courses-list',
       icon: <FaList className="w-6 h-6" />,
     },
-    {
-      title: 'Add Curso',
-      link: '/add-course',
-      icon: <RiMovie2Fill className="w-6 h-6" />,
-    },
+    // {
+    //   title: 'Add Curso',
+    //   link: '/admin-add-course',
+    //   icon: <RiMovie2Fill className="w-6 h-6" />,
+    // },
     {
       title: 'Categorias',
-      link: '/categories',
+      link: '/admin-categories',
       icon: <HiViewGrid className="w-6 h-6" />,
     },
     {
       title: 'Usuários',
-      link: '/usuarios',
+      link: '/admin-users',
       icon: <FaUsers className="w-6 h-6" />,
     },
     {
       title: 'Atualizar Perfil',
-      link: '/atualizar-perfil',
+      link: '/admin-atualizar-perfil',
       icon: <FaUsers className="w-6 h-6" />,
     },
     {
       title: 'Favoritos',
-      link: '/favoritos',
+      link: '/admin-favoritos',
       icon: <FaHeart className="w-6 h-6" />,
     },
     {
       title: 'Mudar Senha',
-      link: '/mudar-senha',
+      link: '/admin-mudar-senha',
       icon: <RiLockPasswordLine className="w-6 h-6" />,
     },
   ]

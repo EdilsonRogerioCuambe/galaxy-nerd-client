@@ -14,7 +14,7 @@ export function CoursesLists() {
             </button>
           </div>
 
-          <Table data={Cursos} admin={false} />
+          {/* <Table data={Cursos} admin={false} /> */}
         </div>
       </SideBar>
     </>

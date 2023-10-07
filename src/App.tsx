@@ -13,6 +13,7 @@ import { AdminDashboard } from './pages/dashboard/admin'
 import { AdminCategories } from './pages/categories/admin'
 import { AdminCoursesLists } from './pages/courses-lists/admin'
 import { AdminUsersList } from './pages/users-list'
+import { AdminUpdateProfile } from './pages/update-profile/admin'
 
 const App = () => {
   Aos.init()
@@ -32,6 +33,7 @@ const App = () => {
         <Route path="/admin-categories" element={<AdminCategories />} />
         <Route path="/admin-courses-list" element={<AdminCoursesLists />} />
         <Route path="/admin-users" element={<AdminUsersList />} />
+        <Route path="/admin-update-profile" element={<AdminUpdateProfile />} />
       </Routes>
     </>
   )

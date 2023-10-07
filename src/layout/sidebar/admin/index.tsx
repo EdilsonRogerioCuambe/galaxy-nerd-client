@@ -35,7 +35,7 @@ export function AdminSideBar({ children }: { children: React.ReactNode }) {
     },
     {
       title: 'Atualizar Perfil',
-      link: '/admin-atualizar-perfil',
+      link: '/admin-update-profile',
       icon: <FaUsers className="w-6 h-6" />,
     },
     {

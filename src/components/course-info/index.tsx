@@ -2,52 +2,60 @@ import { FaPlay, FaShareAlt } from 'react-icons/fa'
 import { FlexCourseItens } from '../flex-course-itens'
 import { Stars } from '../stars'
 import { Link } from 'react-router-dom'
+import EditorJsParser from 'editorjs-html'
 
-type Curso = {
-  id: number
-  imagem: string
+interface CoursesProps {
+  id: string
+  title: string
+  description: string
   thumbnail: string
-  nome: string
+  price: string
+  rating: number
   slug: string
-  descricao: string
-  categoria: string
-  linguagem: string
-  duracao: string
-  nivel: string
-  link: string
-  avaliacao: number
-  avaliacoes: number
+  instructor: {
+    name: string
+    avatar: string
+  }
+  category: {
+    name: string
+    icon: string
+  }
 }
 
-export function CourseInfo({ course }: { course: Curso }) {
+export function CourseInfo({ course }: { course: CoursesProps }) {
+  const editor = EditorJsParser()
+  const description = editor.parse(JSON.parse(course?.description)).join('')
   return (
     <div className="w-full xl:h-screen relative text-[#e1e1e6]">
       <img
-        src={course.thumbnail}
-        alt={course.nome}
+        src={course?.thumbnail}
+        alt={course.title}
         className="w-full hidden xl:inline-block h-full object-cover"
       />
       <div className="xl:bg-main bg-secondary flex-colo xl:bg-opacity-90 xl:absolute top-0 left-0 right-0 bottom-0">
         <div className="container px-3 mx-auto 2xl:px-32 xl:grid grid-cols-3 flex-colo py-10 lg:py-20 gap-8">
           <div className="xl:col-span-1 w-full xl:order-none order-last h-header bg-secondary border-gray-800 rounded-lg overflow-hidden">
             <img
-              src={course.thumbnail}
-              alt={course.nome}
+              src={course?.thumbnail}
+              alt={course?.title}
               className="w-full h-full object-cover"
             />
           </div>
           <div className="col-span-2 md:grid grid-cols-5 gap-4 items-center">
             <div className="col-span-3 flex flex-col gap-10">
               <h1 className="xl:text-4xl capitalize text-2xl font-extrabold">
-                {course.nome}
+                {course?.title}
               </h1>
 
               <div className="flex items-center gap-4 font-medium text-[#e1e1e6]">
                 <FlexCourseItens course={course} />
               </div>
-              <p className="text-[#c4c4cc] text-sm leading-7">
-                {course.descricao}
-              </p>
+              <p
+                className="text-[#c4c4cc] text-md leading-7"
+                dangerouslySetInnerHTML={{
+                  __html: description.substring(0, 150),
+                }}
+              ></p>
 
               <div className="grid sm:grid-cols-3 grid-cols-3 gap-4 p-6 bg-main border border-gray-900 rounded-lg">
                 <div className="col-span-1 flex-col border-r border-[#c4c4cc]">
@@ -62,9 +70,9 @@ export function CourseInfo({ course }: { course: Curso }) {
                 <div className="col-span-2 flex flex-col gap-2">
                   <h2 className="text-xl font-semibold">Avaliações</h2>
                   <div className="flex items-center gap-2">
-                    <Stars stars={course.avaliacoes} />
+                    <Stars stars={course?.rating} />
                     <span className="text-[#c4c4cc] text-sm">
-                      {course.avaliacoes} de 5
+                      {course?.rating}
                     </span>
                   </div>
                 </div>

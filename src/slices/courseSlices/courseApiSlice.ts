@@ -12,6 +12,10 @@ export const coursesApiSlice = courseApiSlice.injectEndpoints({
       query: (id) => `${COURSES_API_ENDPOINT}/${id}`,
       providesTags: ['Course'],
     }),
+    getCourseBySlug: builder.query({
+      query: (slug) => `${COURSES_API_ENDPOINT}/slug/${slug}`,
+      providesTags: ['Course'],
+    }),
     createCourse: builder.mutation({
       query: (body) => ({
         url: COURSES_API_ENDPOINT,
@@ -44,4 +48,5 @@ export const {
   useCreateCourseMutation,
   useUpdateCourseMutation,
   useDeleteCourseMutation,
+  useGetCourseBySlugQuery,
 } = coursesApiSlice

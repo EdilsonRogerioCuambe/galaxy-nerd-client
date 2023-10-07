@@ -15,7 +15,7 @@ export function SampleLessons({ course }: { course: any }) {
       <Header header="O que você vai aprender" Icon={MdOutlinePlayLesson} />
       <div className="mt-10">
         <Accordion.Root type="single">
-          {course.topicos.map(
+          {course?.topicos?.map(
             (
               topico: {
                 titulo: string
@@ -27,26 +27,26 @@ export function SampleLessons({ course }: { course: any }) {
                 <AccordionHeader className="flex items-center justify-between w-full py-4 px-6 text-left border-b border-[#c4c4cc]">
                   <AccordionTrigger className="flex items-center justify-between w-full">
                     <span className="text-lg font-semibold">
-                      {topico.titulo}
+                      {topico?.titulo}
                     </span>
                     <span className="text-[#c4c4cc]">
-                      {topico.videos.length} aulas
+                      {topico?.videos.length} aulas
                     </span>
                   </AccordionTrigger>
                 </AccordionHeader>
                 <AccordionContent className="py-4 px-6">
                   <ul className="space-y-2">
-                    {topico.videos.map(
+                    {topico?.videos.map(
                       (
                         video: { titulo: string; link: string },
                         index: number,
                       ) => (
                         <li key={index}>
                           <Link
-                            to={`/course/${course.slug}/${video.link}`}
+                            to={`/course/${course?.slug}/${video.link}`}
                             className="text-lg font-semibold"
                           >
-                            {video.titulo}
+                            {video?.titulo}
                           </Link>
                         </li>
                       ),

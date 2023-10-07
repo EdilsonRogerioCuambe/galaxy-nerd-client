@@ -6,23 +6,25 @@ import { BsBookmarkStarFill } from 'react-icons/bs'
 import { Header } from '../header'
 import { Message, Select } from '../../custom'
 
-type Curso = {
-  id: number
-  imagem: string
+interface CoursesProps {
+  id: string
+  title: string
+  description: string
   thumbnail: string
-  nome: string
+  price: string
+  rating: number
   slug: string
-  descricao: string
-  categoria: string
-  linguagem: string
-  duracao: string
-  nivel: string
-  link: string
-  avaliacao: number
-  avaliacoes: number
+  instructor: {
+    name: string
+    avatar: string
+  }
+  category: {
+    name: string
+    icon: string
+  }
 }
 
-export function RatingCourse({ course }: { course: Curso }) {
+export function RatingCourse({ course }: { course: CoursesProps }) {
   const Pontuacoes = [
     {
       id: '0',
@@ -71,7 +73,7 @@ export function RatingCourse({ course }: { course: Curso }) {
         <div className="mt-10 xl:grid flex-colo grid-cols-5 gap-12 bg-secondary text-[#c4c4cc] xs:p-10 py-10 px-2 sm:p-20 rounded">
           <div className="xl:col-span-2 w-full flex flex-col gap-8">
             <h3 className="text-xl text-[#e1e1e6] font-semibold">
-              {course?.nome}
+              {course?.title}
             </h3>
             <p className="text-sm leading-7 font-medium text-border">
               Escreva uma resenha para este curso, e ajude outros usuários a
@@ -92,7 +94,11 @@ export function RatingCourse({ course }: { course: Curso }) {
               label="Mensagem"
               placeholder="Escreva uma resenha para este filme, e ajude outros usuários a escolherem o melhor filme para assistir."
             />
-            <button className="bg-quinary text-[#e1e1e6] py-3 w-full flex-colo rounded">
+            <button
+              type="button"
+              title="enviar"
+              className="bg-quinary text-[#e1e1e6] py-3 w-full flex-colo rounded"
+            >
               Enviar
             </button>
           </div>

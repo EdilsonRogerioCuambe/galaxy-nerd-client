@@ -1,10 +1,16 @@
 import { useGetAdminsQuery } from '../../slices/admin/apiSlice/adminsApiSlice'
+import { useGetInstructorsQuery } from '../../slices/instructor/apiSlice/instructorsApiSlice'
 import { AdminSideBar } from '../../layout/sidebar/admin'
 import { UsersOrCategoriesTable } from '../../components/table-2'
-import { useEffect, useState } from 'react'
 
 export function AdminUsersList() {
   const { data: admins } = useGetAdminsQuery({})
+  const { data: instructors } = useGetInstructorsQuery({})
+
+  const combinedData = [
+    ...(admins?.admins || []),
+    ...(instructors?.instructors || []),
+  ]
 
   const handleEdit = (id: string) => {
     console.log(id)
@@ -18,7 +24,7 @@ export function AdminUsersList() {
         </div>
         <UsersOrCategoriesTable
           users={true}
-          data={admins}
+          data={combinedData}
           index={0}
           key={0}
           handleEdit={handleEdit}

@@ -5,11 +5,11 @@ export function FlexCourseItens({ course }: { course: any }) {
     <>
       <div className="flex items-center gap-2">
         <BiCategoryAlt className="w-4 h-4 text-green-400" />
-        <span className="text-md font-medium">{course.categoria}</span>
+        <span className="text-md font-medium">{course?.category?.name}</span>
       </div>
       <div className="flex items-center gap-2">
         <BiTime className="w-6 h-4 text-green-400" />
-        <span className="text-md font-medium">{course.duracao}</span>
+        <span className="text-md font-medium">{course?.duracao}</span>
       </div>
     </>
   )

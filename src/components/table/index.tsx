@@ -86,7 +86,7 @@ export function Lines({ curso, index, admin }: LinesProps) {
             </>
           ) : (
             <>
-              <Link to={`/curso/${curso?.id}`}>
+              <Link to={`/course/${curso?.slug}`}>
                 <button
                   type="button"
                   title="Reproduzir"

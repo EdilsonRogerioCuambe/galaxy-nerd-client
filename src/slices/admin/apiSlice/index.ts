@@ -5,10 +5,12 @@ import { RootState } from '../../../store'
 const baseQuery = fetchBaseQuery({
   baseUrl: 'http://localhost:3333',
   prepareHeaders: (headers, { getState }) => {
-    const state: RootState = getState() as RootState
-    const token = state.adminAuth.token
-    headers.set('authorization', `Bearer ${token}`)
-    console.log(token)
+    const adminAuth = (getState() as RootState).adminAuth
+    console.log(adminAuth.token)
+
+    if (adminAuth && adminAuth.token) {
+      headers.set('authorization', `Bearer ${adminAuth.token}`)
+    }
     return headers
   },
 })

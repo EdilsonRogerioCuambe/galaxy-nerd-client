@@ -2,11 +2,12 @@
 import { createSlice } from '@reduxjs/toolkit'
 
 const storedUser = localStorage.getItem('user')
+const storedToken = localStorage.getItem('token')
 
 const initialState = {
   // Define o estado inicial do reducer
   user: storedUser ? JSON.parse(storedUser) : null,
-  token: null,
+  token: storedToken || null,
 }
 
 const authSlice = createSlice({

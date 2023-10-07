@@ -3,6 +3,7 @@ interface User {
   name: string
   email: string
   avatar: string
+  role: string
 }
 
 interface Category {
@@ -40,6 +41,7 @@ export function Lines({ data, index, users, handleEdit }: Props) {
           </td>
           <td className={`${Body}`}>{user?.name}</td>
           <td className={`${Body}`}>{user?.email}</td>
+          <td className={`${Body}`}>{user?.role}</td>
         </>
       )
     } else {
@@ -104,6 +106,9 @@ export function UsersOrCategoriesTable({ data, users, handleEdit }: Props) {
                   </th>
                   <th scope="col" className={`${Head}`}>
                     Email
+                  </th>
+                  <th scope="col" className={`${Head}`}>
+                    Role
                   </th>
                 </>
               ) : (

@@ -6,8 +6,6 @@ const baseQuery = fetchBaseQuery({
   baseUrl: 'http://localhost:3333',
   prepareHeaders: (headers, { getState }) => {
     const adminAuth = (getState() as RootState).adminAuth
-    console.log(adminAuth.token)
-
     if (adminAuth && adminAuth.token) {
       headers.set('authorization', `Bearer ${adminAuth.token}`)
     }

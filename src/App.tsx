@@ -14,9 +14,14 @@ import { AdminCategories } from './pages/categories/admin'
 import { AdminCoursesLists } from './pages/courses-lists/admin'
 import { AdminUsersList } from './pages/users-list'
 import { AdminUpdateProfile } from './pages/update-profile/admin'
+import { AdminPrivateRoutes } from './pages/private/admin'
+import { RootState } from './store'
+import { useSelector } from 'react-redux'
 
 const App = () => {
+  const { user: admin } = useSelector((state: RootState) => state.adminAuth)
   Aos.init()
+
   return (
     <>
       <Routes>
@@ -29,11 +34,18 @@ const App = () => {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/categories" element={<Categories />} />
         <Route path="/add-course" element={<AddCourse />} />
-        <Route path="/admin-dashboard" element={<AdminDashboard />} />
-        <Route path="/admin-categories" element={<AdminCategories />} />
-        <Route path="/admin-courses-list" element={<AdminCoursesLists />} />
-        <Route path="/admin-users" element={<AdminUsersList />} />
-        <Route path="/admin-update-profile" element={<AdminUpdateProfile />} />
+        {admin?.role === 'ADMIN' && (
+          <Route path="/" element={<AdminPrivateRoutes />}>
+            <Route path="admin-dashboard" element={<AdminDashboard />} />
+            <Route path="admin-categories" element={<AdminCategories />} />
+            <Route path="admin-courses-list" element={<AdminCoursesLists />} />
+            <Route path="admin-users" element={<AdminUsersList />} />
+            <Route
+              path="admin-update-profile"
+              element={<AdminUpdateProfile />}
+            />
+          </Route>
+        )}
       </Routes>
     </>
   )

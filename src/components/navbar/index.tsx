@@ -1,10 +1,12 @@
 import { Link, NavLink } from 'react-router-dom'
-import { BiSearchAlt2 } from 'react-icons/bi'
+import { BiLogOut, BiSearchAlt2 } from 'react-icons/bi'
 import { AiFillHeart } from 'react-icons/ai'
 import { FaUserAlt } from 'react-icons/fa'
 import logo from '../../assets/images/logo.png'
 import { useSelector, useDispatch } from 'react-redux'
 import { RootState } from '../../store'
+import { logout } from '../../slices/admin/authSlice'
+
 export function NavigationBar() {
   const { user: admin } = useSelector((state: RootState) => state.adminAuth)
   const dispatch = useDispatch()
@@ -65,9 +67,17 @@ export function NavigationBar() {
                   <img
                     src={admin.avatar}
                     alt="avatar"
-                    className="w-10 h-10 rounded-full"
+                    className="w-10 h-10 rounded-full object-cover"
                   />
                 </NavLink>
+                <button
+                  type="button"
+                  title="Sair"
+                  className={`${Hover} relative`}
+                  onClick={() => dispatch(logout())}
+                >
+                  <BiLogOut className="w-6 h-6 text-quinary" />
+                </button>
               </>
             ) : (
               <NavLink className={`${Hover} relative`} to="/login">

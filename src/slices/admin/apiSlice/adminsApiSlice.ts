@@ -43,10 +43,9 @@ export const adminsApiSlice = adminApiSlice.injectEndpoints({
       }),
     }),
     refreshToken: builder.mutation({
-      query: (body) => ({
-        url: `${ADMINS_API_ENDPOINT}/token/refresh`,
+      query: () => ({
+        url: 'http://localhost:3333/token/refresh',
         method: 'PATCH',
-        body,
       }),
     }),
   }),

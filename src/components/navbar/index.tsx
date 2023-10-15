@@ -6,21 +6,15 @@ import logo from '../../assets/images/logo.png'
 import { useSelector, useDispatch } from 'react-redux'
 import { RootState } from '../../store'
 import { logout } from '../../slices/admin/authSlice'
-import { useRefreshTokenMutation } from '../../slices/admin/apiSlice/adminsApiSlice'
 
 export function NavigationBar() {
-  const { user: admin, token: adminToken } = useSelector(
-    (state: RootState) => state.adminAuth,
-  )
+  const { user: admin } = useSelector((state: RootState) => state.adminAuth)
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const hover = 'hover:text-[#c4c4cc] transition duration-300 ease-in-out'
 
-  const [refreshToken] = useRefreshTokenMutation()
-
   const handleLogout = async () => {
     try {
-      refreshToken({ token: adminToken })
       dispatch(logout())
       navigate('/admin-login')
     } catch (error) {

@@ -34,18 +34,13 @@ const App = () => {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/categories" element={<Categories />} />
         <Route path="/add-course" element={<AddCourse />} />
-        {admin?.role === 'ADMIN' && (
-          <Route path="/" element={<AdminPrivateRoutes />}>
-            <Route path="admin-dashboard" element={<AdminDashboard />} />
-            <Route path="admin-categories" element={<AdminCategories />} />
-            <Route path="admin-courses-list" element={<AdminCoursesLists />} />
-            <Route path="admin-users" element={<AdminUsersList />} />
-            <Route
-              path="admin-update-profile"
-              element={<AdminUpdateProfile />}
-            />
-          </Route>
-        )}
+        <Route path="/" element={<AdminPrivateRoutes />}>
+          <Route path="admin-dashboard" element={<AdminDashboard />} />
+          <Route path="admin-categories" element={<AdminCategories />} />
+          <Route path="admin-courses-list" element={<AdminCoursesLists />} />
+          <Route path="admin-users" element={<AdminUsersList />} />
+          <Route path="admin-update-profile" element={<AdminUpdateProfile />} />
+        </Route>
       </Routes>
     </>
   )

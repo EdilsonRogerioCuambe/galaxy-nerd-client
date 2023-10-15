@@ -10,10 +10,10 @@ import { useGetCategoriesQuery } from '../../../slices/categorySlices/categoryAp
 
 const { Option } = Select
 
-interface ICategories {
+interface ICategory {
   id: string
-  icon: string
   name: string
+  icon: string
 }
 
 export function AdminUpdateProfile() {
@@ -23,6 +23,7 @@ export function AdminUpdateProfile() {
 
   const formik = useFormik({
     initialValues: {
+      id: user?.id || '',
       name: user?.name || '',
       email: user?.email || '',
       biography: user?.biography || '',
@@ -31,6 +32,20 @@ export function AdminUpdateProfile() {
     },
     onSubmit: async (values) => {
       try {
+        console.log(values)
+
+        const res = await updateAdmin({
+          id: values.id,
+          body: {
+            id: values.id,
+            name: values.name,
+            email: values.email,
+            biography: values.biography,
+            interests: values.interests,
+            avatar: values.avatar,
+          },
+        })
+        console.log(res)
         message.success('Perfil atualizado com sucesso!')
       } catch (err) {
         console.error(err)
@@ -78,20 +93,30 @@ export function AdminUpdateProfile() {
             onChange={formik.handleChange}
           />
           <Select
-            mode="tags"
-            style={{ width: '100%' }}
+            mode="multiple"
+            allowClear
             placeholder="Interesses"
-            defaultValue={formik.values.interests}
+            value={formik.values.interests}
             onChange={(value) => formik.setFieldValue('interests', value)}
-            className="py-2"
+            className="w-full my-2 text-[#c4c4cc] border border-[#c4c4cc] rounded-lg"
           >
-            {categories?.categories?.map((category: ICategories) => (
+            {categories?.categories?.map((category: ICategory) => (
               <Option key={category.id} value={category.id}>
+                <img
+                  src={category.icon}
+                  alt={category.name}
+                  className="w-6 h-6 mr-2 object-cover inline-block"
+                />
+                {'  '}
                 {category.name}
               </Option>
             ))}
           </Select>
-          <button title="Atualizar" type="submit" className="btn btn-primary">
+          <button
+            title="Atualizar"
+            type="submit"
+            className="bg-purple-800 text-[#e1e1e6] rounded-lg px-4 py-2"
+          >
             Atualizar
           </button>
         </form>

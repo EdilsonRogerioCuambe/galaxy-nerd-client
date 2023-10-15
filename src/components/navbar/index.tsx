@@ -1,4 +1,4 @@
-import { Link, NavLink } from 'react-router-dom'
+import { Link, NavLink, useNavigate } from 'react-router-dom'
 import { BiLogOut, BiSearchAlt2 } from 'react-icons/bi'
 import { AiFillHeart } from 'react-icons/ai'
 import { FaUserAlt } from 'react-icons/fa'
@@ -6,11 +6,27 @@ import logo from '../../assets/images/logo.png'
 import { useSelector, useDispatch } from 'react-redux'
 import { RootState } from '../../store'
 import { logout } from '../../slices/admin/authSlice'
+import { useRefreshTokenMutation } from '../../slices/admin/apiSlice/adminsApiSlice'
 
 export function NavigationBar() {
-  const { user: admin } = useSelector((state: RootState) => state.adminAuth)
+  const { user: admin, token: adminToken } = useSelector(
+    (state: RootState) => state.adminAuth,
+  )
+  const navigate = useNavigate()
   const dispatch = useDispatch()
   const hover = 'hover:text-[#c4c4cc] transition duration-300 ease-in-out'
+
+  const [refreshToken] = useRefreshTokenMutation()
+
+  const handleLogout = async () => {
+    try {
+      refreshToken({ token: adminToken })
+      dispatch(logout())
+      navigate('/admin-login')
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   const Hover = ({ isActive }: { isActive: boolean }) =>
     isActive
@@ -67,14 +83,14 @@ export function NavigationBar() {
                   <img
                     src={admin.avatar}
                     alt="avatar"
-                    className="w-10 h-10 rounded-full object-cover"
+                    className="w-6 h-6 rounded-full object-cover"
                   />
                 </NavLink>
                 <button
                   type="button"
                   title="Sair"
                   className={`${Hover} relative`}
-                  onClick={() => dispatch(logout())}
+                  onClick={handleLogout}
                 >
                   <BiLogOut className="w-6 h-6 text-quinary" />
                 </button>

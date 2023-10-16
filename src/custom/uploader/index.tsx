@@ -2,17 +2,28 @@ import { useDropzone } from 'react-dropzone'
 import { FiUploadCloud } from 'react-icons/fi'
 import { message } from 'antd'
 
-export function Uploader() {
+interface UploaderProps {
+  setAvatar: (avatar: string) => void
+}
+
+export function Uploader({ setAvatar }: UploaderProps) {
   const { getRootProps, getInputProps } = useDropzone({
     multiple: false,
     maxSize: 1024 * 1024 * 15, // 15MB
     onDrop: (acceptedFiles) => {
       const file = acceptedFiles[0]
       if (file) {
+        // Aqui, definimos a imagem como base64 e a exibimos na interface.
+        const reader = new FileReader()
+        reader.onload = () => {
+          setAvatar(reader.result as string)
+        }
+        reader.readAsDataURL(file)
         message.success(`Arquivo ${file.name} adicionado!`)
       }
     },
   })
+
   return (
     <div className="w-full text-center my-2">
       <div

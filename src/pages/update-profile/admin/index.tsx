@@ -1,25 +1,16 @@
 import { useUpdateAdminMutation } from '../../../slices/admin/apiSlice/adminsApiSlice'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import { RootState } from '../../../store'
 import { Input } from '../../../custom'
-import { Uploader } from '../../../custom/uploader'
 import { AdminSideBar } from '../../../layout/sidebar/admin'
-import { Select, message } from 'antd'
+import { message } from 'antd'
 import { useFormik } from 'formik'
-import { useGetCategoriesQuery } from '../../../slices/categorySlices/categoryApiSlice'
-
-const { Option } = Select
-
-interface ICategory {
-  id: string
-  name: string
-  icon: string
-}
+import { setCredentials } from '../../../slices/admin/authSlice'
 
 export function AdminUpdateProfile() {
-  const { user } = useSelector((state: RootState) => state.adminAuth)
-  const [updateAdmin, { isLoading, isSuccess }] = useUpdateAdminMutation()
-  const { data: categories } = useGetCategoriesQuery({})
+  const dispatch = useDispatch()
+  const { user, token } = useSelector((state: RootState) => state.adminAuth)
+  const [updateAdmin] = useUpdateAdminMutation()
 
   const formik = useFormik({
     initialValues: {
@@ -28,12 +19,9 @@ export function AdminUpdateProfile() {
       email: user?.email || '',
       biography: user?.biography || '',
       interests: user?.interests || [],
-      avatar: user?.avatar || '',
     },
     onSubmit: async (values) => {
       try {
-        console.log(values)
-
         const res = await updateAdmin({
           id: values.id,
           body: {
@@ -42,10 +30,20 @@ export function AdminUpdateProfile() {
             email: values.email,
             biography: values.biography,
             interests: values.interests,
-            avatar: values.avatar,
           },
         })
+
         console.log(res)
+
+        if ('data' in res && res.data.admin) {
+          dispatch(
+            setCredentials({
+              user: res.data.admin,
+              token,
+            }),
+          )
+        }
+
         message.success('Perfil atualizado com sucesso!')
       } catch (err) {
         console.error(err)
@@ -64,12 +62,6 @@ export function AdminUpdateProfile() {
       <div className="flex- flex-col gap-6">
         <form onSubmit={formik.handleSubmit}>
           <h2 className="text-xl font-extrabold">Atualizar Perfil</h2>
-          <Uploader />
-          <img
-            src={formik.values.avatar}
-            alt={formik.values.name}
-            className="w-28 h-28 rounded-lg object-cover"
-          />
           <Input
             placeholder="Nome"
             value={formik.values.name}
@@ -91,27 +83,8 @@ export function AdminUpdateProfile() {
             className="w-full h-48 mt-2 px-6 bg-main py-6 border rounded placeholder:text-[#c4c4cc] font-medium resize-none"
             value={formik.values.biography}
             onChange={formik.handleChange}
+            name="biography"
           />
-          <Select
-            mode="multiple"
-            allowClear
-            placeholder="Interesses"
-            value={formik.values.interests}
-            onChange={(value) => formik.setFieldValue('interests', value)}
-            className="w-full my-2 text-[#c4c4cc] border border-[#c4c4cc] rounded-lg"
-          >
-            {categories?.categories?.map((category: ICategory) => (
-              <Option key={category.id} value={category.id}>
-                <img
-                  src={category.icon}
-                  alt={category.name}
-                  className="w-6 h-6 mr-2 object-cover inline-block"
-                />
-                {'  '}
-                {category.name}
-              </Option>
-            ))}
-          </Select>
           <button
             title="Atualizar"
             type="submit"

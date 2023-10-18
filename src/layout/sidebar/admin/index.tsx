@@ -38,11 +38,11 @@ export function AdminSideBar({ children }: { children: React.ReactNode }) {
       link: '/admin-update-profile',
       icon: <FaUsers className="w-6 h-6" />,
     },
-    {
-      title: 'Favoritos',
-      link: '/admin-favoritos',
-      icon: <FaHeart className="w-6 h-6" />,
-    },
+    // {
+    //   title: 'Favoritos',
+    //   link: '/admin-favoritos',
+    //   icon: <FaHeart className="w-6 h-6" />,
+    // },
     {
       title: 'Mudar Senha',
       link: '/admin-mudar-senha',

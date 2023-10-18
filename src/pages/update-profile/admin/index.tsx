@@ -1,89 +1,176 @@
+/* eslint-disable n/no-callback-literal */
 import { useUpdateAdminMutation } from '../../../slices/admin/apiSlice/adminsApiSlice'
 import { useSelector, useDispatch } from 'react-redux'
 import { RootState } from '../../../store'
 import { Input } from '../../../custom'
 import { AdminSideBar } from '../../../layout/sidebar/admin'
 import { message } from 'antd'
-import { useFormik } from 'formik'
 import { setCredentials } from '../../../slices/admin/authSlice'
+import { PlusOutlined } from '@ant-design/icons'
+import { useState } from 'react'
 
 export function AdminUpdateProfile() {
   const dispatch = useDispatch()
   const { user, token } = useSelector((state: RootState) => state.adminAuth)
   const [updateAdmin] = useUpdateAdminMutation()
 
-  const formik = useFormik({
-    initialValues: {
-      id: user?.id || '',
-      name: user?.name || '',
-      email: user?.email || '',
-      biography: user?.biography || '',
-      interests: user?.interests || [],
-    },
-    onSubmit: async (values) => {
-      try {
-        const res = await updateAdmin({
-          id: values.id,
-          body: {
-            id: values.id,
-            name: values.name,
-            email: values.email,
-            biography: values.biography,
-            interests: values.interests,
-          },
-        })
+  const [name, setName] = useState<string | null>(user?.name || null)
+  const [email, setEmail] = useState<string | null>(user?.email || null)
+  const [biography, setBiography] = useState<string | null>(
+    user?.biography || null,
+  )
+  const [avatar, setAvatar] = useState<File | null>(null)
+  const [avatarPreview, setAvatarPreview] = useState<string | null>(
+    user?.avatar || null,
+  )
+  const [banner, setBanner] = useState<File | null>(null)
+  const [bannerPreview, setBannerPreview] = useState<string | null>(
+    user?.banner || null,
+  )
 
-        console.log(res)
+  const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setName(event.target.value)
+  }
 
-        if ('data' in res && res.data.admin) {
-          dispatch(
-            setCredentials({
-              user: res.data.admin,
-              token,
-            }),
-          )
-        }
+  const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setEmail(event.target.value)
+  }
 
-        message.success('Perfil atualizado com sucesso!')
-      } catch (err) {
-        console.error(err)
-        if (typeof err === 'object' && err !== null && 'data' in err) {
-          const errorData = err.data as { message?: string; error?: string }
-          message.error(
-            errorData.message || errorData.error || 'An error occurred',
-          )
-        }
+  const handleBiographyChange = (
+    event: React.ChangeEvent<HTMLTextAreaElement>,
+  ) => {
+    setBiography(event.target.value)
+  }
+
+  const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+
+    if (!name || !email || !biography) {
+      message.error('Preencha todos os campos')
+      return
+    }
+
+    const formData = new FormData()
+
+    formData.append('name', name)
+    formData.append('email', email)
+    formData.append('biography', biography)
+
+    if (avatar) {
+      formData.append('avatar', avatar)
+    }
+
+    if (banner) {
+      formData.append('banner', banner)
+    }
+
+    try {
+      const response = await updateAdmin({ id: user?.id, body: formData })
+      if ('data' in response && response.data.admin) {
+        dispatch(
+          setCredentials({
+            user: response.data.admin,
+            token,
+          }),
+        )
       }
-    },
-  })
+    } catch (err) {
+      console.error(err)
+      if (typeof err === 'object' && err !== null && 'data' in err) {
+        const errorData = err.data as { message?: string; error?: string }
+        message.error(
+          errorData.message || errorData.error || 'An error occurred',
+        )
+      }
+    }
+  }
 
   return (
     <AdminSideBar>
       <div className="flex- flex-col gap-6">
-        <form onSubmit={formik.handleSubmit}>
+        <form onSubmit={onSubmit}>
           <h2 className="text-xl font-extrabold">Atualizar Perfil</h2>
+          <div className="flex flex-col gap-2">
+            <div className="flex flex-row gap-2">
+              <input
+                title="Avatar"
+                type="file"
+                name="avatar"
+                id="avatar"
+                className="hidden"
+                onChange={(event) => {
+                  if (event.target.files) {
+                    setAvatar(event.target.files[0])
+                    setAvatarPreview(URL.createObjectURL(event.target.files[0]))
+                  }
+                }}
+              />
+              <label
+                htmlFor="avatar"
+                className="flex flex-col items-center justify-center gap-2 w-32 h-32 bg-main rounded-lg cursor-pointer"
+              >
+                <PlusOutlined />
+                <span>Avatar</span>
+              </label>
+              <img
+                className="w-32 h-32 bg-main rounded-lg object-cover"
+                src={avatarPreview || user?.avatar}
+                alt="Avatar"
+              />
+            </div>
+          </div>
+          <div className="flex flex-col gap-2 my-2">
+            <div className="flex flex-row gap-2">
+              <input
+                title="Banner"
+                type="file"
+                name="banner"
+                id="banner"
+                className="hidden"
+                onChange={(event) => {
+                  if (event.target.files) {
+                    setBanner(event.target.files[0])
+                    setBannerPreview(URL.createObjectURL(event.target.files[0]))
+                  }
+                }}
+              />
+              <label
+                htmlFor="banner"
+                className="flex flex-col items-center justify-center gap-2 w-32 h-32 bg-main rounded-lg cursor-pointer"
+              >
+                <PlusOutlined />
+                <span>Banner</span>
+              </label>
+              <img
+                className="w-32 h-32 bg-main rounded-lg object-cover"
+                src={bannerPreview || user?.banner}
+                alt="Banner"
+              />
+            </div>
+          </div>
           <Input
             placeholder="Nome"
-            value={formik.values.name}
             type="text"
             name="name"
             label="Nome"
-            onChange={formik.handleChange}
+            value={name || ''}
+            onChange={handleNameChange}
           />
           <Input
             placeholder="Email"
-            value={formik.values.email}
             type="email"
             name="email"
             label="Email"
-            onChange={formik.handleChange}
+            value={email || ''}
+            onChange={handleEmailChange}
           />
           <textarea
             placeholder="Biografia"
             className="w-full h-48 mt-2 px-6 bg-main py-6 border rounded placeholder:text-[#c4c4cc] font-medium resize-none"
-            value={formik.values.biography}
-            onChange={formik.handleChange}
             name="biography"
+            id="biography"
+            value={biography || ''}
+            onChange={handleBiographyChange}
           />
           <button
             title="Atualizar"

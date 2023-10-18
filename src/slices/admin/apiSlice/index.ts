@@ -34,7 +34,7 @@ const baseQueryWithReauth = async (
 
     const refreshResult = await baseQuery(
       {
-        url: 'http://localhost:3333/token/refresh',
+        url: 'http://localhost:3333/admin/token/refresh',
         method: 'PATCH',
       },
       api,

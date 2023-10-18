@@ -1,6 +1,6 @@
 import { BsFillGridFill } from 'react-icons/bs'
-import { FaHeart, FaList, FaUsers } from 'react-icons/fa'
-import { RiLockPasswordLine, RiMovie2Fill } from 'react-icons/ri'
+import { FaList, FaUsers } from 'react-icons/fa'
+import { RiLockPasswordLine } from 'react-icons/ri'
 import { HiViewGrid } from 'react-icons/hi'
 import { Layout } from '../..'
 import { NavLink } from 'react-router-dom'
@@ -18,11 +18,6 @@ export function AdminSideBar({ children }: { children: React.ReactNode }) {
       link: '/admin-courses-list',
       icon: <FaList className="w-6 h-6" />,
     },
-    // {
-    //   title: 'Add Curso',
-    //   link: '/admin-add-course',
-    //   icon: <RiMovie2Fill className="w-6 h-6" />,
-    // },
     {
       title: 'Categorias',
       link: '/admin-categories',
@@ -38,11 +33,6 @@ export function AdminSideBar({ children }: { children: React.ReactNode }) {
       link: '/admin-update-profile',
       icon: <FaUsers className="w-6 h-6" />,
     },
-    // {
-    //   title: 'Favoritos',
-    //   link: '/admin-favoritos',
-    //   icon: <FaHeart className="w-6 h-6" />,
-    // },
     {
       title: 'Mudar Senha',
       link: '/admin-update-password',

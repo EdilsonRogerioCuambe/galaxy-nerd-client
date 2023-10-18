@@ -15,15 +15,15 @@ interface FormValues {
   password: string
 }
 
-export function AdminLogin() {
+export function InstructorLogin() {
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const [login, { isLoading, isSuccess }] = useLoginMutation()
-  const { user } = useSelector((state: RootState) => state.adminAuth)
+  const { user } = useSelector((state: RootState) => state.instructorAuth)
 
   useEffect(() => {
     if (user) {
-      navigate('/admin-dashboard')
+      navigate('/instructor-dashboard')
     }
   }, [user, navigate])
 
@@ -59,11 +59,13 @@ export function AdminLogin() {
   if (isSuccess) {
     message.success({
       content: 'Login realizado com sucesso!',
-      key: 'login',
-      duration: 2,
+      className: 'mt-5',
     })
   } else if (isLoading) {
-    message.loading({ content: 'Carregando...', key: 'login' })
+    message.loading({
+      content: 'Carregando...',
+      key: 'login',
+    })
   }
 
   return (

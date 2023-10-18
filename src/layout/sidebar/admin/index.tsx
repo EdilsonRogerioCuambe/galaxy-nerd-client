@@ -45,7 +45,7 @@ export function AdminSideBar({ children }: { children: React.ReactNode }) {
     // },
     {
       title: 'Mudar Senha',
-      link: '/admin-mudar-senha',
+      link: '/admin-update-password',
       icon: <RiLockPasswordLine className="w-6 h-6" />,
     },
   ]

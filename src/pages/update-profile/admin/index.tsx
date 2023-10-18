@@ -73,6 +73,7 @@ export function AdminUpdateProfile() {
             token,
           }),
         )
+        message.success('Perfil atualizado com sucesso')
       }
     } catch (err) {
       console.error(err)

@@ -19,7 +19,7 @@ interface PasswordRequirements {
 
 export function RegisterInstructor() {
   const navigate = useNavigate()
-  const { user } = useSelector((state: RootState) => state.instructorAuth)
+  const { instructor } = useSelector((state: RootState) => state.instructorAuth)
   const [createInstructor, { isSuccess, isLoading }] =
     useCreateInstructorMutation()
 
@@ -112,10 +112,10 @@ export function RegisterInstructor() {
   }
 
   useEffect(() => {
-    if (user) {
+    if (instructor) {
       navigate('/instructor-dashboard')
     }
-  }, [user, navigate])
+  }, [instructor, navigate])
 
   if (isLoading) {
     message.loading('Registrando...')

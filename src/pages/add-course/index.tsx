@@ -1,14 +1,26 @@
 import { useState } from 'react'
-import { CourseModal } from '../../components/course-modal'
-import { SideBar } from '../../layout/sidebar'
+import { InstructorSideBar } from '../../layout/sidebar/instructor'
+
+interface ICourse {
+  title: string
+  description: string
+  category: string
+  price: number
+  image: File | null
+  thumbnail: File | null
+  rating: number
+  level: string
+  duration: string
+}
 
 export function AddCourse() {
-  const [open, setOpen] = useState(false)
   return (
     <>
-      <SideBar>
-        <CourseModal open={open} setOpen={setOpen} />
-      </SideBar>
+      <InstructorSideBar>
+        <div className="flex-betweens gap-2">
+          <h2 className="text-xl font-bold">Adicionar curso</h2>
+        </div>
+      </InstructorSideBar>
     </>
   )
 }

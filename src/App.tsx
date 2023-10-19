@@ -18,6 +18,8 @@ import { AdminPrivateRoutes } from './pages/private/admin'
 import { AdminUpdatePassword } from './pages/update-password/admin'
 import { InstructorLogin } from './pages/login/instructor'
 import { RegisterInstructor } from './pages/register/instructor'
+import { InstructorPrivateRoutes } from './pages/private/instructor'
+import { InstructorDashboard } from './pages/dashboard/instructor'
 
 const App = () => {
   Aos.init()
@@ -33,12 +35,11 @@ const App = () => {
         <Route path="/instructor-login" element={<InstructorLogin />} />
 
         {/** REGISTER */}
-        <Route path="register" element={<Register />} />
+        <Route path="/register" element={<Register />} />
         <Route path="/register-instructor" element={<RegisterInstructor />} />
         <Route path="/courses-list" element={<CoursesLists />} />
-        <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/categories" element={<Categories />} />
-        <Route path="/add-course" element={<AddCourse />} />
+
         <Route path="/" element={<AdminPrivateRoutes />}>
           <Route path="admin-dashboard" element={<AdminDashboard />} />
           <Route path="admin-categories" element={<AdminCategories />} />
@@ -49,6 +50,13 @@ const App = () => {
             path="admin-update-password"
             element={<AdminUpdatePassword />}
           />
+        </Route>
+        <Route path="/" element={<InstructorPrivateRoutes />}>
+          <Route
+            path="instructor-dashboard"
+            element={<InstructorDashboard />}
+          />
+          <Route path="instructor-add-course" element={<AddCourse />} />
         </Route>
       </Routes>
     </>

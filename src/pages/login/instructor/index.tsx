@@ -4,8 +4,8 @@ import { Link, useNavigate } from 'react-router-dom'
 import { FiLogIn } from 'react-icons/fi'
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { useLoginMutation } from '../../../slices/admin/apiSlice/adminsApiSlice'
-import { setCredentials } from '../../../slices/admin/authSlice'
+import { useLoginMutation } from '../../../slices/instructor/apiSlice/instructorsApiSlice'
+import { setCredentials } from '../../../slices/instructor/authSlice'
 import { RootState } from '../../../store'
 import { useFormik } from 'formik'
 import { message } from 'antd'
@@ -19,13 +19,13 @@ export function InstructorLogin() {
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const [login, { isLoading, isSuccess }] = useLoginMutation()
-  const { user } = useSelector((state: RootState) => state.instructorAuth)
+  const { instructor } = useSelector((state: RootState) => state.instructorAuth)
 
   useEffect(() => {
-    if (user) {
+    if (instructor) {
       navigate('/instructor-dashboard')
     }
-  }, [user, navigate])
+  }, [instructor, navigate])
 
   const formik = useFormik<FormValues>({
     initialValues: {
@@ -36,14 +36,16 @@ export function InstructorLogin() {
       try {
         const response = await login(values).unwrap()
 
-        console.log(response)
-
         dispatch(
           setCredentials({
             token: response.token,
-            user: response.admin,
+            instructor: response.instructor,
           }),
         )
+
+        if (!isLoading) {
+          navigate('/instructor-dashboard')
+        }
       } catch (err) {
         console.error(err)
         if (typeof err === 'object' && err !== null && 'data' in err) {

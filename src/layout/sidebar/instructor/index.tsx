@@ -9,23 +9,18 @@ export function InstructorSideBar({ children }: { children: React.ReactNode }) {
   const links = [
     {
       title: 'Dashboard',
-      link: '/admin-dashboard',
+      link: '/instructor-dashboard',
       icon: <BsFillGridFill className="w-6 h-6" />,
     },
     {
       title: 'Cursos',
-      link: '/admin-courses-list',
+      link: '/instructor-courses-list',
       icon: <FaList className="w-6 h-6" />,
     },
     {
       title: 'Add Curso',
-      link: '/admin-add-course',
+      link: '/instructor-add-course',
       icon: <RiMovie2Fill className="w-6 h-6" />,
-    },
-    {
-      title: 'Categorias',
-      link: '/admin-categories',
-      icon: <HiViewGrid className="w-6 h-6" />,
     },
     {
       title: 'Usuários',
@@ -49,7 +44,7 @@ export function InstructorSideBar({ children }: { children: React.ReactNode }) {
     },
   ]
 
-  const active = 'text-green-300 bg-main'
+  const active = 'text-purple-300 bg-main'
   const hover = 'hover:text-green-300'
   const inActive =
     'rounded font-medium text-sm transitions flex gap-3 items-center p-4'

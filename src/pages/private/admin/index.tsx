@@ -4,17 +4,13 @@ import { RootState } from '../../../store'
 
 export function AdminPrivateRoutes() {
   const location = useLocation()
-  const { user, token } = useSelector((state: RootState) => state.adminAuth)
+  const { user: admin } = useSelector((state: RootState) => state.adminAuth)
 
-  if (!user) {
+  if (admin.ROLE !== 'ADMIN') {
     return <Navigate to="/admin-login" />
   }
 
-  if (!token) {
-    return <Navigate to="/admin-login" />
-  }
-
-  return token ? (
+  return admin.ROLE === 'ADMIN' ? (
     <Outlet />
   ) : (
     <Navigate to="/admin-login" state={{ from: location }} replace />

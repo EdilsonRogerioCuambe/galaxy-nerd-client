@@ -9,6 +9,9 @@ import { logout } from '../../slices/admin/authSlice'
 
 export function NavigationBar() {
   const { user: admin } = useSelector((state: RootState) => state.adminAuth)
+  const { instructor } = useSelector((state: RootState) => state.instructorAuth)
+  console.log(instructor)
+
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const hover = 'hover:text-[#c4c4cc] transition duration-300 ease-in-out'
@@ -16,7 +19,7 @@ export function NavigationBar() {
   const handleLogout = async () => {
     try {
       dispatch(logout())
-      navigate('/admin-login')
+      navigate('/instructor-login')
     } catch (error) {
       console.log(error)
     }
@@ -65,38 +68,32 @@ export function NavigationBar() {
             <NavLink className={Hover} to="/contact">
               Contato
             </NavLink>
-            {admin ? (
-              <>
-                <NavLink className={`${Hover} relative`} to="/favorites">
+            <>
+              {/* <NavLink className={`${Hover} relative`} to="/favorites">
                   <AiFillHeart className="w-6 h-6 text-quinary" />
                   <div className="absolute flex justify-center items-center bg-secondary text-white w-4 h-4 rounded-full -top-1 -right-1 text-xs">
                     0
                   </div>
-                </NavLink>
-                <NavLink className={`${Hover} relative`} to="/admin-dashboard">
-                  <img
-                    src={admin.avatar}
-                    alt="avatar"
-                    className="w-6 h-6 rounded-full object-cover"
-                  />
-                </NavLink>
-                <button
-                  type="button"
-                  title="Sair"
-                  className={`${Hover} relative`}
-                  onClick={handleLogout}
-                >
-                  <BiLogOut className="w-6 h-6 text-quinary" />
-                </button>
-              </>
-            ) : (
-              <NavLink className={`${Hover} relative`} to="/login">
-                <FaUserAlt className="w-6 h-6 text-quinary" />
-                <div className="absolute flex justify-center items-center bg-secondary text-white w-4 h-4 rounded-full -top-1 -right-1 text-xs">
-                  0
-                </div>
+                </NavLink> */}
+              <NavLink
+                className={`${Hover} relative`}
+                to={`${admin ? '/admin-dashboard' : '/instructor-dashboard'}`}
+              >
+                <img
+                  src={admin?.avatar || instructor?.avatar}
+                  alt="avatar"
+                  className="w-8 h-8 rounded-full object-cover"
+                />
               </NavLink>
-            )}
+              <button
+                type="button"
+                title="Sair"
+                className={`${Hover} relative`}
+                onClick={handleLogout}
+              >
+                <BiLogOut className="w-6 h-6 text-quinary" />
+              </button>
+            </>
           </div>
         </div>
       </div>

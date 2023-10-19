@@ -22,7 +22,7 @@ export function AdminLogin() {
   const { user } = useSelector((state: RootState) => state.adminAuth)
 
   useEffect(() => {
-    if (user) {
+    if (user?.ROLE === 'ADMIN') {
       navigate('/admin-dashboard')
     }
   }, [user, navigate])
@@ -36,14 +36,14 @@ export function AdminLogin() {
       try {
         const response = await login(values).unwrap()
 
-        console.log(response)
-
         dispatch(
           setCredentials({
             token: response.token,
             user: response.admin,
           }),
         )
+
+        navigate('/admin-dashboard')
       } catch (err) {
         console.error(err)
         if (typeof err === 'object' && err !== null && 'data' in err) {

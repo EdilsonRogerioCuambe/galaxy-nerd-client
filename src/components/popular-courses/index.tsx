@@ -1,6 +1,6 @@
 import { BsCollectionFill } from 'react-icons/bs'
 import { Header } from '../header'
-import { Course } from '../course'
+import { Course } from '../course-card'
 import { useGetCoursesQuery } from '../../slices/courseSlices/courseApiSlice'
 
 interface PopularCoursesProps {

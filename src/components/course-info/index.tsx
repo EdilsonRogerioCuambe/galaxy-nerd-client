@@ -2,6 +2,15 @@ import { FaPlay, FaShareAlt } from 'react-icons/fa'
 import { FlexCourseItens } from '../flex-course-itens'
 import { Stars } from '../stars'
 import { Link } from 'react-router-dom'
+import { useGetTopicsQuery } from '../../slices/topicSlices/topicApiSlice'
+import {
+  Accordion,
+  AccordionItem,
+  AccordionButton,
+  AccordionPanel,
+  List,
+  ListItem,
+} from '@chakra-ui/react'
 
 interface LanguageProps {
   id: string

@@ -5,7 +5,6 @@ import { Course } from './pages/course'
 import { Lessons } from './pages/lessons'
 import { CoursesLists } from './pages/courses-lists'
 import { Register } from './pages/register'
-import { Dashboard } from './pages/dashboard'
 import { Categories } from './pages/categories'
 import { AddCourse } from './pages/add-course'
 import { AdminLogin } from './pages/login/admin'
@@ -20,6 +19,7 @@ import { InstructorLogin } from './pages/login/instructor'
 import { RegisterInstructor } from './pages/register/instructor'
 import { InstructorPrivateRoutes } from './pages/private/instructor'
 import { InstructorDashboard } from './pages/dashboard/instructor'
+import { InstructorAddTopicsToCourse } from './pages/add-topic-modal'
 
 const App = () => {
   Aos.init()
@@ -57,6 +57,10 @@ const App = () => {
             element={<InstructorDashboard />}
           />
           <Route path="instructor-add-course" element={<AddCourse />} />
+          <Route
+            path="instructor-add-topics-to-course"
+            element={<InstructorAddTopicsToCourse />}
+          />
         </Route>
       </Routes>
     </>

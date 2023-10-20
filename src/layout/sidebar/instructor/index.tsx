@@ -25,7 +25,7 @@ export function InstructorSideBar({ children }: { children: React.ReactNode }) {
     },
     {
       title: 'Add Topicos',
-      link: '/instructor-add-topics',
+      link: '/instructor-add-topics-to-course',
       icon: <MdTopic className="w-6 h-6" />,
     },
     {

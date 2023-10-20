@@ -86,7 +86,7 @@ export function ModalCategory({
               <div className="flex flex-col gap-2">
                 <label
                   htmlFor="categoryIcon"
-                  className="flex items-center justify-center bg-secondary rounded-lg h-32 w-full cursor-pointer hover:bg-transparent"
+                  className="flex items-center justify-center bg-main rounded-lg h-32 w-32 cursor-pointer hover:bg-transparent"
                 >
                   {categoryIconPreview ? (
                     <img

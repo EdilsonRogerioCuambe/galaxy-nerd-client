@@ -12,10 +12,6 @@ interface CoursesProps {
     name: string
     avatar: string
   }
-  category: {
-    name: string
-    icon: string
-  }
 }
 
 export function Course({ course }: { course: CoursesProps }) {

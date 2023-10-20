@@ -5,6 +5,7 @@ import instructorAuthReducer from './slices/instructor/authSlice'
 import { instructorApiSlice } from './slices/instructor/apiSlice'
 import { categoryApiSlice } from './slices/categorySlices'
 import { courseApiSlice } from './slices/courseSlices'
+import { topicApiSlice } from './slices/topicSlices'
 
 const store = configureStore({
   reducer: {
@@ -14,6 +15,7 @@ const store = configureStore({
     [instructorApiSlice.reducerPath]: instructorApiSlice.reducer,
     [categoryApiSlice.reducerPath]: categoryApiSlice.reducer,
     [courseApiSlice.reducerPath]: courseApiSlice.reducer,
+    [topicApiSlice.reducerPath]: topicApiSlice.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(
@@ -21,6 +23,7 @@ const store = configureStore({
       instructorApiSlice.middleware,
       categoryApiSlice.middleware,
       courseApiSlice.middleware,
+      topicApiSlice.middleware,
     ),
   devTools: true,
 })

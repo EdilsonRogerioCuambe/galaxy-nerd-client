@@ -58,7 +58,7 @@ interface IInputProps {
   label: string
   bg?: boolean
   type: string
-  value: string | undefined
+  value: string | undefined | number
   placeholder: string
   defaultValue?: string | undefined
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void

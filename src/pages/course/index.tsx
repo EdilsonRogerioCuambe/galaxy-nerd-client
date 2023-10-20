@@ -45,6 +45,8 @@ export function Course() {
     [],
   )
 
+  console.log(course)
+
   const getCursosRelacionados = useCallback(() => {
     const cursos = courses?.courses.filter(
       (course: CoursesProps) => course?.languages[0]?.name === 'Javascript',
@@ -56,13 +58,11 @@ export function Course() {
     getCursosRelacionados()
   }, [getCursosRelacionados])
 
-  console.log(course)
-
   return (
     <Layout>
       {course && <CourseInfo course={course?.course?.course as CoursesProps} />}
       <div className="container mx-auto min-h-screen px-2 my-6">
-        {course && <SampleLessons course={course} />}
+        {course && <SampleLessons course={course?.course?.course} />}
         <RatingCourse course={course?.course?.course as CoursesProps} />
         <div className="my-16">
           <Header header="Cursos Relacionados" Icon={BsCollectionFill} />

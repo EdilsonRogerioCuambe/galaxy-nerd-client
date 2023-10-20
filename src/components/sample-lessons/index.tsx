@@ -49,7 +49,7 @@ interface CoursesProps {
   languages: LanguageProps[]
 }
 
-export function SampleLessons({ course }: { course: any }) {
+export function SampleLessons({ course }: { course: CoursesProps }) {
   return (
     <div className="my-12 text-[#c4c4cc]">
       <Header header="O que você vai aprender" Icon={MdOutlinePlayLesson} />
@@ -76,6 +76,12 @@ export function SampleLessons({ course }: { course: any }) {
                   className="flex justify-between items-center bg-[#1e1e1e] text-[#c4c4cc] px-4 py-2 rounded-md"
                 >
                   <span className="text-lg">{topic?.title}</span>
+
+                  <span className="text-sm text-[#c4c4cc]">
+                    {topic?.lessons?.length === undefined
+                      ? '0 aulas'
+                      : `${topic?.lessons?.length} aulas`}
+                  </span>
                 </AccordionButton>
               </h2>
               <AccordionPanel
@@ -83,7 +89,7 @@ export function SampleLessons({ course }: { course: any }) {
                 pb={4}
               >
                 <List spacing={3}>
-                  {topic?.lessons?.map((lesson: any, index: number) => (
+                  {topic?.lessons?.map((lesson, index) => (
                     <ListItem key={index} className="flex items-center">
                       <Link
                         to={`/course/${course?.slug}/${lesson?.order}`}

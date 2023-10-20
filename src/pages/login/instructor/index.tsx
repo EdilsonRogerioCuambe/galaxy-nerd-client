@@ -37,7 +37,7 @@ export function InstructorLogin() {
         )
 
         if (!isLoading) {
-          navigate('/instructor-dashboard')
+          navigate('/')
         }
       } catch (err) {
         console.error(err)

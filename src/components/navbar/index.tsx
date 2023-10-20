@@ -9,6 +9,7 @@ import { logout } from '../../slices/admin/authSlice'
 
 export function NavigationBar() {
   const { instructor } = useSelector((state: RootState) => state.instructorAuth)
+  const { user: admin } = useSelector((state: RootState) => state.adminAuth)
 
   const navigate = useNavigate()
   const dispatch = useDispatch()
@@ -98,7 +99,32 @@ export function NavigationBar() {
               </>
             )}
 
-            {!instructor && (
+            {admin && (
+              <>
+                <div className="flex items-center gap-2">
+                  <NavLink
+                    className={`${Hover} relative`}
+                    to="/admin-dashboard"
+                  >
+                    <img
+                      src={admin.avatar}
+                      alt="avatar"
+                      className="w-8 h-8 rounded-full object-cover"
+                    />
+                  </NavLink>
+                  <button
+                    title="Sair"
+                    type="button"
+                    onClick={handleLogout}
+                    className="text-[#c4c4cc] w-8 h-8 flex-colo rounded"
+                  >
+                    <BiLogOut className="w-6 h-6" />
+                  </button>
+                </div>
+              </>
+            )}
+
+            {!instructor && !admin && (
               <>
                 <NavLink className={Hover} to="/instructor-login">
                   <FaUserAlt className="w-6 h-6" />

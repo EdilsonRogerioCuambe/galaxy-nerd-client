@@ -39,7 +39,7 @@ export function Banner() {
         slidesPerView={1}
         loop
         speed={2500}
-        autoplay={{ delay: 4000 }}
+        autoplay={{ delay: 2000 }}
         modules={[Autoplay]}
         pagination={{ clickable: true }}
         className="w-full xl:h-96 bg-secondary lg:h-64 h-60"
@@ -53,7 +53,7 @@ export function Banner() {
             />
             <div className="absolute linear-bg xl:pl-52 pl-8 top-0 bottom-0 flex flex-col justify-center right-0 left-0 lg:gap-8 md:gap-5 gap-4">
               <h1 className="xl:text-4xl truncate capitalize text-[#e1e1e6] sm:text-2xl text-xl font-extrabold">
-                {course.title}
+                {(course.title.substring(0, 50) + '...').toUpperCase()}
               </h1>
               <div className="flex gap-5 items-center">
                 <p className="text-[#c4c4cc] font-medium text-lg">

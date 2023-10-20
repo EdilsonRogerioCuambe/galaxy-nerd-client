@@ -22,6 +22,7 @@ interface CoursesProps {
   id: string
   title: string
   duration: string
+  image: string
   description: string
   shortDescription: string
   thumbnail: string

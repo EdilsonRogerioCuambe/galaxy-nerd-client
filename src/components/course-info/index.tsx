@@ -15,6 +15,7 @@ interface CoursesProps {
   description: string
   shortDescription: string
   thumbnail: string
+  image: string
   price: string
   rating: number
   duration: string
@@ -38,13 +39,13 @@ export function CourseInfo({ course }: { course: CoursesProps }) {
         <div className="container px-3 mx-auto 2xl:px-32 xl:grid grid-cols-3 flex-colo py-10 lg:py-20 gap-8">
           <div className="xl:col-span-1 w-full xl:order-none order-last h-header bg-secondary border-gray-800 rounded-lg overflow-hidden">
             <img
-              src={course?.thumbnail}
+              src={course?.image}
               alt={course?.title}
               className="w-full h-full object-cover"
             />
           </div>
           <div className="col-span-2 md:grid grid-cols-5 gap-4 items-center">
-            <div className="col-span-4 flex flex-col gap-10">
+            <div className="col-span-5 flex flex-col gap-10">
               <h1 className="xl:text-4xl capitalize text-2xl font-extrabold">
                 {course?.title}
               </h1>
@@ -66,7 +67,7 @@ export function CourseInfo({ course }: { course: CoursesProps }) {
                     <FaShareAlt className="w-6 h-6 m-auto" />
                   </button>
                 </div>
-                <div className="col-span-2 flex flex-col gap-2">
+                <div className="col-span-1 flex flex-col gap-2">
                   <h2 className="text-xl font-semibold">Avaliações</h2>
                   <div className="flex items-center gap-2">
                     <Stars stars={course?.rating} />
@@ -75,7 +76,7 @@ export function CourseInfo({ course }: { course: CoursesProps }) {
                     </span>
                   </div>
                 </div>
-                <div className="col-span-3 flex justify-end font-medium text-sm">
+                <div className="col-span-1 flex justify-end font-medium text-sm">
                   <Link
                     to={`/course/${course.slug}/lessons`}
                     className="bg-dry py-3 hover:bg-quinary transitions border-2 border-quinary rounded-full flex-rows gap-4 w-full sm:py-3"

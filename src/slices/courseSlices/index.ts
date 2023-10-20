@@ -35,7 +35,8 @@ const baseQueryWithReauth = async (
     const refreshResult = await baseQuery(
       {
         url: 'http://localhost:3333/instructor/token/refresh',
-        method: 'PATCH',
+        method: 'PUT',
+        credentials: 'include',
       },
       api,
       extraOptions,

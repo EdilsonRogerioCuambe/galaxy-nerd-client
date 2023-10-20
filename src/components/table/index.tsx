@@ -2,17 +2,21 @@ import { BsTrash3 } from 'react-icons/bs'
 import { FaEdit, FaPlay } from 'react-icons/fa'
 import { Link } from 'react-router-dom'
 
-interface Curso {
+interface LanguageProps {
+  id: string
+  name: string
+  icon: string
+}
+
+interface Course {
   id?: string
-  imagem?: string
   thumbnail?: string
+  image?: string
   title?: string
   slug?: string
   description?: string
-  category?: {
-    id?: string
-    name?: string
-  }
+  shortDescription?: string
+  languages?: LanguageProps[]
   instructor?: {
     id?: string
     name?: string
@@ -35,34 +39,45 @@ interface Curso {
 }
 
 interface LinesProps {
-  curso: Curso
+  Course: Course
   index: number
   admin: boolean
 }
 
-export function Lines({ curso, index, admin }: LinesProps) {
+export function Lines({ Course, index, admin }: LinesProps) {
   const Text =
     'text-sm text-[#c4c4cc] text-left leading-6 whitespace-nowrap px-5 py-2'
   return (
     <>
       <tr key={index} className="text-[#c4c4cc]">
+        <td className={`${Text}`}>{index + 1}</td>
         <td className={`${Text}`}>
           <div className="w-12 p-1 bg-main boder border h-12 rounded overflow-hidden">
             <img
-              src={curso?.thumbnail}
-              alt={curso?.title}
+              src={Course?.thumbnail}
+              alt={Course?.title}
               className="w-full h-full object-cover"
             />
           </div>
         </td>
-        <td className={`${Text} truncate`}>{curso?.title}</td>
-        <td className={`${Text}`}>{curso?.instructor?.name}</td>
-        <td className={`${Text}`}>{curso?.category?.name}</td>
+        <td className={`${Text} truncate`}>{Course?.title}</td>
+        <td className={`${Text}`}>{Course?.instructor?.name}</td>
+        {/** Mostrar os icones das categorias */}
+        <td className={`${Text}`}>
+          {Course?.languages?.map((language, index) => (
+            <img
+              key={index}
+              src={language.icon}
+              alt={language.name}
+              className="w-8 h-8 object-cover inline-block mr-2"
+            />
+          ))}
+        </td>
         <td className={`${Text}`}>
           {new Intl.NumberFormat('pt-BR', {
             style: 'currency',
             currency: 'BRL',
-          }).format(Number(curso?.price))}
+          }).format(Number(Course?.price))}
         </td>
         <td
           className={`${Text} float-right align-middle items-center justify-center flex-rows gap-2`}
@@ -86,7 +101,7 @@ export function Lines({ curso, index, admin }: LinesProps) {
             </>
           ) : (
             <>
-              <Link to={`/course/${curso?.slug}`}>
+              <Link to={`/course/${Course?.slug}`}>
                 <button
                   type="button"
                   title="Reproduzir"
@@ -104,7 +119,7 @@ export function Lines({ curso, index, admin }: LinesProps) {
 }
 
 interface TableProps {
-  data: Curso[]
+  data: Course[]
   admin: boolean
 }
 
@@ -117,6 +132,9 @@ export function Table({ data, admin }: TableProps) {
         <table className="w-full table-auto">
           <thead>
             <tr className="bg-dryGray">
+              <th scope="col" className={`${Head}`}>
+                #
+              </th>
               <th scope="col" className={`${Head}`}>
                 Thumbnail
               </th>
@@ -138,8 +156,8 @@ export function Table({ data, admin }: TableProps) {
             </tr>
           </thead>
           <tbody className="bg-main divide-gray-800">
-            {data?.map((curso, index) => (
-              <Lines key={index} curso={curso} index={index} admin={admin} />
+            {data?.map((Course, index) => (
+              <Lines key={index} Course={Course} index={index} admin={admin} />
             ))}
           </tbody>
         </table>

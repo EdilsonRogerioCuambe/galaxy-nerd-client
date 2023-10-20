@@ -1,6 +1,12 @@
 import { FaHeart } from 'react-icons/fa'
 import { Link } from 'react-router-dom'
 
+interface LanguageProps {
+  id: string
+  name: string
+  icon: string
+}
+
 interface CoursesProps {
   id: string
   title: string
@@ -13,10 +19,7 @@ interface CoursesProps {
     name: string
     avatar: string
   }
-  category: {
-    name: string
-    icon: string
-  }
+  languages: LanguageProps[]
 }
 
 export function RelatedCourses({ course }: { course: CoursesProps }) {

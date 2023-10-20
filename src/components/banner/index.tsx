@@ -1,12 +1,36 @@
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { Autoplay } from 'swiper/modules'
-import { Cursos } from '../../data/Cursos'
 import { Link } from 'react-router-dom'
 import { FaHeart } from 'react-icons/fa'
 import { BsFillPlayFill } from 'react-icons/bs'
 import { FlexCourseItens } from '../flex-course-itens'
+import { useGetCoursesQuery } from '../../slices/courseSlices/courseApiSlice'
+
+interface LanguageProps {
+  id: string
+  name: string
+  icon: string
+}
+
+interface CoursesProps {
+  id: string
+  title: string
+  description: string
+  shortDescription: string
+  thumbnail: string
+  price: string
+  rating: number
+  duration: string
+  slug: string
+  instructor: {
+    name: string
+    avatar: string
+  }
+  languages: LanguageProps[]
+}
 
 export function Banner() {
+  const { data: courses } = useGetCoursesQuery({})
   return (
     <div className="relative w-full">
       <Swiper
@@ -20,30 +44,30 @@ export function Banner() {
         pagination={{ clickable: true }}
         className="w-full xl:h-96 bg-secondary lg:h-64 h-60"
       >
-        {Cursos.slice(0, 9).map((curso, index) => (
+        {courses?.courses.map((course: CoursesProps, index: number) => (
           <SwiperSlide key={index} className="relative rounded overflow-hidden">
             <img
-              src={curso.imagem}
-              alt={curso.nome}
+              src={course.thumbnail}
+              alt={course.title}
               className="object-fill w-full"
             />
             <div className="absolute linear-bg xl:pl-52 pl-8 top-0 bottom-0 flex flex-col justify-center right-0 left-0 lg:gap-8 md:gap-5 gap-4">
               <h1 className="xl:text-4xl truncate capitalize text-[#e1e1e6] sm:text-2xl text-xl font-extrabold">
-                {curso.nome}
+                {course.title}
               </h1>
               <div className="flex gap-5 items-center">
                 <p className="text-[#c4c4cc] font-medium text-lg">
-                  {curso.descricao.length > 200
-                    ? curso.descricao.slice(0, 50) + '...'
-                    : curso.descricao}
+                  {course.shortDescription.length > 200
+                    ? course.shortDescription.slice(0, 50) + '...'
+                    : course.shortDescription}
                 </p>
               </div>
               <div className="flex gap-5 items-center text-[#c4c4cc]">
-                <FlexCourseItens course={curso} />
+                <FlexCourseItens course={course} />
               </div>
               <div className="flex gap-5 items-center">
                 <Link
-                  to={`/curso/${curso.id}`}
+                  to={`/course/${course.slug}`}
                   className="bg-quinary text-[#e1e1e6] px-4 py-2 rounded-md font-medium hover:bg-opacity-80 transition duration-300 ease-in-out"
                 >
                   Assistir <BsFillPlayFill className="inline-block w-6 h-6" />

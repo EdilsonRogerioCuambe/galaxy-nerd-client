@@ -6,6 +6,12 @@ import { BsBookmarkStarFill } from 'react-icons/bs'
 import { Header } from '../header'
 import { Message, Select } from '../../custom'
 
+interface LanguageProps {
+  id: string
+  name: string
+  icon: string
+}
+
 interface CoursesProps {
   id: string
   title: string
@@ -18,10 +24,7 @@ interface CoursesProps {
     name: string
     avatar: string
   }
-  category: {
-    name: string
-    icon: string
-  }
+  languages: LanguageProps[]
 }
 
 export function RatingCourse({ course }: { course: CoursesProps }) {

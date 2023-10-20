@@ -19,13 +19,6 @@ export function InstructorLogin() {
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const [login, { isLoading, isSuccess }] = useLoginMutation()
-  const { instructor } = useSelector((state: RootState) => state.instructorAuth)
-
-  useEffect(() => {
-    if (instructor) {
-      navigate('/instructor-dashboard')
-    }
-  }, [instructor, navigate])
 
   const formik = useFormik<FormValues>({
     initialValues: {
@@ -38,7 +31,7 @@ export function InstructorLogin() {
 
         dispatch(
           setCredentials({
-            token: response.token,
+            instructorToken: response.token,
             instructor: response.instructor,
           }),
         )
@@ -58,17 +51,20 @@ export function InstructorLogin() {
     },
   })
 
-  if (isSuccess) {
-    message.success({
-      content: 'Login realizado com sucesso!',
-      className: 'mt-5',
-    })
-  } else if (isLoading) {
-    message.loading({
-      content: 'Carregando...',
-      key: 'login',
-    })
-  }
+  useEffect(() => {
+    if (isSuccess) {
+      message.success({
+        content: 'Login realizado com sucesso!',
+        className: 'mt-5',
+      })
+      navigate('/instructor-dashboard')
+    } else if (isLoading) {
+      message.loading({
+        content: 'Carregando...',
+        key: 'login',
+      })
+    }
+  }, [isSuccess, isLoading, navigate])
 
   return (
     <Layout>

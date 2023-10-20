@@ -12,10 +12,18 @@ import {
   useGetCourseBySlugQuery,
 } from '../../slices/courseSlices/courseApiSlice'
 
+interface LanguageProps {
+  id: string
+  name: string
+  icon: string
+}
+
 interface CoursesProps {
   id: string
   title: string
+  duration: string
   description: string
+  shortDescription: string
   thumbnail: string
   price: string
   rating: number
@@ -24,10 +32,7 @@ interface CoursesProps {
     name: string
     avatar: string
   }
-  category: {
-    name: string
-    icon: string
-  }
+  languages: LanguageProps[]
 }
 
 export function Course() {
@@ -41,7 +46,7 @@ export function Course() {
 
   const getCursosRelacionados = useCallback(() => {
     const cursos = courses?.courses.filter(
-      (course: CoursesProps) => course?.category?.name === 'Programação',
+      (course: CoursesProps) => course?.languages[0]?.name === 'Javascript',
     )
     setCursosRelacionados(cursos)
   }, [courses])
@@ -49,6 +54,8 @@ export function Course() {
   useEffect(() => {
     getCursosRelacionados()
   }, [getCursosRelacionados])
+
+  console.log(course)
 
   return (
     <Layout>

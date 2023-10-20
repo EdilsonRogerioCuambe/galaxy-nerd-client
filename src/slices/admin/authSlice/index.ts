@@ -4,8 +4,20 @@ import { createSlice } from '@reduxjs/toolkit'
 const storedUser = localStorage.getItem('user')
 const storedToken = localStorage.getItem('token')
 
+let parsedUser = null
+
+if (storedUser) {
+  try {
+    parsedUser = JSON.parse(storedUser)
+  } catch (e) {
+    console.error(e)
+  }
+} else {
+  console.log("'user' is not defined in localStorage")
+}
+
 const initialState = {
-  user: storedUser ? JSON.parse(storedUser) : null,
+  user: parsedUser,
   token: storedToken || null,
 }
 
@@ -31,7 +43,3 @@ const authSlice = createSlice({
 export const { setCredentials, logout } = authSlice.actions
 
 export default authSlice.reducer
-
-export const selectUser = (state: { auth: { user: any } }) => state.auth.user
-export const selectToken = (state: { auth: { token: string } }) =>
-  state.auth.token

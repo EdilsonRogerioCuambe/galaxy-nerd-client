@@ -1,11 +1,21 @@
 import { createSlice } from '@reduxjs/toolkit'
 
 const storedInstructor = localStorage.getItem('instructor')
-const storedToken = localStorage.getItem('token')
+const storedToken = localStorage.getItem('instructorToken')
+
+let parsedInstructor = null
+
+if (storedInstructor) {
+  try {
+    parsedInstructor = JSON.parse(storedInstructor)
+  } catch (e) {
+    console.error(e)
+  }
+}
 
 const initialState = {
-  instructor: storedInstructor ? JSON.parse(storedInstructor) : null,
-  token: storedToken || null,
+  instructor: parsedInstructor,
+  instructorToken: storedToken || null,
 }
 
 const authSlice = createSlice({
@@ -14,15 +24,18 @@ const authSlice = createSlice({
   reducers: {
     setCredentials(state, action) {
       state.instructor = action.payload.instructor
-      state.token = action.payload.token
-      localStorage.setItem('user', JSON.stringify(action.payload.instructor))
-      localStorage.setItem('token', action.payload.token)
+      state.instructorToken = action.payload.token
+      localStorage.setItem(
+        'instructor',
+        JSON.stringify(action.payload.instructor),
+      )
+      localStorage.setItem('instructorToken', action.payload.instructorToken)
     },
     logout: (state) => {
       state.instructor = null
-      state.token = null
+      state.instructorToken = null
       localStorage.removeItem('instructor')
-      localStorage.removeItem('token')
+      localStorage.removeItem('instructorToken')
     },
   },
 })

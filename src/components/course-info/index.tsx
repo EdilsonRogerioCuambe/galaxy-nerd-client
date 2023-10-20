@@ -2,29 +2,31 @@ import { FaPlay, FaShareAlt } from 'react-icons/fa'
 import { FlexCourseItens } from '../flex-course-itens'
 import { Stars } from '../stars'
 import { Link } from 'react-router-dom'
-import EditorJsParser from 'editorjs-html'
+
+interface LanguageProps {
+  id: string
+  name: string
+  icon: string
+}
 
 interface CoursesProps {
   id: string
   title: string
   description: string
+  shortDescription: string
   thumbnail: string
   price: string
   rating: number
+  duration: string
   slug: string
   instructor: {
     name: string
     avatar: string
   }
-  category: {
-    name: string
-    icon: string
-  }
+  languages: LanguageProps[]
 }
 
 export function CourseInfo({ course }: { course: CoursesProps }) {
-  const editor = EditorJsParser()
-  const description = editor.parse(JSON.parse(course?.description)).join('')
   return (
     <div className="w-full xl:h-screen relative text-[#e1e1e6]">
       <img
@@ -42,7 +44,7 @@ export function CourseInfo({ course }: { course: CoursesProps }) {
             />
           </div>
           <div className="col-span-2 md:grid grid-cols-5 gap-4 items-center">
-            <div className="col-span-3 flex flex-col gap-10">
+            <div className="col-span-4 flex flex-col gap-10">
               <h1 className="xl:text-4xl capitalize text-2xl font-extrabold">
                 {course?.title}
               </h1>
@@ -50,12 +52,9 @@ export function CourseInfo({ course }: { course: CoursesProps }) {
               <div className="flex items-center gap-4 font-medium text-[#e1e1e6]">
                 <FlexCourseItens course={course} />
               </div>
-              <p
-                className="text-[#c4c4cc] text-md leading-7"
-                dangerouslySetInnerHTML={{
-                  __html: description.substring(0, 150),
-                }}
-              ></p>
+              <p className="text-[#c4c4cc] text-md leading-7">
+                {course?.shortDescription.slice(0, 350)}...
+              </p>
 
               <div className="grid sm:grid-cols-3 grid-cols-3 gap-4 p-6 bg-main border border-gray-900 rounded-lg">
                 <div className="col-span-1 flex-col border-r border-[#c4c4cc]">

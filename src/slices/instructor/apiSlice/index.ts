@@ -13,7 +13,7 @@ const baseQuery = fetchBaseQuery({
   baseUrl: 'http://localhost:3333',
   credentials: 'include',
   prepareHeaders: (headers, { getState }) => {
-    const token = (getState() as RootState).instructorAuth.token
+    const token = (getState() as RootState).instructorAuth.instructorToken
     if (token) {
       headers.set('authorization', `Bearer ${token}`)
     }
@@ -46,7 +46,10 @@ const baseQueryWithReauth = async (
     if (refreshResult?.data) {
       console.log('refreshResult.data', refreshResult.data)
       api.dispatch(
-        setCredentials({ ...instructorAuth, token: refreshResult.data }),
+        setCredentials({
+          ...instructorAuth,
+          instructorToken: refreshResult.data,
+        }),
       )
       result = await baseQuery(args, api, extraOptions)
     } else {

@@ -8,9 +8,7 @@ import { RootState } from '../../store'
 import { logout } from '../../slices/admin/authSlice'
 
 export function NavigationBar() {
-  const { user: admin } = useSelector((state: RootState) => state.adminAuth)
   const { instructor } = useSelector((state: RootState) => state.instructorAuth)
-  console.log(instructor)
 
   const navigate = useNavigate()
   const dispatch = useDispatch()
@@ -68,32 +66,45 @@ export function NavigationBar() {
             <NavLink className={Hover} to="/contact">
               Contato
             </NavLink>
-            <>
-              {/* <NavLink className={`${Hover} relative`} to="/favorites">
-                  <AiFillHeart className="w-6 h-6 text-quinary" />
-                  <div className="absolute flex justify-center items-center bg-secondary text-white w-4 h-4 rounded-full -top-1 -right-1 text-xs">
-                    0
-                  </div>
-                </NavLink> */}
-              <NavLink
-                className={`${Hover} relative`}
-                to={`${admin ? '/admin-dashboard' : '/instructor-dashboard'}`}
-              >
-                <img
-                  src={admin?.avatar || instructor?.avatar}
-                  alt="avatar"
-                  className="w-8 h-8 rounded-full object-cover"
-                />
-              </NavLink>
-              <button
-                type="button"
-                title="Sair"
-                className={`${Hover} relative`}
-                onClick={handleLogout}
-              >
-                <BiLogOut className="w-6 h-6 text-quinary" />
-              </button>
-            </>
+            <NavLink className={`${Hover} relative`} to="/favorites">
+              <AiFillHeart className="w-6 h-6 text-quinary" />
+              <div className="absolute flex justify-center items-center bg-secondary text-white w-4 h-4 rounded-full -top-1 -right-1 text-xs">
+                0
+              </div>
+            </NavLink>
+
+            {instructor && (
+              <>
+                <div className="flex items-center gap-2">
+                  <NavLink
+                    className={`${Hover} relative`}
+                    to="/instructor-dashboard"
+                  >
+                    <img
+                      src={instructor.avatar}
+                      alt="avatar"
+                      className="w-8 h-8 rounded-full object-cover"
+                    />
+                  </NavLink>
+                  <button
+                    title="Sair"
+                    type="button"
+                    onClick={handleLogout}
+                    className="text-[#c4c4cc] w-8 h-8 flex-colo rounded"
+                  >
+                    <BiLogOut className="w-6 h-6" />
+                  </button>
+                </div>
+              </>
+            )}
+
+            {!instructor && (
+              <>
+                <NavLink className={Hover} to="/instructor-login">
+                  <FaUserAlt className="w-6 h-6" />
+                </NavLink>
+              </>
+            )}
           </div>
         </div>
       </div>

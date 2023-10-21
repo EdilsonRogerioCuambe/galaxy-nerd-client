@@ -26,9 +26,9 @@ export function RegisterAdmin() {
   const [email, setEmail] = useState('')
   const [biography, setBiography] = useState('')
   const [password, setPassword] = useState('')
-  const [avatar, setAvatar] = useState<File | null>(null)
+  const [avatar, setAvatar] = useState<string | null>(null)
   const [avatarPreview, setAvatarPreview] = useState<string | null>(null)
-  const [banner, setBanner] = useState<File | null>(null)
+  const [banner, setBanner] = useState<string | null>(null)
   const [bannerPreview, setBannerPreview] = useState<string | null>(null)
   const [requirements, setRequirements] = useState<PasswordRequirements>({
     uppercase: false,
@@ -92,19 +92,15 @@ export function RegisterAdmin() {
       return
     }
 
-    const formData = new FormData()
-
     try {
-      formData.append('avatar', avatar)
-      formData.append('banner', banner)
-      formData.append('name', name)
-      formData.append('email', email)
-      formData.append('biography', biography)
-      formData.append('password', password)
-
-      if (formData) {
-        await createAdmin(formData).unwrap()
-      }
+      await createAdmin({
+        name,
+        email,
+        biography,
+        password,
+        avatar,
+        banner,
+      }).unwrap()
     } catch (error) {
       console.log(error)
       if (typeof error === 'object' && error !== null && 'data' in error) {
@@ -132,7 +128,9 @@ export function RegisterAdmin() {
     <Layout>
       <div className="max-w-5xl bg-secondary mx-auto px-4 mt-8 rounded-lg p-4 text-[#c4c4cc]">
         <form onSubmit={handleSubmit}>
-          <h2 className="text-xl font-extrabold">Registro como Instrutor</h2>
+          <h2 className="text-xl font-extrabold">
+            Registro como Administrador
+          </h2>
           <p className="text-sm text-center">
             Já tem uma conta?{' '}
             <Link to="/instructor-login" className="text-quinary">
@@ -150,8 +148,12 @@ export function RegisterAdmin() {
                 className="hidden"
                 onChange={(event) => {
                   if (event.target.files) {
-                    setAvatar(event.target.files[0])
                     setAvatarPreview(URL.createObjectURL(event.target.files[0]))
+                    const reader = new FileReader()
+                    reader.readAsDataURL(event.target.files[0])
+                    reader.onload = () => {
+                      setAvatar(reader.result as string)
+                    }
                   }
                 }}
               />
@@ -178,8 +180,12 @@ export function RegisterAdmin() {
                 className="hidden"
                 onChange={(event) => {
                   if (event.target.files) {
-                    setBanner(event.target.files[0])
                     setBannerPreview(URL.createObjectURL(event.target.files[0]))
+                    const reader = new FileReader()
+                    reader.readAsDataURL(event.target.files[0])
+                    reader.onload = () => {
+                      setBanner(reader.result as string)
+                    }
                   }
                 }}
               />

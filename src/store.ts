@@ -6,6 +6,7 @@ import { instructorApiSlice } from './slices/instructor/apiSlice'
 import { categoryApiSlice } from './slices/categorySlices'
 import { courseApiSlice } from './slices/courseSlices'
 import { topicApiSlice } from './slices/topicSlices'
+import { lessonApiSlice } from './slices/lessonsSlices'
 
 const store = configureStore({
   reducer: {
@@ -16,6 +17,7 @@ const store = configureStore({
     [categoryApiSlice.reducerPath]: categoryApiSlice.reducer,
     [courseApiSlice.reducerPath]: courseApiSlice.reducer,
     [topicApiSlice.reducerPath]: topicApiSlice.reducer,
+    [lessonApiSlice.reducerPath]: lessonApiSlice.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(
@@ -24,6 +26,7 @@ const store = configureStore({
       categoryApiSlice.middleware,
       courseApiSlice.middleware,
       topicApiSlice.middleware,
+      lessonApiSlice.middleware,
     ),
   devTools: true,
 })

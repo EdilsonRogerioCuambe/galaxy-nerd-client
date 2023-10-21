@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux'
 import { RootState } from '../../../store'
 import { message } from 'antd'
 import { PlusOutlined } from '@ant-design/icons'
-import { useCreateInstructorMutation } from '../../../slices/instructor/apiSlice/instructorsApiSlice'
+import { useCreateAdminMutation } from '../../../slices/admin/apiSlice/adminsApiSlice'
 import wall from '../../../assets/images/wall.jpg'
 
 interface PasswordRequirements {
@@ -17,19 +17,18 @@ interface PasswordRequirements {
   length: boolean
 }
 
-export function RegisterInstructor() {
+export function RegisterAdmin() {
   const navigate = useNavigate()
-  const { instructor } = useSelector((state: RootState) => state.instructorAuth)
-  const [createInstructor, { isSuccess, isLoading }] =
-    useCreateInstructorMutation()
+  const { user } = useSelector((state: RootState) => state.adminAuth)
+  const [createAdmin, { isSuccess, isLoading }] = useCreateAdminMutation()
 
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [biography, setBiography] = useState('')
   const [password, setPassword] = useState('')
-  const [avatar, setAvatar] = useState<string | null>(null)
+  const [avatar, setAvatar] = useState<File | null>(null)
   const [avatarPreview, setAvatarPreview] = useState<string | null>(null)
-  const [banner, setBanner] = useState<string | null>(null)
+  const [banner, setBanner] = useState<File | null>(null)
   const [bannerPreview, setBannerPreview] = useState<string | null>(null)
   const [requirements, setRequirements] = useState<PasswordRequirements>({
     uppercase: false,
@@ -93,15 +92,19 @@ export function RegisterInstructor() {
       return
     }
 
+    const formData = new FormData()
+
     try {
-      await createInstructor({
-        name,
-        email,
-        biography,
-        password,
-        avatar,
-        banner,
-      }).unwrap()
+      formData.append('avatar', avatar)
+      formData.append('banner', banner)
+      formData.append('name', name)
+      formData.append('email', email)
+      formData.append('biography', biography)
+      formData.append('password', password)
+
+      if (formData) {
+        await createAdmin(formData).unwrap()
+      }
     } catch (error) {
       console.log(error)
       if (typeof error === 'object' && error !== null && 'data' in error) {
@@ -114,10 +117,10 @@ export function RegisterInstructor() {
   }
 
   useEffect(() => {
-    if (instructor) {
+    if (user) {
       navigate('/instructor-dashboard')
     }
-  }, [instructor, navigate])
+  }, [user, navigate])
 
   if (isLoading) {
     message.loading('Registrando...')
@@ -147,13 +150,8 @@ export function RegisterInstructor() {
                 className="hidden"
                 onChange={(event) => {
                   if (event.target.files) {
-                    // conevert to base64
+                    setAvatar(event.target.files[0])
                     setAvatarPreview(URL.createObjectURL(event.target.files[0]))
-                    const reader = new FileReader()
-                    reader.readAsDataURL(event.target.files[0])
-                    reader.onload = () => {
-                      setAvatar(reader.result as string)
-                    }
                   }
                 }}
               />
@@ -180,12 +178,8 @@ export function RegisterInstructor() {
                 className="hidden"
                 onChange={(event) => {
                   if (event.target.files) {
+                    setBanner(event.target.files[0])
                     setBannerPreview(URL.createObjectURL(event.target.files[0]))
-                    const reader = new FileReader()
-                    reader.readAsDataURL(event.target.files[0])
-                    reader.onload = () => {
-                      setBanner(reader.result as string)
-                    }
                   }
                 }}
               />

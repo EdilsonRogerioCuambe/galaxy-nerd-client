@@ -2,7 +2,6 @@ import { FaRegListAlt, FaUsers } from 'react-icons/fa'
 import { InstructorSideBar } from '../../../layout/sidebar/instructor'
 import { HiViewGrid } from 'react-icons/hi'
 import { useGetCategoriesQuery } from '../../../slices/categorySlices/categoryApiSlice'
-import { useGetCoursesQuery } from '../../../slices/courseSlices/courseApiSlice'
 import { useSelector } from 'react-redux'
 import { RootState } from '../../../store'
 import { useGetInstructorQuery } from '../../../slices/instructor/apiSlice/instructorsApiSlice'
@@ -24,10 +23,8 @@ interface ICourse {
 
 export function InstructorDashboard() {
   const { data: categories } = useGetCategoriesQuery({})
-  const { data: courses } = useGetCoursesQuery({})
   const { instructor } = useSelector((state: RootState) => state.instructorAuth)
   const { data: instructorData } = useGetInstructorQuery(instructor?.id || '')
-  console.log(instructorData)
 
   const data = [
     {

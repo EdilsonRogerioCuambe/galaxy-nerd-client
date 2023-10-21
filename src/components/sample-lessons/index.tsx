@@ -53,16 +53,16 @@ export function SampleLessons({ course }: { course: CoursesProps }) {
   return (
     <div className="my-12 text-[#c4c4cc]">
       <Header header="O que você vai aprender" Icon={MdOutlinePlayLesson} />
-      <div className="mt-10">
+      <div className="mt-10 h-96 overflow-y-auto bg-secondary">
         {course?.topics?.map((topic: TopicsProps, index: number) => (
           <Accordion
             key={index}
             allowToggle
             border="none"
             defaultIndex={[0]}
-            className="mb-4"
+            className=""
           >
-            <AccordionItem border="none" className="mb-4">
+            <AccordionItem border="none">
               <h2>
                 <AccordionButton
                   _expanded={{
@@ -73,7 +73,7 @@ export function SampleLessons({ course }: { course: CoursesProps }) {
                   _focus={{
                     boxShadow: 'none',
                   }}
-                  className="flex justify-between items-center bg-[#1e1e1e] text-[#c4c4cc] px-4 py-2 rounded-md"
+                  className="flex justify-between items-center text-[#c4c4cc] px-4 py-2 rounded-md"
                 >
                   <span className="text-lg">{topic?.title}</span>
 
@@ -85,7 +85,7 @@ export function SampleLessons({ course }: { course: CoursesProps }) {
                 </AccordionButton>
               </h2>
               <AccordionPanel
-                className="bg-[#1e1e1e] text-[#c4c4cc] rounded-md"
+                className="bg-[#c4c4cc] text-[#c4c4cc] rounded-md"
                 pb={4}
               >
                 <List spacing={3}>

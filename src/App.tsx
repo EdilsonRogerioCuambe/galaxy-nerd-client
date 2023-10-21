@@ -19,7 +19,9 @@ import { InstructorLogin } from './pages/login/instructor'
 import { RegisterInstructor } from './pages/register/instructor'
 import { InstructorPrivateRoutes } from './pages/private/instructor'
 import { InstructorDashboard } from './pages/dashboard/instructor'
-import { InstructorAddTopicsToCourse } from './pages/add-topic-modal'
+import { InstructorAddTopicsToCourse } from './pages/add-topic'
+import { InstructorAddLessonsToCourse } from './pages/add-lesson'
+import { RegisterAdmin } from './pages/register/admin'
 
 const App = () => {
   Aos.init()
@@ -35,8 +37,9 @@ const App = () => {
         <Route path="/instructor-login" element={<InstructorLogin />} />
 
         {/** REGISTER */}
-        <Route path="/register" element={<Register />} />
+        <Route path="/register-admin" element={<RegisterAdmin />} />
         <Route path="/register-instructor" element={<RegisterInstructor />} />
+
         <Route path="/courses-list" element={<CoursesLists />} />
         <Route path="/categories" element={<Categories />} />
 
@@ -60,6 +63,10 @@ const App = () => {
           <Route
             path="instructor-add-topics-to-course"
             element={<InstructorAddTopicsToCourse />}
+          />
+          <Route
+            path="/instructor-add-lessons-to-course"
+            element={<InstructorAddLessonsToCourse />}
           />
         </Route>
       </Routes>

@@ -17,6 +17,7 @@ export const instructorsApiSlice = instructorApiSlice.injectEndpoints({
         url: INSTRUCTORS_API_ENDPOINT,
         method: 'POST',
         body,
+        formData: true,
       }),
       invalidatesTags: ['Instructor'],
     }),

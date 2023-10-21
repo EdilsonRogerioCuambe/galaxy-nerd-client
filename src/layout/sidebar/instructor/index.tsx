@@ -4,7 +4,7 @@ import { HiViewGrid } from 'react-icons/hi'
 import { RiLockPasswordLine, RiMovie2Fill } from 'react-icons/ri'
 import { Layout } from '../..'
 import { NavLink } from 'react-router-dom'
-import { MdTopic } from 'react-icons/md'
+import { MdTopic, MdOutlineClass } from 'react-icons/md'
 
 export function InstructorSideBar({ children }: { children: React.ReactNode }) {
   const links = [
@@ -27,6 +27,11 @@ export function InstructorSideBar({ children }: { children: React.ReactNode }) {
       title: 'Add Topicos',
       link: '/instructor-add-topics-to-course',
       icon: <MdTopic className="w-6 h-6" />,
+    },
+    {
+      title: 'Add Aulas',
+      link: '/instructor-add-lessons-to-course',
+      icon: <MdOutlineClass className="w-6 h-6" />,
     },
     {
       title: 'Usuários',

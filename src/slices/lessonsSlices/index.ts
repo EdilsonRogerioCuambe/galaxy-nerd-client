@@ -6,8 +6,8 @@ import {
   FetchArgs,
   BaseQueryApi,
 } from '@reduxjs/toolkit/query/react'
-import { RootState } from '../../../store'
-import { logout, setCredentials } from '../authSlice'
+import { RootState } from '../../store'
+import { logout, setCredentials } from '../instructor/authSlice'
 
 const baseQuery = fetchBaseQuery({
   baseUrl: 'http://localhost:3333',
@@ -15,7 +15,7 @@ const baseQuery = fetchBaseQuery({
   prepareHeaders: (headers, { getState }) => {
     const token = (getState() as RootState).instructorAuth.instructorToken
     if (token) {
-      headers.set('Authorization', `Bearer ${token}`)
+      headers.set('authorization', `Bearer ${token}`)
     }
     return headers
   },
@@ -62,9 +62,9 @@ const baseQueryWithReauth = async (
   return result
 }
 
-export const instructorApiSlice = createApi({
-  reducerPath: 'instructorApi',
+export const lessonApiSlice = createApi({
+  reducerPath: 'lessonApi',
   baseQuery: baseQueryWithReauth,
-  tagTypes: ['Instructor'],
+  tagTypes: ['Lesson'],
   endpoints: (_builder) => ({}),
 })

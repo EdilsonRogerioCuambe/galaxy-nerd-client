@@ -50,7 +50,7 @@ export function CourseInfo({ course }: { course: CoursesProps }) {
             <img
               src={course?.image}
               alt={course?.title}
-              className="w-96 h-96 object-cover"
+              className="w-full h-full object-cover"
             />
           </div>
           <div className="col-span-2 md:grid grid-cols-5 gap-4 items-center">

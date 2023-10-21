@@ -10,6 +10,7 @@ interface PopularCoursesProps {
   thumbnail: string
   price: string
   slug: string
+  image: string
   instructor: {
     name: string
     avatar: string

@@ -6,6 +6,7 @@ interface CoursesProps {
   title: string
   description: string
   thumbnail: string
+  image: string
   price: string
   slug: string
   instructor: {
@@ -20,7 +21,7 @@ export function Course({ course }: { course: CoursesProps }) {
       <Link to={`/course/${course?.slug}`} className="w-full">
         <div className="border border-border p-1 hover:scale-95 transitions relative rounded overflow-hidden">
           <img
-            src={course?.thumbnail}
+            src={course?.image}
             alt={course?.title}
             className="w-full h-64 object-cover"
           />

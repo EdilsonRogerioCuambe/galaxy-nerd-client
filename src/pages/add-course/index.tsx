@@ -42,8 +42,8 @@ export function AddCourse() {
   const [shortDescription, setShortDescription] = useState<string>('')
   const [languages, setLanguages] = useState<string[]>([])
   const [price, setPrice] = useState<string>('')
-  const [image, setImage] = useState<File | null>(null)
-  const [thumbnail, setThumbnail] = useState<File | null>(null)
+  const [image, setImage] = useState<string | null>(null)
+  const [thumbnail, setThumbnail] = useState<string | null>(null)
   const [level, setLevel] = useState<'Básico' | 'Intermediário' | 'Avançado'>(
     'Básico',
   )
@@ -53,7 +53,7 @@ export function AddCourse() {
   const initEditor = () => {
     const editor = new EditorJS({
       holder: 'editorjs',
-      minHeight: 500,
+      minHeight: 150,
       onReady: () => {
         editorRef.current = editor
       },
@@ -180,35 +180,19 @@ export function AddCourse() {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
 
-    const formData = new FormData()
-
     try {
-      formData.append('title', title)
-      formData.append('price', price)
-      if (image) {
-        formData.append('image', image)
-      }
-      if (thumbnail) {
-        formData.append('thumbnail', thumbnail)
-      }
-      formData.append('level', level)
-      formData.append('duration', duration)
-      formData.append('instructorId', instructor.id)
-      languages.forEach((language) => {
-        formData.append('languages', language)
-      })
-      formData.append('shortDescription', shortDescription)
-      formData.append(
-        'description',
-        JSON.stringify(await editorRef.current?.save()),
-      )
-
-      console.log(instructor.id)
-      console.log(formData)
-
-      const response = await createCourse(formData).unwrap()
-
-      console.log(response)
+      await createCourse({
+        instructorId: instructor?.id,
+        title,
+        shortDescription,
+        description: JSON.stringify(await editorRef.current?.save()),
+        price,
+        duration,
+        level,
+        languages,
+        image,
+        thumbnail,
+      }).unwrap()
     } catch (error) {
       console.error(error)
       if (typeof error === 'object' && error !== null && 'data' in error) {
@@ -245,10 +229,14 @@ export function AddCourse() {
                   className="hidden"
                   onChange={(event) => {
                     if (event.target.files) {
-                      setImage(event.target.files[0])
                       setImagePreview(
                         URL.createObjectURL(event.target.files[0]),
                       )
+                      const reader = new FileReader()
+                      reader.readAsDataURL(event.target.files[0])
+                      reader.onload = () => {
+                        setImage(reader.result as string)
+                      }
                     }
                   }}
                 />
@@ -275,10 +263,14 @@ export function AddCourse() {
                   className="hidden"
                   onChange={(event) => {
                     if (event.target.files) {
-                      setThumbnail(event.target.files[0])
                       setThumbnailPreview(
                         URL.createObjectURL(event.target.files[0]),
                       )
+                      const reader = new FileReader()
+                      reader.readAsDataURL(event.target.files[0])
+                      reader.onload = () => {
+                        setThumbnail(reader.result as string)
+                      }
                     }
                   }}
                 />
@@ -320,7 +312,7 @@ export function AddCourse() {
               </label>
               <div
                 id="editorjs"
-                className="text-[#c4c4cc] h-96 overflow-y-auto"
+                className="text-[#c4c4cc] h-96 overflow-y-auto bg-main border border-border rounded p-4"
               />
               <Input
                 type="text"

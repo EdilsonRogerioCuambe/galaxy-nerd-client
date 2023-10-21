@@ -60,8 +60,6 @@ export function InstructorAddLessonsToCourse() {
   const { data: instructorData } = useGetInstructorQuery(instructor?.id || '')
   const { data: course } = useGetCourseQuery(selectedCourse)
 
-  console.log(course)
-
   return (
     <InstructorSideBar>
       <div className="flex flex-col gap-6">

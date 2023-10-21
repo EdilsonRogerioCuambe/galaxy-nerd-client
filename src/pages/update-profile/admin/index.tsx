@@ -19,11 +19,11 @@ export function AdminUpdateProfile() {
   const [biography, setBiography] = useState<string | null>(
     user?.biography || null,
   )
-  const [avatar, setAvatar] = useState<File | null>(null)
+  const [avatar, setAvatar] = useState<string | null>(null)
   const [avatarPreview, setAvatarPreview] = useState<string | null>(
     user?.avatar || null,
   )
-  const [banner, setBanner] = useState<File | null>(null)
+  const [banner, setBanner] = useState<string | null>(null)
   const [bannerPreview, setBannerPreview] = useState<string | null>(
     user?.banner || null,
   )
@@ -50,22 +50,18 @@ export function AdminUpdateProfile() {
       return
     }
 
-    const formData = new FormData()
-
-    formData.append('name', name)
-    formData.append('email', email)
-    formData.append('biography', biography)
-
-    if (avatar) {
-      formData.append('avatar', avatar)
-    }
-
-    if (banner) {
-      formData.append('banner', banner)
-    }
-
     try {
-      const response = await updateAdmin({ id: user?.id, body: formData })
+      const response = await updateAdmin({
+        id: user?.id,
+        body: {
+          adminId: user?.id,
+          name,
+          email,
+          biography,
+          avatar: avatar || user?.avatar,
+          banner: banner || user?.banner,
+        },
+      })
       if ('data' in response && response.data.admin) {
         dispatch(
           setCredentials({
@@ -101,8 +97,12 @@ export function AdminUpdateProfile() {
                 className="hidden"
                 onChange={(event) => {
                   if (event.target.files) {
-                    setAvatar(event.target.files[0])
                     setAvatarPreview(URL.createObjectURL(event.target.files[0]))
+                    const reader = new FileReader()
+                    reader.readAsDataURL(event.target.files[0])
+                    reader.onloadend = () => {
+                      setAvatar(reader.result as string)
+                    }
                   }
                 }}
               />
@@ -130,8 +130,12 @@ export function AdminUpdateProfile() {
                 className="hidden"
                 onChange={(event) => {
                   if (event.target.files) {
-                    setBanner(event.target.files[0])
                     setBannerPreview(URL.createObjectURL(event.target.files[0]))
+                    const reader = new FileReader()
+                    reader.readAsDataURL(event.target.files[0])
+                    reader.onloadend = () => {
+                      setBanner(reader.result as string)
+                    }
                   }
                 }}
               />

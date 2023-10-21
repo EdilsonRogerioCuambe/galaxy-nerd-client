@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/ban-types */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import {
+  BaseQueryApi,
+  FetchArgs,
   createApi,
   fetchBaseQuery,
-  FetchArgs,
-  BaseQueryApi,
 } from '@reduxjs/toolkit/query/react'
 import { RootState } from '../../store'
 import { logout, setCredentials } from '../instructor/authSlice'
@@ -27,16 +27,15 @@ const baseQueryWithReauth = async (
   extraOptions: {},
 ) => {
   let result = await baseQuery(args, api, extraOptions)
-  const instructorAuth = (api.getState() as RootState).instructorAuth
+  const user = (api.getState() as RootState).instructorAuth.instructor
 
   if (result?.error?.status === 401) {
     console.log('401 error, trying to refresh token')
 
     const refreshResult = await baseQuery(
       {
-        url: 'http://localhost:3333/instructor/token/refresh',
-        method: 'PUT',
-        credentials: 'include',
+        url: 'http://localhost:3333/instrcutor/token/refresh',
+        method: 'POST',
       },
       api,
       extraOptions,
@@ -46,12 +45,7 @@ const baseQueryWithReauth = async (
 
     if (refreshResult?.data) {
       console.log('refreshResult.data', refreshResult.data)
-      api.dispatch(
-        setCredentials({
-          ...instructorAuth,
-          instructorToken: refreshResult.data,
-        }),
-      )
+      api.dispatch(setCredentials({ ...user, token: refreshResult.data }))
       result = await baseQuery(args, api, extraOptions)
     } else {
       console.log('refreshResult.data is null')

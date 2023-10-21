@@ -19,7 +19,7 @@ export function ModalCategory({
   category,
 }: IModalCategoryProps) {
   const [categoryName, setCategoryName] = useState('')
-  const [categoryIcon, setCategoryIcon] = useState<File | null>(null)
+  const [categoryIcon, setCategoryIcon] = useState<string | null>(null)
   const [categoryIconPreview, setCategoryIconPreview] = useState('')
   const [categoryDescription, setCategoryDescription] = useState('')
 
@@ -38,16 +38,16 @@ export function ModalCategory({
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
 
-    const formData = new FormData()
-
-    formData.append('name', categoryName)
-    formData.append('description', categoryDescription)
-    if (categoryIcon) {
-      formData.append('icon', categoryIcon)
-    }
-
     try {
-      await createCategory(formData).unwrap()
+      await createCategory({
+        name: categoryName,
+        description: categoryDescription,
+        icon: categoryIcon,
+      }).unwrap()
+
+      setCategoryName('')
+      setCategoryDescription('')
+      setCategoryIcon(null)
       setOpen(false)
     } catch (error) {
       console.error(error)
@@ -105,10 +105,14 @@ export function ModalCategory({
                   className="hidden"
                   onChange={(event) => {
                     if (event.target.files) {
-                      setCategoryIcon(event.target.files[0])
                       setCategoryIconPreview(
                         URL.createObjectURL(event.target.files[0]),
                       )
+                      const reader = new FileReader()
+                      reader.readAsDataURL(event.target.files[0])
+                      reader.onload = () => {
+                        setCategoryIcon(reader.result as string)
+                      }
                     }
                   }}
                 />

@@ -78,9 +78,7 @@ export function Lines({ course, index, admin, addTopics }: LinesProps) {
             currency: 'BRL',
           }).format(Number(course?.price))}
         </td>
-        <td
-          className={`${Text} float-right align-middle items-center justify-center flex-rows gap-2`}
-        >
+        <td className="text-sm text-[#c4c4cc] text-right leading-6 whitespace-nowrap px-5 py-2 flex items-center justify-end my-auto">
           {admin ? (
             <>
               <button
@@ -155,7 +153,7 @@ export function Table({ data, admin, addTopics }: TableProps) {
               <th scope="col" className={`${Head}`}>
                 Instrutor
               </th>
-              <th scope="col" className={`${Head}`}>
+              <th scope="col" className={`${Head} text-end`}>
                 Categoria
               </th>
               <th scope="col" className={`${Head} text-end`}>

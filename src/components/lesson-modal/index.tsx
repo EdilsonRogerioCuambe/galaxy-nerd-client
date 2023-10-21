@@ -15,9 +15,9 @@ interface IModalTopicsProps {
 export function LessonModal({ open, setOpen, topicId }: IModalTopicsProps) {
   const [title, setTitle] = useState<string>('')
   const [description, setDescription] = useState<string>('')
-  const [order, setOrder] = useState<number>(0)
+  const [order, setOrder] = useState<string>('')
   const [duration, setDuration] = useState<string>('')
-  const [video, setVideo] = useState<File | null>(null)
+  const [video, setVideo] = useState<string | null>(null)
   const [videoPreview, setVideoPreview] = useState<string | null>(null)
   const [createLesson, { isLoading, isSuccess }] = useCreateLessonMutation()
 
@@ -30,7 +30,7 @@ export function LessonModal({ open, setOpen, topicId }: IModalTopicsProps) {
   }
 
   const handleOrder = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setOrder(Number(e.target.value))
+    setOrder(e.target.value)
   }
 
   const handleDuration = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -39,8 +39,12 @@ export function LessonModal({ open, setOpen, topicId }: IModalTopicsProps) {
 
   const handleVideo = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
-      setVideo(e.target.files[0])
       setVideoPreview(URL.createObjectURL(e.target.files[0]))
+      const reader = new FileReader()
+      reader.readAsDataURL(e.target.files[0])
+      reader.onload = () => {
+        setVideo(reader.result as string)
+      }
     }
   }
 
@@ -52,19 +56,15 @@ export function LessonModal({ open, setOpen, topicId }: IModalTopicsProps) {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
-    const formData = new FormData()
-
-    formData.append('title', title)
-    formData.append('description', description)
-    formData.append('order', String(order))
-    formData.append('topicId', topicId)
-    formData.append('duration', duration)
-    if (video) {
-      formData.append('video', video)
-    }
-
     try {
-      await createLesson(formData).unwrap()
+      await createLesson({
+        topicId,
+        title,
+        description,
+        order,
+        duration,
+        video,
+      }).unwrap()
     } catch (error) {
       message.error('Erro ao adicionar aula')
     }

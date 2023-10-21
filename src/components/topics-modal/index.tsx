@@ -14,8 +14,8 @@ interface IModalTopicsProps {
 export function TopicsModal({ open, setOpen, courseId }: IModalTopicsProps) {
   const [topicName, setTopicName] = useState('')
   const [topicDescription, setTopicDescription] = useState('')
-  const [topicOrder, setTopicOrder] = useState(0)
-  const [topicIcon, setTopicIcon] = useState<File | null>(null)
+  const [topicOrder, setTopicOrder] = useState('')
+  const [topicIcon, setTopicIcon] = useState<string | null>(null)
   const [topicIconPreview, setTopicIconPreview] = useState('')
   const [createTopic, { isSuccess, isLoading }] = useCreateTopicMutation()
 
@@ -30,23 +30,20 @@ export function TopicsModal({ open, setOpen, courseId }: IModalTopicsProps) {
   }
 
   const handleOrderChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setTopicOrder(Number(event.target.value))
+    setTopicOrder(event.target.value)
   }
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
 
-    const formData = new FormData()
-    formData.append('title', topicName)
-    formData.append('description', topicDescription)
-    formData.append('order', String(topicOrder))
-    formData.append('courseId', courseId)
-    if (topicIcon) {
-      formData.append('icon', topicIcon)
-    }
-
     try {
-      await createTopic(formData).unwrap()
+      await createTopic({
+        courseId,
+        title: topicName,
+        description: topicDescription,
+        order: topicOrder,
+        icon: topicIcon,
+      }).unwrap()
       setOpen(false)
     } catch (error) {
       console.error(error)
@@ -104,10 +101,14 @@ export function TopicsModal({ open, setOpen, courseId }: IModalTopicsProps) {
                 className="hidden"
                 onChange={(event) => {
                   if (event.target.files) {
-                    setTopicIcon(event.target.files[0])
                     setTopicIconPreview(
                       URL.createObjectURL(event.target.files[0]),
                     )
+                    const reader = new FileReader()
+                    reader.readAsDataURL(event.target.files[0])
+                    reader.onloadend = () => {
+                      setTopicIcon(reader.result as string)
+                    }
                   }
                 }}
               />

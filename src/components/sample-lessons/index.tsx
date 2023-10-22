@@ -9,6 +9,7 @@ import {
   List,
   ListItem,
 } from '@chakra-ui/react'
+import { FaChevronRight } from 'react-icons/fa'
 
 interface LanguageProps {
   id: string
@@ -27,6 +28,7 @@ interface TopicsProps {
     order: string
     duration: string
     videoUrl: string
+    slug: string
   }[]
 }
 
@@ -53,14 +55,13 @@ export function SampleLessons({ course }: { course: CoursesProps }) {
   return (
     <div className="my-12 text-[#c4c4cc]">
       <Header header="O que você vai aprender" Icon={MdOutlinePlayLesson} />
-      <div className="mt-10 h-96 overflow-y-auto bg-secondary">
+      <div className="mt-10 h-96 overflow-y-auto bg-secondary p-4">
         {course?.topics?.map((topic: TopicsProps, index: number) => (
           <Accordion
             key={index}
             allowToggle
-            border="none"
             defaultIndex={[0]}
-            className=""
+            className="mb-4"
           >
             <AccordionItem border="none">
               <h2>
@@ -76,25 +77,24 @@ export function SampleLessons({ course }: { course: CoursesProps }) {
                   className="flex justify-between items-center text-[#c4c4cc] px-4 py-2 rounded-md"
                 >
                   <span className="text-lg">{topic?.title}</span>
-
-                  <span className="text-sm text-[#c4c4cc]">
-                    {topic?.lessons?.length === undefined
-                      ? '0 aulas'
-                      : `${topic?.lessons?.length} aulas`}
+                  {/** MOSTRAR A QUANTIDADE DE AULAS E OS ICONES */}
+                  <span className="text-lg">
+                    {topic?.lessons?.length} aulas
                   </span>
                 </AccordionButton>
               </h2>
               <AccordionPanel
-                className="bg-[#c4c4cc] text-[#c4c4cc] rounded-md"
+                className="bg-transparent text-[#c4c4cc] rounded-md"
                 pb={4}
               >
                 <List spacing={3}>
                   {topic?.lessons?.map((lesson, index) => (
                     <ListItem key={index} className="flex items-center">
                       <Link
-                        to={`/course/${course?.slug}/${lesson?.order}`}
-                        className="flex items-center"
+                        to={`/course/${course?.slug}/lesson/${lesson?.slug}`}
+                        className="flex items-center px-4 py-2 rounded-md hover:bg-[#c4c4cc] hover:text-secondary transitions"
                       >
+                        <FaChevronRight className="mr-2" />
                         <span className="text-lg mr-2">{lesson?.title}</span>
                       </Link>
                     </ListItem>

@@ -39,7 +39,7 @@ interface CoursesProps {
 export function Course() {
   const { slug } = useParams()
   const { data: courses } = useGetCoursesQuery({})
-  const { data: course } = useGetCourseBySlugQuery(slug)
+  const { data: course, isLoading } = useGetCourseBySlugQuery(slug)
 
   const [cursosRelacionados, setCursosRelacionados] = useState<CoursesProps[]>(
     [],
@@ -60,7 +60,10 @@ export function Course() {
 
   return (
     <Layout>
-      {course && <CourseInfo course={course?.course?.course as CoursesProps} />}
+      <CourseInfo
+        course={course?.course?.course as CoursesProps}
+        isLoading={isLoading}
+      />
       <div className="container mx-auto min-h-screen px-2 my-6">
         {course && <SampleLessons course={course?.course?.course} />}
         <RatingCourse course={course?.course?.course as CoursesProps} />

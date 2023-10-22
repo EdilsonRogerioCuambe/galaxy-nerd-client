@@ -1,15 +1,11 @@
 import { Link, useParams } from 'react-router-dom'
 import { Layout } from '../../layout'
 import { BiArrowBack } from 'react-icons/bi'
-import { useEffect, useState } from 'react'
-import { Cursos } from '../../data/Cursos'
 import { FaHeart, FaBook, FaImage } from 'react-icons/fa'
 import { faker } from '@faker-js/faker'
-import ReactPlayer from 'react-player'
 import { AiFillPlayCircle } from 'react-icons/ai'
 import { SiApachestorm } from 'react-icons/si'
 import { BsDiscord } from 'react-icons/bs'
-import flutter from '../../assets/images/seguranca.jpg'
 import {
   Accordion,
   AccordionItem,
@@ -19,16 +15,67 @@ import {
   ListItem,
 } from '@chakra-ui/react'
 import { MdCheckCircle, MdRadioButtonUnchecked } from 'react-icons/md'
-import video from '../../assets/images/video.mp4'
+import { useGetCourseBySlugQuery } from '../../slices/courseSlices/courseApiSlice'
+import { useGetLessonBySlugQuery } from '../../slices/lessonsSlices/lessonsApiSlice'
+
+interface LanguageProps {
+  id: string
+  name: string
+  icon: string
+}
+
+interface TopicsProps {
+  id: string
+  title: string
+  order: string
+  completed: boolean
+  description: string
+  lessons: {
+    id: string
+    title: string
+    order: string
+    duration: string
+    videoUrl: string
+    slug: string
+  }[]
+}
+
+interface CoursesProps {
+  id: string
+  title: string
+  duration: string
+  image: string
+  description: string
+  shortDescription: string
+  thumbnail: string
+  price: string
+  rating: number
+  slug: string
+  instructor: {
+    name: string
+    avatar: string
+  }
+  topics: TopicsProps[]
+  languages: LanguageProps[]
+}
 
 export function Lessons() {
-  const { slug } = useParams()
-  const [course, setCourse] = useState<any>(undefined)
+  const { slug, lesson } = useParams()
+  const { data: course } = useGetCourseBySlugQuery(slug)
+  const { data: lessonData } = useGetLessonBySlugQuery(lesson)
 
-  useEffect(() => {
-    const course = Cursos.find((course) => course.slug === slug)
-    setCourse(course)
-  }, [slug])
+  console.log(course?.course)
+
+  const videoJsOptions = {
+    autoplay: false,
+    controls: true,
+    sources: [
+      {
+        src: lessonData?.lesson?.lesson?.videoUrl,
+        type: 'video/mp4',
+      },
+    ],
+  }
 
   const fakeQuestions = Array.from({ length: 10 }, () => ({
     username: faker.person.fullName(),
@@ -47,10 +94,10 @@ export function Lessons() {
       <div className="container mx-auto bg-secondary rounded-md mb-6 p-6 mt-8">
         <div className="flex-betweens flex-wrap gap-2 bg-main rounded border border-gray-800 py-6 px-6">
           <Link
-            to={`/course/${course?.slug}`}
+            to={`/course/${course?.course?.course?.slug}`}
             className="md:text-xl text-sm flex gap-3 items-center font-bold text-[#c4c4cc]"
           >
-            <BiArrowBack className="w-6 h-6" /> {course?.nome}
+            <BiArrowBack className="w-6 h-6" /> {course?.course?.course?.title}
           </Link>
           <div className="flex-btweens sm:w-auto w-full gap-5">
             <button
@@ -65,31 +112,21 @@ export function Lessons() {
       </div>
       <div className="bg-secondary relative container mx-auto rounded-md text-[#c4c4cc] p-6 justify-between flex flex-col md:flex-row">
         <div className="w-full md:w-4/6 left-0 top-[72px] bg-opacity-40 max-w-full">
-          <ReactPlayer
-            url={video}
-            width="100%"
-            height="auto"
-            light={flutter}
-            controls
-            style={{
-              boxShadow: '0 0 10px rgba(0,0,0,0.5)',
-              aspectRatio: '16/9',
-              position: 'relative',
-              height: '0',
-              overflow: 'hidden',
-            }}
-          />
+          {/** AREA DO VIDEO */}
+          <video
+            id="my-video"
+            className="video-js"
+            preload="auto"
+            src={lessonData?.lesson?.lesson?.videoUrl}
+            {...videoJsOptions}
+          ></video>
           <div className="mt-4 flex flex-col md:flex-row bg-main p-6 shadow-md rounded-lg">
             <div className="w-full md:w-3/4 md:pr-4">
               <div className="text-[#e1e1e6] text-xl md:text-2xl font-bold leading-[33.60px] mt-2">
-                Aula 01 - Criando o projeto e realizando o setup inicial
+                {lessonData?.lesson?.lesson?.title}
               </div>
               <div className="text-[#c4c4cc] text-base md:text-lg font-normal leading-relaxed mt-2">
-                Nessa aula vamos dar início ao projeto criando a estrutura base
-                da aplicação utilizando ReactJS, Vite e TailwindCSS. Vamos
-                também realizar o setup do nosso projeto no GraphCMS criando as
-                entidades da aplicação e integrando a API GraphQL gerada pela
-                plataforma no nosso front-end utilizando Apollo Client.
+                {lessonData?.lesson?.lesson?.description}
               </div>
             </div>
             <div className="w-full md:w-1/4 mt-4 md:mt-0 md:pl-4">
@@ -118,15 +155,15 @@ export function Lessons() {
           <div className="flex items-center mt-4">
             <img
               className="rounded-full object-cover border-2 border-quinary w-14 h-14"
-              src={faker.image.avatar()}
-              alt="Diego Fernandes"
+              src={course?.course?.course?.instructor?.avatar}
+              alt={course?.course?.course?.instructor?.name}
             />
             <div className="flex flex-col ml-2">
               <div className="text-lg text-[#e1e1e6] font-semibold">
-                Diego Fernandes
+                {course?.course?.course?.instructor?.name}
               </div>
               <div className="text-[#c4c4cc]">
-                Co-fundador e CTO na Rocketseat
+                {course?.course?.course?.instructor?.biography}
               </div>
             </div>
           </div>
@@ -166,39 +203,44 @@ export function Lessons() {
             allowMultiple
             className="overflow-y-auto h-[calc(100vh-1rem)] bg-main rounded-md"
           >
-            {course?.topicos?.map((topico: any, index: number) => (
-              <AccordionItem
-                key={index}
-                className={`border-b border-gray-400 ${
-                  topico.concluido ? 'border-green-500' : ''
-                }`}
-              >
-                <h2 className="text-gray-400">
-                  <AccordionButton className="flex justify-between items-center py-2 px-4">
-                    <span className="font-extrabold text-left">
-                      {topico?.titulo}
-                    </span>
-                  </AccordionButton>
-                </h2>
-                <AccordionPanel pb={4} className="text-gray-400 px-4 py-2 mb-2">
-                  {topico?.videos?.map((video: any, videoIndex: number) => (
-                    <div
-                      key={videoIndex}
-                      className={`flex gap-3 items-center pl-2 py-2 ${
-                        video.concluido
-                          ? 'border-l-4 border-green-500 -opacity-50'
-                          : 'border-l-4 border-gray-400'
-                      }`}
-                    >
-                      <AiFillPlayCircle size={24} />
-                      <Link to={video?.link} className="text-sm">
-                        {video?.titulo}
-                      </Link>
-                    </div>
-                  ))}
-                </AccordionPanel>
-              </AccordionItem>
-            ))}
+            {course?.course?.course?.topics?.map(
+              (topic: TopicsProps, index: number) => (
+                <AccordionItem
+                  key={index}
+                  className={`border-b border-gray-400 ${
+                    topic?.completed ? 'border-green-500' : ''
+                  }`}
+                >
+                  <h2 className="text-gray-400">
+                    <AccordionButton className="flex justify-between items-center py-2 px-4">
+                      <span className="font-extrabold text-left">
+                        {topic?.title}
+                      </span>
+                    </AccordionButton>
+                  </h2>
+                  <AccordionPanel
+                    pb={4}
+                    className="text-gray-400 px-4 py-2 mb-2"
+                  >
+                    {topic?.lessons?.map((video: any, videoIndex: number) => (
+                      <div
+                        key={videoIndex}
+                        className={`flex gap-3 items-center pl-2 py-2 ${
+                          video.concluido
+                            ? 'border-l-4 border-green-500 -opacity-50'
+                            : 'border-l-4 border-gray-400'
+                        }`}
+                      >
+                        <AiFillPlayCircle size={24} />
+                        <Link to={video?.slug} className="text-sm">
+                          {video?.title}
+                        </Link>
+                      </div>
+                    ))}
+                  </AccordionPanel>
+                </AccordionItem>
+              ),
+            )}
           </Accordion>
         </div>
       </div>

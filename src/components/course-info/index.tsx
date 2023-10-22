@@ -2,7 +2,6 @@ import { FaPlay, FaShareAlt } from 'react-icons/fa'
 import { FlexCourseItens } from '../flex-course-itens'
 import { Stars } from '../stars'
 import { Link } from 'react-router-dom'
-import { useGetTopicsQuery } from '../../slices/topicSlices/topicApiSlice'
 import {
   Accordion,
   AccordionItem,
@@ -36,12 +35,19 @@ interface CoursesProps {
   languages: LanguageProps[]
 }
 
-export function CourseInfo({ course }: { course: CoursesProps }) {
+export function CourseInfo({
+  course,
+  isLoading,
+}: {
+  course: CoursesProps
+  isLoading: boolean
+}) {
+  // colocar um array fill parecido com o do sample-lessons cores do background #202024, para os background dos textos #121214
   return (
     <div className="w-full xl:h-screen relative text-[#e1e1e6]">
       <img
         src={course?.thumbnail}
-        alt={course.title}
+        alt={course?.title}
         className="w-full hidden xl:inline-block h-full object-cover"
       />
       <div className="xl:bg-main bg-secondary flex-colo xl:bg-opacity-90 xl:absolute top-0 left-0 right-0 bottom-0">
@@ -87,7 +93,7 @@ export function CourseInfo({ course }: { course: CoursesProps }) {
                 </div>
                 <div className="col-span-1 flex justify-end font-medium text-sm">
                   <Link
-                    to={`/course/${course.slug}/lessons`}
+                    to={`/course/${course?.slug}/lessons`}
                     className="bg-dry py-3 hover:bg-quinary transitions border-2 border-quinary rounded-full flex-rows gap-4 w-full sm:py-3"
                   >
                     <FaPlay className="w-6 h-6" />

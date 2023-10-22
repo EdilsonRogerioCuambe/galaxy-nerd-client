@@ -4,7 +4,6 @@ import { Home } from './pages/home'
 import { Course } from './pages/course'
 import { Lessons } from './pages/lessons'
 import { CoursesLists } from './pages/courses-lists'
-import { Register } from './pages/register'
 import { Categories } from './pages/categories'
 import { AddCourse } from './pages/add-course'
 import { AdminLogin } from './pages/login/admin'
@@ -30,7 +29,7 @@ const App = () => {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/course/:slug" element={<Course />} />
-        <Route path="/course/:slug/:lessons" element={<Lessons />} />
+        <Route path="/course/:slug/lesson/:lesson" element={<Lessons />} />
 
         {/** LOGIN */}
         <Route path="/admin-login" element={<AdminLogin />} />

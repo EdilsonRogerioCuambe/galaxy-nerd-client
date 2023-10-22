@@ -28,10 +28,14 @@ export function FlexCourseItens({ course }: { course: CoursesProps }) {
     <>
       <div className="flex items-center gap-2">
         <BiCategoryAlt className="w-4 h-4 text-green-400" />
-        {course.languages.map((language) => (
-          <div key={language.id} className="flex items-center gap-2">
-            <img src={language.icon} alt={language.name} className="w-4 h-4" />
-            <span>{language.name}</span>
+        {course?.languages?.map((language) => (
+          <div key={language?.id} className="flex items-center gap-2">
+            <img
+              src={language?.icon}
+              alt={language?.name}
+              className="w-4 h-4"
+            />
+            <span>{language?.name}</span>
           </div>
         ))}
       </div>

@@ -21,12 +21,6 @@ import videojs from 'video.js'
 import 'video.js/dist/video-js.css'
 import { useRef, useEffect } from 'react'
 
-interface LanguageProps {
-  id: string
-  name: string
-  icon: string
-}
-
 interface TopicsProps {
   id: string
   title: string
@@ -51,11 +45,10 @@ export function Lessons() {
   const playerRef = useRef<videojs.Player | null>(null)
 
   useEffect(() => {
-    // adicionar um shadow para o video
     const options = {
       autoplay: true,
-      controls: true,
       aspectRatio: '16:9',
+      controls: true,
       fluid: true,
       sources: [
         {
@@ -68,22 +61,25 @@ export function Lessons() {
     if (!playerRef.current) {
       const videoElement = document.createElement('video-js')
       videoElement.classList.add('vjs-big-play-centered')
+      videoElement.classList.add('vjs-16-9')
+      videoElement.classList.add('vjs-playeflix')
+      videoElement.classList.add('vjs-playeflix-skin')
 
       if (videoRef.current) {
         videoRef.current.appendChild(videoElement)
-      }
+        playerRef.current = videojs(videoElement, options, () => {
+          videojs.log('player is ready')
+        })
 
-      playerRef.current = videojs(videoElement, options, () => {
-        videojs.log('player is ready')
-      })
+        playerRef.current.on('ended', () => {
+          console.log('video ended')
+        })
+      }
     } else {
       const player = playerRef.current
       if (player) {
         player.autoplay(options.autoplay)
-        player.src(options.sources)
-        player.controls(options.controls)
         player.aspectRatio(options.aspectRatio)
-        player.fluid(options.fluid)
       }
     }
   }, [lessonData?.lesson?.lesson?.videoUrl])
@@ -135,11 +131,13 @@ export function Lessons() {
           {/** AREA DO VIDEO USANDO SKIN DA NETFLIX COM VIDEOJS */}
           <div className="bg-main rounded-md overflow-hidden relative">
             <div className="aspect-w-16 aspect-h-9">
-              <div
-                data-vjs-playefa-rotate-180
-                className="vjs-playeflix vjs-playeflix-skin vjs-16-9 vjs-big-play-centered"
-                ref={videoRef}
-              />
+              {lessonData?.lesson?.lesson?.videoUrl && (
+                <div
+                  data-vjs-playefa-rotate-180
+                  className="vjs-playeflix vjs-playeflix-skin vjs-16-9 vjs-big-play-centered"
+                  ref={videoRef}
+                />
+              )}
             </div>
           </div>
           <div className="mt-4 flex flex-col md:flex-row bg-main p-6 shadow-md rounded-lg">

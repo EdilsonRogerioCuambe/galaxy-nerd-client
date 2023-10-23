@@ -232,7 +232,7 @@ export function Lessons() {
                         }`}
                       >
                         <AiFillPlayCircle size={24} />
-                        <Link to={video?.slug} className="text-sm">
+                        <Link to={`/course/${slug}/lesson/${video?.slug}`}>
                           {video?.title}
                         </Link>
                       </div>

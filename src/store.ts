@@ -7,6 +7,8 @@ import { categoryApiSlice } from './slices/categorySlices'
 import { courseApiSlice } from './slices/courseSlices'
 import { topicApiSlice } from './slices/topicSlices'
 import { lessonApiSlice } from './slices/lessonsSlices'
+import studentAuthReducer from './slices/student/authSlice'
+import { studentApiSlice } from './slices/student/apiSlice'
 
 const store = configureStore({
   reducer: {
@@ -14,6 +16,8 @@ const store = configureStore({
     [adminApiSlice.reducerPath]: adminApiSlice.reducer,
     instructorAuth: instructorAuthReducer,
     [instructorApiSlice.reducerPath]: instructorApiSlice.reducer,
+    studentAuth: studentAuthReducer,
+    [studentApiSlice.reducerPath]: studentApiSlice.reducer,
     [categoryApiSlice.reducerPath]: categoryApiSlice.reducer,
     [courseApiSlice.reducerPath]: courseApiSlice.reducer,
     [topicApiSlice.reducerPath]: topicApiSlice.reducer,
@@ -27,6 +31,7 @@ const store = configureStore({
       courseApiSlice.middleware,
       topicApiSlice.middleware,
       lessonApiSlice.middleware,
+      studentApiSlice.middleware,
     ),
   devTools: true,
 })

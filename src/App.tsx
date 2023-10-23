@@ -21,6 +21,7 @@ import { InstructorDashboard } from './pages/dashboard/instructor'
 import { InstructorAddTopicsToCourse } from './pages/add-topic'
 import { InstructorAddLessonsToCourse } from './pages/add-lesson'
 import { RegisterAdmin } from './pages/register/admin'
+import { RegisterStudent } from './pages/register/student'
 
 const App = () => {
   Aos.init()
@@ -38,6 +39,7 @@ const App = () => {
         {/** REGISTER */}
         <Route path="/register-admin" element={<RegisterAdmin />} />
         <Route path="/register-instructor" element={<RegisterInstructor />} />
+        <Route path="/register-student" element={<RegisterStudent />} />
 
         <Route path="/courses-list" element={<CoursesLists />} />
         <Route path="/categories" element={<Categories />} />

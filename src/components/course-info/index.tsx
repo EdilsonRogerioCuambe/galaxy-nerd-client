@@ -32,6 +32,17 @@ interface CoursesProps {
     name: string
     avatar: string
   }
+  topics: {
+    id: string
+    title: string
+    slug: string
+    lessons: {
+      id: string
+      title: string
+      slug: string
+      duration: string
+    }[]
+  }[]
   languages: LanguageProps[]
 }
 
@@ -42,6 +53,8 @@ export function CourseInfo({
   course: CoursesProps
   isLoading: boolean
 }) {
+  console.log(course)
+
   // colocar um array fill parecido com o do sample-lessons cores do background #202024, para os background dos textos #121214
   return (
     <div className="w-full xl:h-screen relative text-[#e1e1e6]">
@@ -93,7 +106,7 @@ export function CourseInfo({
                 </div>
                 <div className="col-span-1 flex justify-end font-medium text-sm">
                   <Link
-                    to={`/course/${course?.slug}/lessons`}
+                    to={`/course/${course?.slug}/lesson/${course?.topics[0]?.lessons[0]?.slug}`}
                     className="bg-dry py-3 hover:bg-quinary transitions border-2 border-quinary rounded-full flex-rows gap-4 w-full sm:py-3"
                   >
                     <FaPlay className="w-6 h-6" />

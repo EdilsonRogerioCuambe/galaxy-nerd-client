@@ -34,6 +34,17 @@ interface CoursesProps {
     avatar: string
   }
   languages: LanguageProps[]
+  topics: {
+    id: string
+    title: string
+    slug: string
+    lessons: {
+      id: string
+      title: string
+      slug: string
+      duration: string
+    }[]
+  }[]
 }
 
 export function Course() {

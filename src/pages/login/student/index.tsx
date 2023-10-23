@@ -1,20 +1,20 @@
-import { Layout } from '../../../layout'
-import { Input } from '../../../custom'
-import { Link, useNavigate } from 'react-router-dom'
 import { FiLogIn } from 'react-icons/fi'
+import { Layout } from '../../../layout'
+import { message } from 'antd'
+import { useFormik } from 'formik'
+import { Input } from '../../../custom'
 import { useEffect } from 'react'
 import { useDispatch } from 'react-redux'
-import { useLoginMutation } from '../../../slices/instructor/apiSlice/instructorsApiSlice'
-import { setCredentials } from '../../../slices/instructor/authSlice'
-import { useFormik } from 'formik'
-import { message } from 'antd'
+import { Link, useNavigate } from 'react-router-dom'
+import { setCredentials } from '../../../slices/student/authSlice'
+import { useLoginMutation } from '../../../slices/student/apiSlice/studentApiSlice'
 
 interface FormValues {
   email: string
   password: string
 }
 
-export function InstructorLogin() {
+export function StudentLogin() {
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const [login, { isLoading, isSuccess }] = useLoginMutation()
@@ -30,8 +30,8 @@ export function InstructorLogin() {
 
         dispatch(
           setCredentials({
-            instructorToken: response.token,
-            instructor: response.instructor,
+            studentToken: response.token,
+            student: response.student,
           }),
         )
 
@@ -56,7 +56,7 @@ export function InstructorLogin() {
         content: 'Login realizado com sucesso!',
         className: 'mt-5',
       })
-      navigate('/instructor-dashboard')
+      navigate('/student-dashboard')
     } else if (isLoading) {
       message.loading({
         content: 'Carregando...',

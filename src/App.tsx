@@ -22,6 +22,7 @@ import { InstructorAddTopicsToCourse } from './pages/add-topic'
 import { InstructorAddLessonsToCourse } from './pages/add-lesson'
 import { RegisterAdmin } from './pages/register/admin'
 import { RegisterStudent } from './pages/register/student'
+import { StudentLogin } from './pages/login/student'
 
 const App = () => {
   Aos.init()
@@ -35,11 +36,12 @@ const App = () => {
         {/** LOGIN */}
         <Route path="/admin-login" element={<AdminLogin />} />
         <Route path="/instructor-login" element={<InstructorLogin />} />
+        <Route path="/login" element={<StudentLogin />} />
 
         {/** REGISTER */}
         <Route path="/register-admin" element={<RegisterAdmin />} />
         <Route path="/register-instructor" element={<RegisterInstructor />} />
-        <Route path="/register-student" element={<RegisterStudent />} />
+        <Route path="/register" element={<RegisterStudent />} />
 
         <Route path="/courses-list" element={<CoursesLists />} />
         <Route path="/categories" element={<Categories />} />

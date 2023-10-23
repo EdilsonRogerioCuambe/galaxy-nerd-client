@@ -17,6 +17,9 @@ import {
 import { MdCheckCircle, MdRadioButtonUnchecked } from 'react-icons/md'
 import { useGetCourseBySlugQuery } from '../../slices/courseSlices/courseApiSlice'
 import { useGetLessonBySlugQuery } from '../../slices/lessonsSlices/lessonsApiSlice'
+import videojs from 'video.js'
+import 'video.js/dist/video-js.css'
+import { useRef, useEffect } from 'react'
 
 interface LanguageProps {
   id: string
@@ -40,42 +43,74 @@ interface TopicsProps {
   }[]
 }
 
-interface CoursesProps {
-  id: string
-  title: string
-  duration: string
-  image: string
-  description: string
-  shortDescription: string
-  thumbnail: string
-  price: string
-  rating: number
-  slug: string
-  instructor: {
-    name: string
-    avatar: string
-  }
-  topics: TopicsProps[]
-  languages: LanguageProps[]
-}
+// interface CoursesProps {
+//   id: string
+//   title: string
+//   duration: string
+//   image: string
+//   description: string
+//   shortDescription: string
+//   thumbnail: string
+//   price: string
+//   rating: number
+//   slug: string
+//   instructor: {
+//     name: string
+//     avatar: string
+//   }
+//   topics: TopicsProps[]
+//   languages: LanguageProps[]
+// }
 
 export function Lessons() {
   const { slug, lesson } = useParams()
   const { data: course } = useGetCourseBySlugQuery(slug)
   const { data: lessonData } = useGetLessonBySlugQuery(lesson)
+  const videoRef = useRef<HTMLDivElement | null>(null)
+  const playerRef = useRef<videojs.Player | null>(null)
 
-  console.log(course?.course)
+  useEffect(() => {
+    const options = {
+      autoplay: true,
+      controls: true,
+      aspectRatio: '16:9',
+      sources: [
+        {
+          src: lessonData?.lesson?.lesson?.videoUrl,
+          type: 'video/mp4',
+        },
+      ],
+    }
 
-  const videoJsOptions = {
-    autoplay: false,
-    controls: true,
-    sources: [
-      {
-        src: lessonData?.lesson?.lesson?.videoUrl,
-        type: 'video/mp4',
-      },
-    ],
-  }
+    if (!playerRef.current) {
+      const videoElement = document.createElement('video-js')
+      videoElement.classList.add('vjs-big-play-centered')
+
+      // Certifique-se de que videoRef.current não é nulo antes de anexar o elemento
+      if (videoRef.current) {
+        videoRef.current.appendChild(videoElement)
+      }
+
+      playerRef.current = videojs(videoElement, options, () => {
+        videojs.log('player is ready')
+      })
+    } else {
+      const player = playerRef.current
+      if (player) {
+        player.autoplay(options.autoplay)
+        player.src(options.sources)
+      }
+    }
+  }, [lessonData?.lesson?.lesson?.videoUrl])
+
+  useEffect(() => {
+    return () => {
+      if (playerRef.current) {
+        playerRef.current.dispose()
+        playerRef.current = null
+      }
+    }
+  }, [playerRef])
 
   const fakeQuestions = Array.from({ length: 10 }, () => ({
     username: faker.person.fullName(),
@@ -112,14 +147,16 @@ export function Lessons() {
       </div>
       <div className="bg-secondary relative container mx-auto rounded-md text-[#c4c4cc] p-6 justify-between flex flex-col md:flex-row">
         <div className="w-full md:w-4/6 left-0 top-[72px] bg-opacity-40 max-w-full">
-          {/** AREA DO VIDEO */}
-          <video
-            id="my-video"
-            className="video-js"
-            preload="auto"
-            src={lessonData?.lesson?.lesson?.videoUrl}
-            {...videoJsOptions}
-          ></video>
+          {/** AREA DO VIDEO USANDO SKIN DA NETFLIX COM VIDEOJS */}
+          <div className="bg-main rounded-md overflow-hidden relative">
+            <div className="aspect-w-16 aspect-h-9">
+              <div
+                data-vjs-playefa-rotate-180
+                className="vjs-playeflix vjs-playeflix-skin vjs-16-9 vjs-big-play-centered"
+                ref={videoRef}
+              />
+            </div>
+          </div>
           <div className="mt-4 flex flex-col md:flex-row bg-main p-6 shadow-md rounded-lg">
             <div className="w-full md:w-3/4 md:pr-4">
               <div className="text-[#e1e1e6] text-xl md:text-2xl font-bold leading-[33.60px] mt-2">

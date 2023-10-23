@@ -43,25 +43,6 @@ interface TopicsProps {
   }[]
 }
 
-// interface CoursesProps {
-//   id: string
-//   title: string
-//   duration: string
-//   image: string
-//   description: string
-//   shortDescription: string
-//   thumbnail: string
-//   price: string
-//   rating: number
-//   slug: string
-//   instructor: {
-//     name: string
-//     avatar: string
-//   }
-//   topics: TopicsProps[]
-//   languages: LanguageProps[]
-// }
-
 export function Lessons() {
   const { slug, lesson } = useParams()
   const { data: course } = useGetCourseBySlugQuery(slug)
@@ -70,10 +51,12 @@ export function Lessons() {
   const playerRef = useRef<videojs.Player | null>(null)
 
   useEffect(() => {
+    // adicionar um shadow para o video
     const options = {
       autoplay: true,
       controls: true,
       aspectRatio: '16:9',
+      fluid: true,
       sources: [
         {
           src: lessonData?.lesson?.lesson?.videoUrl,
@@ -86,7 +69,6 @@ export function Lessons() {
       const videoElement = document.createElement('video-js')
       videoElement.classList.add('vjs-big-play-centered')
 
-      // Certifique-se de que videoRef.current não é nulo antes de anexar o elemento
       if (videoRef.current) {
         videoRef.current.appendChild(videoElement)
       }
@@ -99,6 +81,9 @@ export function Lessons() {
       if (player) {
         player.autoplay(options.autoplay)
         player.src(options.sources)
+        player.controls(options.controls)
+        player.aspectRatio(options.aspectRatio)
+        player.fluid(options.fluid)
       }
     }
   }, [lessonData?.lesson?.lesson?.videoUrl])

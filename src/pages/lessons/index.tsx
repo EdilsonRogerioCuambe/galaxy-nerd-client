@@ -20,6 +20,7 @@ import { useGetLessonBySlugQuery } from '../../slices/lessonsSlices/lessonsApiSl
 import videojs from 'video.js'
 import 'video.js/dist/video-js.css'
 import { useRef, useEffect } from 'react'
+import { ForumComponent } from '../../components/forum-component'
 
 interface TopicsProps {
   id: string
@@ -37,12 +38,30 @@ interface TopicsProps {
   }[]
 }
 
+interface Forum {
+  answered: boolean
+  createdAt: string
+  description: string
+  id: string
+  lessonId: string
+  slug: string
+  student: {
+    avatar: string
+    name: string
+  }
+  studentId: string
+  title: string
+  updatedAt: string
+}
+
 export function Lessons() {
   const { slug, lesson } = useParams()
   const { data: course } = useGetCourseBySlugQuery(slug)
   const { data: lessonData } = useGetLessonBySlugQuery(lesson)
   const videoRef = useRef<HTMLDivElement | null>(null)
   const playerRef = useRef<videojs.Player | null>(null)
+
+  console.log(lessonData?.lesson?.lesson)
 
   useEffect(() => {
     const options = {
@@ -93,18 +112,6 @@ export function Lessons() {
     }
   }, [playerRef])
 
-  const fakeQuestions = Array.from({ length: 10 }, () => ({
-    username: faker.person.fullName(),
-    avatar: faker.image.avatar(),
-    questionTitle: faker.lorem.sentence(),
-    createdAt: faker.date.past().toLocaleDateString('pt-BR', {
-      day: 'numeric',
-      month: 'long',
-      year: 'numeric',
-    }),
-    answered: faker.datatype.boolean(),
-  }))
-
   return (
     <Layout>
       <div className="container mx-auto bg-secondary rounded-md mb-6 p-6 mt-8">
@@ -128,14 +135,18 @@ export function Lessons() {
       </div>
       <div className="bg-secondary relative container mx-auto rounded-md text-[#c4c4cc] p-6 justify-between flex flex-col md:flex-row">
         <div className="w-full md:w-4/6 left-0 top-[72px] bg-opacity-40 max-w-full">
-          {/** AREA DO VIDEO USANDO SKIN DA NETFLIX COM VIDEOJS */}
-          <div className="bg-main rounded-md overflow-hidden relative">
+          <div
+            key={lessonData?.lesson?.lesson?.id}
+            className="bg-main rounded-md overflow-hidden relative"
+          >
             <div className="aspect-w-16 aspect-h-9">
               {lessonData?.lesson?.lesson?.videoUrl && (
                 <div
                   data-vjs-playefa-rotate-180
                   className="vjs-playeflix vjs-playeflix-skin vjs-16-9 vjs-big-play-centered"
                   ref={videoRef}
+                  key={lessonData?.lesson?.lesson?.id}
+                  data-setup='{ "controls": true, "autoplay": false, "preload": "auto", "playbackRates": [1, 1.5, 2], "fluid": true, "plugins": { "playbackrate": { "clickable": true } } }'
                 />
               )}
             </div>
@@ -266,51 +277,20 @@ export function Lessons() {
       </div>
 
       {/** PERGUNTAS */}
-      <div className="bg-secondary relative container mx-auto rounded-md text-[#c4c4cc] p-6 mt-8 h-[calc(100vh-17rem)] overflow-y-auto">
-        <Accordion allowToggle>
-          {fakeQuestions.map((question, index) => (
-            <AccordionItem key={index}>
-              <List spacing={3}>
-                <ListItem>
-                  <AccordionButton
-                    className="flex justify-between items-center py-2 px-4"
-                    _expanded={{ bg: 'gray.800', color: 'white' }}
-                    _focus={{ boxShadow: 'none' }}
-                  >
-                    <div className="flex gap-2 items-center">
-                      <img
-                        className="w-10 h-10 rounded-full"
-                        src={question.avatar}
-                        alt={question.username}
-                      />
-                      <div className="flex flex-col">
-                        <span className="font-bold text-sm">
-                          {question.username}
-                        </span>
-                        <span className="text-xs">{question.createdAt}</span>
-                      </div>
-                    </div>
-                    <div className="flex gap-2 items-center">
-                      <span className="text-xs">
-                        {question.answered ? 'Respondida' : 'Sem resposta'}
-                      </span>
-                      <span className="text-xs">
-                        {question.answered ? (
-                          <MdCheckCircle className="text-green-500" />
-                        ) : (
-                          <MdRadioButtonUnchecked className="text-red-500" />
-                        )}
-                      </span>
-                    </div>
-                  </AccordionButton>
-                </ListItem>
-                <AccordionPanel pb={4} className="text-gray-400 px-4 py-2 mb-2">
-                  {question.questionTitle}
-                </AccordionPanel>
-              </List>
-            </AccordionItem>
-          ))}
-        </Accordion>
+      <div className="bg-[#202024] container mx-auto p-6 mt-8 rounded-md h-[calc(100vh-17rem)] overflow-y-auto">
+        <Link
+          to={`/course/${course?.course?.course?.slug}/lesson/${lessonData?.lesson?.lesson?.slug}/add-question`}
+          className="bg-quinary text-white font-semibold py-2 px-4 rounded hover:bg-senary mt-4 mb-4"
+        >
+          Nova Issue
+        </Link>
+        <div className="mt-4">
+          {lessonData?.lesson?.lesson?.forum?.map(
+            (question: Forum, index: number) => (
+              <ForumComponent key={index} question={question} />
+            ),
+          )}
+        </div>
       </div>
     </Layout>
   )

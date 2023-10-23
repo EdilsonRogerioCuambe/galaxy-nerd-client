@@ -23,6 +23,7 @@ import { InstructorAddLessonsToCourse } from './pages/add-lesson'
 import { RegisterAdmin } from './pages/register/admin'
 import { RegisterStudent } from './pages/register/student'
 import { StudentLogin } from './pages/login/student'
+import { StudentAddNewQuestionPage } from './pages/add-question'
 
 const App = () => {
   Aos.init()
@@ -32,6 +33,12 @@ const App = () => {
         <Route path="/" element={<Home />} />
         <Route path="/course/:slug" element={<Course />} />
         <Route path="/course/:slug/lesson/:lesson" element={<Lessons />} />
+
+        {/** STUDENT QUESTION */}
+        <Route
+          path="/course/:slug/lesson/:lesson/add-question"
+          element={<StudentAddNewQuestionPage />}
+        />
 
         {/** LOGIN */}
         <Route path="/admin-login" element={<AdminLogin />} />
@@ -57,6 +64,7 @@ const App = () => {
             element={<AdminUpdatePassword />}
           />
         </Route>
+
         <Route path="/" element={<InstructorPrivateRoutes />}>
           <Route
             path="instructor-dashboard"

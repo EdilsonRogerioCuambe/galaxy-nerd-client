@@ -9,6 +9,7 @@ import { logout } from '../../slices/admin/authSlice'
 
 export function NavigationBar() {
   const { instructor } = useSelector((state: RootState) => state.instructorAuth)
+  const { student } = useSelector((state: RootState) => state.studentAuth)
   const { user: admin } = useSelector((state: RootState) => state.adminAuth)
 
   const navigate = useNavigate()
@@ -18,7 +19,7 @@ export function NavigationBar() {
   const handleLogout = async () => {
     try {
       dispatch(logout())
-      navigate('/instructor-login')
+      navigate('/login')
     } catch (error) {
       console.log(error)
     }
@@ -74,6 +75,31 @@ export function NavigationBar() {
               </div>
             </NavLink>
 
+            {student && (
+              <>
+                <div className="flex items-center gap-2">
+                  <NavLink
+                    className={`${Hover} relative`}
+                    to="/student-dashboard"
+                  >
+                    <img
+                      src={student.avatar}
+                      alt="avatar"
+                      className="w-8 h-8 rounded-full object-cover"
+                    />
+                  </NavLink>
+                  <button
+                    title="Sair"
+                    type="button"
+                    onClick={handleLogout}
+                    className="text-[#c4c4cc] w-8 h-8 flex-colo rounded"
+                  >
+                    <BiLogOut className="w-6 h-6" />
+                  </button>
+                </div>
+              </>
+            )}
+
             {instructor && (
               <>
                 <div className="flex items-center gap-2">
@@ -124,9 +150,9 @@ export function NavigationBar() {
               </>
             )}
 
-            {!instructor && !admin && (
+            {!instructor && !admin && !student && (
               <>
-                <NavLink className={Hover} to="/instructor-login">
+                <NavLink className={Hover} to="/login">
                   <FaUserAlt className="w-6 h-6" />
                 </NavLink>
               </>

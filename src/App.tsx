@@ -24,6 +24,7 @@ import { RegisterAdmin } from './pages/register/admin'
 import { RegisterStudent } from './pages/register/student'
 import { StudentLogin } from './pages/login/student'
 import { StudentAddNewQuestionPage } from './pages/add-question'
+import { ForumPage } from './pages/forum-page'
 
 const App = () => {
   Aos.init()
@@ -39,6 +40,8 @@ const App = () => {
           path="/course/:slug/lesson/:lesson/add-question"
           element={<StudentAddNewQuestionPage />}
         />
+
+        <Route path="/question/:slug" element={<ForumPage />} />
 
         {/** LOGIN */}
         <Route path="/admin-login" element={<AdminLogin />} />

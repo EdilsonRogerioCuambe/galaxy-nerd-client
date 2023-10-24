@@ -19,6 +19,8 @@ interface Forum {
 }
 
 export function ForumComponent({ question }: { question: Forum }) {
+  console.log(question.slug)
+
   return (
     <>
       <div className="bg-main p-4 my-4 rounded-md">
@@ -64,7 +66,7 @@ export function ForumComponent({ question }: { question: Forum }) {
           </div>
         </div>
         <Link
-          to={`/issue/`}
+          to={`/question/${question.slug}`}
           className="text-lg font-extrabold text-[#e1e1e6] mt-2 hover:text-quinary transitions"
         >
           {question.title}

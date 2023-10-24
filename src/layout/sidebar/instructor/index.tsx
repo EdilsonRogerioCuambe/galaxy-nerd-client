@@ -1,6 +1,5 @@
 import { BsFillGridFill } from 'react-icons/bs'
 import { FaList, FaUsers } from 'react-icons/fa'
-import { HiViewGrid } from 'react-icons/hi'
 import { RiLockPasswordLine, RiMovie2Fill } from 'react-icons/ri'
 import { Layout } from '../..'
 import { NavLink } from 'react-router-dom'

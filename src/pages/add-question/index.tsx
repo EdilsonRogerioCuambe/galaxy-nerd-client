@@ -1,6 +1,5 @@
 import { Layout } from '../../layout'
 import { useGetLessonBySlugQuery } from '../../slices/lessonsSlices/lessonsApiSlice'
-import { useGetCourseBySlugQuery } from '../../slices/courseSlices/courseApiSlice'
 import { useSelector } from 'react-redux'
 import { RootState } from '../../store'
 import EditorJS from '@editorjs/editorjs'
@@ -33,7 +32,6 @@ export function StudentAddNewQuestionPage() {
   }>()
 
   const { data: lessonData } = useGetLessonBySlugQuery(lesson)
-  const { data: courseData } = useGetCourseBySlugQuery(slug)
   const { student } = useSelector((state: RootState) => state.studentAuth)
   const [createQuestion, { isLoading, isSuccess }] = useCreateQuestionMutation()
 

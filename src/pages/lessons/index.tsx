@@ -143,6 +143,13 @@ export function Lessons() {
               <ForumComponent key={index} question={question} />
             ),
           )}
+          {lessonData?.lesson?.lesson?.forum?.length === 0 && (
+            <div className="flex justify-center items-center h-[calc(100vh-17rem)]">
+              <p className="text-[#c4c4cc] text-2xl font-semibold">
+                Nenhuma pergunta ainda
+              </p>
+            </div>
+          )}
         </div>
       </div>
     </Layout>

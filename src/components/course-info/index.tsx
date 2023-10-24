@@ -45,9 +45,37 @@ export function CourseInfo({
   course: CoursesProps
   isLoading: boolean
 }) {
-  console.log(course)
-
-  if (isLoading) return <h1>Carregando...</h1>
+  if (isLoading) {
+    return (
+      <div className="w-full xl:h-screen relative text-[#e1e1e6]">
+        <div className="animate-pulse w-full hidden xl:inline-block h-full object-cover bg-secondary"></div>
+        <div className="xl:bg-main bg-secondary flex-colo xl:bg-opacity-90 xl:absolute top-0 left-0 right-0 bottom-0">
+          <div className="container px-3 mx-auto 2xl:px-32 xl:grid grid-cols-3 flex-colo py-10 lg:py-20 gap-8">
+            <div className="xl:col-span-1 w-full xl:order-none order-last h-header bg-secondary border-gray-800 rounded-lg overflow-hidden flex-colo">
+              <div className="animate-pulse w-full h-full object-cover bg-secondary"></div>
+            </div>
+            <div className="col-span-2 md:grid grid-cols-5 gap-4 items-center">
+              <div className="col-span-2 md:col-span-3 flex flex-col gap-4">
+                <div className="animate-pulse w-1/2 h-6 bg-secondary"></div>
+                <div className="animate-pulse w-full h-6 bg-secondary"></div>
+                <div className="animate-pulse w-5/6 h-6 bg-secondary"></div>
+                <div className="animate-pulse w-4/5 h-6 bg-secondary"></div>
+                <div className="animate-pulse w-8/7 h-6 bg-secondary"></div>
+                <div className="animate-pulse w-full h-6 bg-secondary"></div>
+                <div className="animate-pulse w-5/6 h-6 bg-secondary"></div>
+                <div className="animate-pulse w-4/5 h-6 bg-secondary"></div>
+                <div className="animate-pulse w-8/7 h-6 bg-secondary"></div>
+                <div className="animate-pulse w-full h-6 bg-secondary"></div>
+                <div className="animate-pulse w-5/6 h-6 bg-secondary"></div>
+                <div className="animate-pulse w-4/5 h-6 bg-secondary"></div>
+                <div className="animate-pulse w-8/7 h-6 bg-secondary"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="w-full xl:h-screen relative text-[#e1e1e6]">

@@ -17,7 +17,6 @@ export const questionsApiSlice = questionApiSlice.injectEndpoints({
       providesTags: ['Question'],
     }),
     createQuestion: builder.mutation({
-      // rota prar :lessonId/:studentId
       query: ({ lessonId, studentId, body }) => ({
         url: `${QUESTIONS_API_ENDPOINT}/${lessonId}/${studentId}`,
         method: 'POST',

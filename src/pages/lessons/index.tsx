@@ -52,29 +52,21 @@ export function Lessons() {
       ],
     }
 
-    if (!playerRef.current) {
+    if (videoRef.current && lessonData?.lesson?.lesson?.videoUrl) {
       const videoElement = document.createElement('video-js')
       videoElement.classList.add('vjs-big-play-centered')
       videoElement.classList.add('vjs-16-9')
       videoElement.classList.add('vjs-playeflix')
       videoElement.classList.add('vjs-playeflix-skin')
 
-      if (videoRef.current) {
-        videoRef.current.appendChild(videoElement)
-        playerRef.current = videojs(videoElement, options, () => {
-          videojs.log('player is ready')
-        })
+      videoRef.current.appendChild(videoElement)
+      playerRef.current = videojs(videoElement, options, () => {
+        videojs.log('player is ready')
+      })
 
-        playerRef.current.on('ended', () => {
-          console.log('video ended')
-        })
-      }
-    } else {
-      const player = playerRef.current
-      if (player) {
-        player.autoplay(options.autoplay)
-        player.aspectRatio(options.aspectRatio)
-      }
+      playerRef.current.on('ended', () => {
+        console.log('video ended')
+      })
     }
   }, [lessonData?.lesson?.lesson?.videoUrl])
 
@@ -85,9 +77,7 @@ export function Lessons() {
         playerRef.current = null
       }
     }
-  }, [playerRef])
-
-  console.log(lessonData?.lesson?.lesson)
+  }, [])
 
   return (
     <Layout>

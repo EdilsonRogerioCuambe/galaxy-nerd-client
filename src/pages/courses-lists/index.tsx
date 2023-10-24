@@ -1,5 +1,3 @@
-import { Table } from '../../components/table'
-import { Cursos } from '../../data/Cursos'
 import { SideBar } from '../../layout/sidebar'
 
 export function CoursesLists() {

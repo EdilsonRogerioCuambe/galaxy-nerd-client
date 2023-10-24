@@ -98,11 +98,6 @@ export function RegisterStudent() {
     handlePasswordRequirements(event.target.value)
   }
 
-  // transformar o socialLinks em um array de strings
-  const socialLinksArray = Object.values(socialLinks).filter(
-    (socialLink) => socialLink,
-  )
-
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
 

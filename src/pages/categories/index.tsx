@@ -2,17 +2,10 @@ import { ModalCategory } from '../../components/modal-category'
 import { SideBar } from '../../layout/sidebar'
 import { useEffect, useState } from 'react'
 import { HiPlusCircle } from 'react-icons/hi'
-import { UsersOrCategoriesTable } from '../../components/table-2'
-import { CourseCategories } from '../../data/categories'
 
 export function Categories() {
   const [open, setOpen] = useState(false)
   const [category, setCategory] = useState('')
-
-  const handleEdit = (id: string) => {
-    setOpen(!open)
-    setCategory(id)
-  }
 
   useEffect(() => {
     if (open === false) {

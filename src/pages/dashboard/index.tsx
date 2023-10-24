@@ -1,8 +1,6 @@
 import { SideBar } from '../../layout/sidebar'
 import { FaRegListAlt, FaUsers } from 'react-icons/fa'
 import { HiViewGrid } from 'react-icons/hi'
-import { Table } from '../../components/table'
-import { Cursos } from '../../data/Cursos'
 
 export function Dashboard() {
   const data = [

@@ -2,14 +2,6 @@ import { FaPlay, FaShareAlt } from 'react-icons/fa'
 import { FlexCourseItens } from '../flex-course-itens'
 import { Stars } from '../stars'
 import { Link } from 'react-router-dom'
-import {
-  Accordion,
-  AccordionItem,
-  AccordionButton,
-  AccordionPanel,
-  List,
-  ListItem,
-} from '@chakra-ui/react'
 
 interface LanguageProps {
   id: string
@@ -55,7 +47,8 @@ export function CourseInfo({
 }) {
   console.log(course)
 
-  // colocar um array fill parecido com o do sample-lessons cores do background #202024, para os background dos textos #121214
+  if (isLoading) return <h1>Carregando...</h1>
+
   return (
     <div className="w-full xl:h-screen relative text-[#e1e1e6]">
       <img

@@ -1,7 +1,7 @@
 import { Link, useParams } from 'react-router-dom'
 import { Layout } from '../../layout'
 import { BiArrowBack } from 'react-icons/bi'
-import { FaHeart, FaBook, FaImage } from 'react-icons/fa'
+import { FaHeart } from 'react-icons/fa'
 import { useGetCourseBySlugQuery } from '../../slices/courseSlices/courseApiSlice'
 import { useGetLessonBySlugQuery } from '../../slices/lessonsSlices/lessonsApiSlice'
 import videojs from 'video.js'

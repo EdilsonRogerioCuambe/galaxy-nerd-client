@@ -324,8 +324,10 @@ const CommentList = ({
     }
   }
   return (
-    <div className="rounded-lg p-4 mt-4 bg-main">
-      <div className="text-[#c4c4cc]">{answer.content}</div>
+    <div className="rounded-lg p-4 mt-4 bg-main border border-[#e1e1e6]">
+      <div className="text-[#c4c4cc]">
+        <p>{answer.content}</p>
+      </div>
       <div className="text-[#c4c4cc] mt-2">
         <p>
           {new Date(answer.createdAt).toLocaleDateString('pt-BR', {

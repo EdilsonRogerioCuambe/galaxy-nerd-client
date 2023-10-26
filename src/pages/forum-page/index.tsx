@@ -1,6 +1,8 @@
 import { Layout } from '../../layout'
 import { useParams } from 'react-router-dom'
 import { useGetQuestionBySlugQuery } from '../../slices/questionSlices/questionsApiSlice'
+import { useCreateAnswerMutation } from '../../slices/answersSlices/answersApiSlice'
+import { message } from 'antd'
 import EditorJS from '@editorjs/editorjs'
 import Header from '@editorjs/header'
 import List from '@editorjs/list'
@@ -42,7 +44,6 @@ interface Answer {
 }
 
 export function ForumPage() {
-  const [open, setOpen] = useState<boolean>(false)
   const { slug } = useParams<{ slug: string }>()
   const { data: forum } = useGetQuestionBySlugQuery(slug)
   const editorRef = useRef<EditorJS | null>(null)
@@ -304,7 +305,12 @@ export function ForumPage() {
 
           {/** RECURSIVE REACT COMPONENT FOR THE NESTED COMENTS */}
           {forum?.forum?.forum?.answers?.map((answer: Answer) => (
-            <Comment key={answer.id} answer={answer} />
+            <Comment
+              key={answer.id}
+              answer={answer}
+              studentId={forum?.forum?.forum?.studentId}
+              forumId={forum?.forum?.forum?.id}
+            />
           ))}
         </div>
       </div>
@@ -312,10 +318,19 @@ export function ForumPage() {
   )
 }
 
-const Comment = ({ answer }: { answer: Answer }) => {
+const Comment = ({
+  answer,
+  studentId,
+  forumId,
+}: {
+  answer: Answer
+  studentId: string
+  forumId: string
+}) => {
   const [showChildren, setShowChildren] = useState<boolean>(false)
   const [replying, setReplying] = useState<boolean>(false)
   const [replyContent, setReplyContent] = useState<string>('')
+  const [createAnswer, { isSuccess }] = useCreateAnswerMutation()
 
   const handleReplyClick = () => {
     setReplying(!replying)
@@ -327,12 +342,32 @@ const Comment = ({ answer }: { answer: Answer }) => {
     setReplyContent(e.target.value)
   }
 
-  const handleReplySubmit = async () => {
-    // Lógica para enviar a resposta
-    // Use o CreateAnswerUseCase ou outra função apropriada para criar a resposta
-    // Certifique-se de fornecer os valores necessários, como forumId, parentId, studentId, etc.
-    // Limpe o campo de entrada após o envio
+  const handleReplySubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
     setReplyContent('')
+
+    try {
+      await createAnswer({
+        content: replyContent,
+        parentId: answer.id,
+        studentId,
+        forumId,
+      }).unwrap()
+
+      if (isSuccess) {
+        message.success('Resposta enviada com sucesso!')
+        setReplying(false)
+      }
+    } catch (error) {
+      message.error('Erro ao enviar resposta')
+      console.error(error)
+      if (typeof error === 'object' && error !== null && 'data' in error) {
+        const errorData = error.data as { message?: string; error?: string }
+        message.error(
+          errorData.message || errorData.error || 'An error occurred',
+        )
+      }
+    }
   }
   return (
     <div className="rounded-lg p-4 mt-4 bg-main">
@@ -372,20 +407,23 @@ const Comment = ({ answer }: { answer: Answer }) => {
       </div>
       {replying ? (
         <div className="flex mt-4 flex-col">
-          <textarea
-            placeholder="Digite sua resposta"
-            value={replyContent}
-            onChange={handleReplyInputChange}
-            className="bg-secondary rounded-lg p-4 w-full h-32"
-          ></textarea>
-          {/** PODER CANCELAR */}
-          <button
-            type="button"
-            onClick={handleReplySubmit}
-            className="bg-quinary text-white mt-4 rounded-lg px-4 py-2 text-lg font-semibold w-48 transitions hover:bg-opacity-80"
-          >
-            Enviar
-          </button>
+          <form onSubmit={handleReplySubmit}>
+            <input type="hidden" value={answer.id} />
+            <input type="hidden" value={studentId} />
+            <input type="hidden" value={forumId} />
+            <textarea
+              placeholder="Digite sua resposta"
+              value={replyContent}
+              onChange={handleReplyInputChange}
+              className="bg-secondary rounded-lg p-4 w-full h-32"
+            ></textarea>
+            <button
+              type="submit"
+              className="bg-quinary text-white mt-4 rounded-lg px-4 py-2 text-lg font-semibold w-48 transitions hover:bg-opacity-80 resize-none"
+            >
+              Enviar
+            </button>
+          </form>
         </div>
       ) : (
         <button
@@ -411,7 +449,12 @@ const Comment = ({ answer }: { answer: Answer }) => {
           {showChildren && (
             <div>
               {answer.children.map((child) => (
-                <Comment key={child.id} answer={child} />
+                <Comment
+                  key={child.id}
+                  answer={child}
+                  studentId={studentId}
+                  forumId={forumId}
+                />
               ))}
             </div>
           )}

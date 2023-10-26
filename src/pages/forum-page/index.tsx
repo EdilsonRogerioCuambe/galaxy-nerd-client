@@ -19,8 +19,11 @@ import Marker from '@editorjs/marker'
 import Delimiter from '@editorjs/delimiter'
 import InlineCode from '@editorjs/inline-code'
 import Paragraph from '@editorjs/paragraph'
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { FaAngleUp, FaAngleDown, FaReply } from 'react-icons/fa'
+import { useFormik } from 'formik'
+import { useSelector } from 'react-redux'
+import { RootState } from '../../store'
 
 interface Answer {
   answer: string
@@ -47,113 +50,114 @@ export function ForumPage() {
   const { slug } = useParams<{ slug: string }>()
   const { data: forum } = useGetQuestionBySlugQuery(slug)
   const editorRef = useRef<EditorJS | null>(null)
-  const editorRefAnswer = useRef<EditorJS | null>(null)
+  const { student } = useSelector((state: RootState) => state.studentAuth)
+  const { instructor } = useSelector((state: RootState) => state.instructorAuth)
 
-  console.log(forum)
+  console.log(instructor?.id)
 
   const parseDescription = JSON.parse(forum?.forum?.forum?.description || '{}')
 
-  useEffect(() => {
-    const initEditor = () => {
-      const editor = new EditorJS({
-        holder: 'editorjs',
-        onReady() {
-          editorRef.current = editor
-        },
-        minHeight: 1,
-        readOnly: true,
-        data: parseDescription,
-        tools: {
-          header: {
-            class: Header,
-            config: {
-              placeholder: 'Digite um título',
-              levels: [1, 2, 3, 4, 5, 6],
-              defaultLevel: 3,
-            },
-          },
-          list: {
-            class: List,
-            inlineToolbar: true,
-          },
-          embed: {
-            class: Embed,
-            inlineToolbar: true,
-            config: {
-              services: {
-                youtube: true,
-                coub: true,
-              },
-            },
-          },
-          image: {
-            class: Image,
-            config: {
-              endpoints: {
-                byFile: 'http://localhost:3333/images',
-                byUrl: 'http://localhost:3333/images',
-              },
-            },
-          },
-          table: {
-            class: Table,
-            inlineToolbar: true,
-          },
-          simpleImage: {
-            class: SimpleImage,
-            inlineToolbar: true,
-          },
-          quote: {
-            class: Quote,
-            inlineToolbar: true,
-            config: {
-              quotePlaceholder: 'Digite uma citação',
-              captionPlaceholder: 'Autor da citação',
-            },
-          },
-          warning: {
-            class: Warning,
-            inlineToolbar: true,
-            shortcut: 'CMD+SHIFT+W',
-            config: {
-              titlePlaceholder: 'Digite um título',
-              messagePlaceholder: 'Digite uma mensagem',
-            },
-          },
-          code: {
-            class: Code,
-            inlineToolbar: true,
-          },
-          linkTool: {
-            class: LinkTool,
-            config: {
-              endpoint: 'http://localhost:3333/images',
-            },
-          },
-          raw: {
-            class: Raw,
-            inlineToolbar: true,
-          },
-          marker: {
-            class: Marker,
-            shortcut: 'CMD+SHIFT+M',
-          },
-          delimiter: {
-            class: Delimiter,
-            shortcut: 'CMD+SHIFT+M',
-          },
-          inlineCode: {
-            class: InlineCode,
-            shortcut: 'CMD+SHIFT+M',
-          },
-          paragraph: {
-            class: Paragraph,
-            inlineToolbar: true,
+  const initEditor = useCallback(() => {
+    const editor = new EditorJS({
+      holder: 'editorjs',
+      onReady() {
+        editorRef.current = editor
+      },
+      minHeight: 1,
+      readOnly: true,
+      data: parseDescription,
+      tools: {
+        header: {
+          class: Header,
+          config: {
+            placeholder: 'Digite um título',
+            levels: [1, 2, 3, 4, 5, 6],
+            defaultLevel: 3,
           },
         },
-      })
-    }
+        list: {
+          class: List,
+          inlineToolbar: true,
+        },
+        embed: {
+          class: Embed,
+          inlineToolbar: true,
+          config: {
+            services: {
+              youtube: true,
+              coub: true,
+            },
+          },
+        },
+        image: {
+          class: Image,
+          config: {
+            endpoints: {
+              byFile: 'http://localhost:3333/images',
+              byUrl: 'http://localhost:3333/images',
+            },
+          },
+        },
+        table: {
+          class: Table,
+          inlineToolbar: true,
+        },
+        simpleImage: {
+          class: SimpleImage,
+          inlineToolbar: true,
+        },
+        quote: {
+          class: Quote,
+          inlineToolbar: true,
+          config: {
+            quotePlaceholder: 'Digite uma citação',
+            captionPlaceholder: 'Autor da citação',
+          },
+        },
+        warning: {
+          class: Warning,
+          inlineToolbar: true,
+          shortcut: 'CMD+SHIFT+W',
+          config: {
+            titlePlaceholder: 'Digite um título',
+            messagePlaceholder: 'Digite uma mensagem',
+          },
+        },
+        code: {
+          class: Code,
+          inlineToolbar: true,
+        },
+        linkTool: {
+          class: LinkTool,
+          config: {
+            endpoint: 'http://localhost:3333/images',
+          },
+        },
+        raw: {
+          class: Raw,
+          inlineToolbar: true,
+        },
+        marker: {
+          class: Marker,
+          shortcut: 'CMD+SHIFT+M',
+        },
+        delimiter: {
+          class: Delimiter,
+          shortcut: 'CMD+SHIFT+M',
+        },
+        inlineCode: {
+          class: InlineCode,
+          shortcut: 'CMD+SHIFT+M',
+        },
+        paragraph: {
+          class: Paragraph,
+          inlineToolbar: true,
+        },
+      },
+    })
+  }, [parseDescription])
 
+  useEffect(() => {
     if (forum?.forum?.forum?.description) {
       initEditor()
     }
@@ -162,122 +166,13 @@ export function ForumPage() {
       editorRef?.current?.destroy()
       editorRef.current = null
     }
-  }, [forum, parseDescription])
-
-  useEffect(() => {
-    const initEditor = () => {
-      const editor = new EditorJS({
-        holder: 'editorjs-answer',
-        minHeight: 15,
-        onReady: () => {
-          editorRefAnswer.current = editor
-        },
-        tools: {
-          header: {
-            class: Header,
-            config: {
-              placeholder: 'Digite um título',
-              levels: [1, 2, 3, 4, 5, 6],
-              defaultLevel: 3,
-            },
-          },
-          list: {
-            class: List,
-            inlineToolbar: true,
-          },
-          embed: {
-            class: Embed,
-            inlineToolbar: true,
-            config: {
-              services: {
-                youtube: true,
-                coub: true,
-              },
-            },
-          },
-          image: {
-            class: Image,
-            config: {
-              endpoints: {
-                byFile: 'http://localhost:3333/images',
-                byUrl: 'http://localhost:3333/images',
-              },
-            },
-          },
-          table: {
-            class: Table,
-            inlineToolbar: true,
-          },
-          simpleImage: {
-            class: SimpleImage,
-            inlineToolbar: true,
-          },
-          quote: {
-            class: Quote,
-            inlineToolbar: true,
-            config: {
-              quotePlaceholder: 'Digite uma citação',
-              captionPlaceholder: 'Autor da citação',
-            },
-          },
-          warning: {
-            class: Warning,
-            inlineToolbar: true,
-            shortcut: 'CMD+SHIFT+W',
-            config: {
-              titlePlaceholder: 'Digite um título',
-              messagePlaceholder: 'Digite uma mensagem',
-            },
-          },
-          code: {
-            class: Code,
-            inlineToolbar: true,
-          },
-          linkTool: {
-            class: LinkTool,
-            config: {
-              endpoint: 'http://localhost:3333/images',
-            },
-          },
-          raw: {
-            class: Raw,
-            inlineToolbar: true,
-          },
-          marker: {
-            class: Marker,
-            shortcut: 'CMD+SHIFT+M',
-          },
-          delimiter: {
-            class: Delimiter,
-            shortcut: 'CMD+SHIFT+M',
-          },
-          inlineCode: {
-            class: InlineCode,
-            shortcut: 'CMD+SHIFT+M',
-          },
-          paragraph: {
-            class: Paragraph,
-            inlineToolbar: true,
-          },
-        },
-      })
-    }
-
-    if (editorRefAnswer.current === null) {
-      initEditor()
-    }
-
-    return () => {
-      editorRefAnswer?.current?.destroy()
-      editorRefAnswer.current = null
-    }
-  }, [])
+  }, [forum?.forum?.forum?.description, parseDescription, initEditor])
 
   return (
     <Layout>
       <div className="bg-secondary relative container mx-auto rounded-md text-[#c4c4cc] p-6 mt-8">
         <div className="max-w-7xl bg-secondary rounded-lg p-4 text-[#c4c4cc]">
-          <h1 className="text-[#e1e1e6] text-4xl text-center font-semibold mb-2">
+          <h1 className="text-[#e1e1e6] text-4xl text-center font-semibold mb-2 mx-auto max-w-3xl">
             #{forum?.forum?.forum?.title}
           </h1>
           <div id="editorjs"></div>
@@ -290,26 +185,19 @@ export function ForumPage() {
             Comentários
           </h1>
 
-          <div className="flex flex-col">
-            <div
-              id="editorjs-answer"
-              className="mb-4 bg-main rounded-lg overflow-y-auto h-[calc(100vh-20rem)]"
-            ></div>
-            <button
-              type="button"
-              className="bg-quinary text-white rounded-lg px-4 py-2 text-lg font-semibold w-48 transitions hover:bg-opacity-80"
-            >
-              Enviar comentário
-            </button>
-          </div>
+          <CommentInForum
+            studentId={student?.id}
+            instructorId={instructor?.id}
+            forumId={forum?.forum?.forum?.id}
+          />
 
-          {/** RECURSIVE REACT COMPONENT FOR THE NESTED COMENTS */}
           {forum?.forum?.forum?.answers?.map((answer: Answer) => (
-            <Comment
+            <CommentList
               key={answer.id}
               answer={answer}
-              studentId={forum?.forum?.forum?.studentId}
+              studentId={student?.id}
               forumId={forum?.forum?.forum?.id}
+              instructorId={instructor?.id}
             />
           ))}
         </div>
@@ -318,19 +206,87 @@ export function ForumPage() {
   )
 }
 
-const Comment = ({
+const CommentInForum = ({
+  studentId,
+  forumId,
+  instructorId,
+}: {
+  studentId?: string
+  forumId: string
+  instructorId?: string
+}) => {
+  const [createAnswer] = useCreateAnswerMutation()
+  const [content, setContent] = useState<string>('')
+
+  const handleCommentSubmit = async (
+    event: React.FormEvent<HTMLFormElement>,
+  ) => {
+    event.preventDefault()
+    if (!instructorId && !studentId) {
+      message.error('Existem campos vazios')
+    }
+
+    try {
+      await createAnswer({
+        content,
+        studentId,
+        instructorId,
+        forumId,
+      }).unwrap()
+
+      message.success('Comentário enviado com sucesso')
+    } catch (error) {
+      message.error('Erro ao enviar comentário')
+      console.error(error)
+      if (typeof error === 'object' && error !== null && 'data' in error) {
+        const errorData = error.data as { message?: string; error?: string }
+        message.error(
+          errorData.message || errorData.error || 'An error occurred',
+        )
+      }
+    }
+  }
+
+  return (
+    <div className="flex flex-col">
+      <form onSubmit={handleCommentSubmit}>
+        <input type="hidden" value={studentId} />
+        <input type="hidden" value={instructorId} />
+        <input type="hidden" value={forumId} />
+        <textarea
+          placeholder="Digite seu comentário"
+          className="bg-main rounded-lg p-4 w-full resize-none h-72"
+          name="content"
+          itemID="content"
+          value={content}
+          onChange={(e) => setContent(e.target.value)}
+        ></textarea>
+        <button
+          type="submit"
+          className="bg-quinary text-white rounded-lg px-4 py-2 mt-4 text-lg font-semibold w-32 transitions hover:bg-opacity-80"
+        >
+          Enviar
+        </button>
+      </form>
+    </div>
+  )
+}
+
+const CommentList = ({
   answer,
   studentId,
+  instructorId,
   forumId,
 }: {
   answer: Answer
   studentId: string
   forumId: string
+  instructorId: string
 }) => {
   const [showChildren, setShowChildren] = useState<boolean>(false)
   const [replying, setReplying] = useState<boolean>(false)
   const [replyContent, setReplyContent] = useState<string>('')
-  const [createAnswer, { isSuccess }] = useCreateAnswerMutation()
+  const [createAnswer] = useCreateAnswerMutation()
 
   const handleReplyClick = () => {
     setReplying(!replying)
@@ -351,13 +307,11 @@ const Comment = ({
         content: replyContent,
         parentId: answer.id,
         studentId,
+        instructorId,
         forumId,
       }).unwrap()
 
-      if (isSuccess) {
-        message.success('Resposta enviada com sucesso!')
-        setReplying(false)
-      }
+      message.success('Resposta enviada com sucesso')
     } catch (error) {
       message.error('Erro ao enviar resposta')
       console.error(error)
@@ -410,12 +364,14 @@ const Comment = ({
           <form onSubmit={handleReplySubmit}>
             <input type="hidden" value={answer.id} />
             <input type="hidden" value={studentId} />
+            <input type="hidden" value={instructorId} />
             <input type="hidden" value={forumId} />
+            {/** textarea não ser afetado pelo editorjs */}
             <textarea
               placeholder="Digite sua resposta"
+              className="bg-secondary rounded-lg p-4 w-full resize-none h-72"
               value={replyContent}
               onChange={handleReplyInputChange}
-              className="bg-secondary rounded-lg p-4 w-full h-32"
             ></textarea>
             <button
               type="submit"
@@ -443,17 +399,18 @@ const Comment = ({
           >
             {showChildren ? <FaAngleUp size={20} /> : <FaAngleDown size={20} />}
             <span className="text-[#c4c4cc] ml-2">
-              {showChildren ? 'Hide Replies' : 'Show Replies'}
+              {showChildren ? 'Esconder' : 'Mostrar'} respostas
             </span>
           </div>
           {showChildren && (
             <div>
               {answer.children.map((child) => (
-                <Comment
+                <CommentList
                   key={child.id}
                   answer={child}
                   studentId={studentId}
                   forumId={forumId}
+                  instructorId={instructorId}
                 />
               ))}
             </div>

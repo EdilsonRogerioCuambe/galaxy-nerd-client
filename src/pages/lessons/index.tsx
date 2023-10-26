@@ -130,7 +130,7 @@ export function Lessons() {
         <CourseAccordionProps course={course} slug={slug || ''} />
       </div>
 
-      <div className="bg-[#202024] container mx-auto p-6 mt-8 rounded-md h-[calc(100vh-17rem)] overflow-y-auto">
+      <div className="container mx-auto mt-8 rounded-md h-[calc(100vh-17rem)] overflow-y-auto">
         <Link
           to={`/course/${course?.course?.course?.slug}/lesson/${lessonData?.lesson?.lesson?.slug}/add-question`}
           className="bg-quinary text-white font-semibold py-2 px-4 rounded hover:bg-senary mt-4 mb-4"

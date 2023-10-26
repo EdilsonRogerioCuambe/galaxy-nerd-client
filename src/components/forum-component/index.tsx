@@ -19,23 +19,21 @@ interface Forum {
 }
 
 export function ForumComponent({ question }: { question: Forum }) {
-  console.log(question.slug)
-
   return (
     <>
-      <div className="bg-main p-4 my-4 rounded-md">
+      <div className="p-6 my-4 bg-secondary rounded-lg">
         <div className="flex justify-between items-center">
-          <div className="flex items-center">
+          <div className="flex items-center mb-2">
             <img
               className="w-10 h-10 rounded-full object-cover"
               src={question.student.avatar}
               alt={question.student.name}
             />
             <div className="ml-3">
-              <span className="font-semibold text-sm text-[#c4c4cc]">
+              <span className="font-extrabold text-md text-[#c4c4cc]">
                 {question.student.name}
               </span>
-              <span className="text-sm text-[#c4c4cc] ml-2">
+              <span className="text-sm ml-2 font-bold text-[#c4c4cc]">
                 {new Date(question.createdAt).toLocaleDateString('pt-BR', {
                   day: 'numeric',
                   month: 'long',
@@ -67,9 +65,9 @@ export function ForumComponent({ question }: { question: Forum }) {
         </div>
         <Link
           to={`/question/${question.slug}`}
-          className="text-lg font-extrabold text-[#e1e1e6] mt-2 hover:text-quinary transitions"
+          className="text-xl font-extrabold text-[#e1e1e6] transitions hover:text-quinary"
         >
-          {question.title}
+          #{question.title}
         </Link>
       </div>
     </>

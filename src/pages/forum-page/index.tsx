@@ -17,16 +17,41 @@ import Marker from '@editorjs/marker'
 import Delimiter from '@editorjs/delimiter'
 import InlineCode from '@editorjs/inline-code'
 import Paragraph from '@editorjs/paragraph'
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import { RiCloseCircleLine } from 'react-icons/ri'
+import { TiEdit } from 'react-icons/ti'
+
+interface Answer {
+  answer: string
+  createdAt: string
+  id: string
+  parentId: string | null
+  student?: {
+    avatar: string
+    name: string
+  }
+  instructor?: {
+    avatar: string
+    name: string
+  }
+  content: string
+  upvotes: number
+  downvotes: number
+  studentId: string
+  updatedAt: string
+  children: Answer[]
+}
 
 export function ForumPage() {
+  const [open, setOpen] = useState<boolean>(false)
   const { slug } = useParams<{ slug: string }>()
-  const { data: question, isLoading } = useGetQuestionBySlugQuery(slug)
+  const { data: forum } = useGetQuestionBySlugQuery(slug)
   const editorRef = useRef<EditorJS | null>(null)
+  const editorRefAnswer = useRef<EditorJS | null>(null)
 
-  const parseDescription = JSON.parse(
-    question?.forum?.forum?.description || '{}',
-  )
+  console.log(forum)
+
+  const parseDescription = JSON.parse(forum?.forum?.forum?.description || '{}')
 
   useEffect(() => {
     const initEditor = () => {
@@ -129,7 +154,7 @@ export function ForumPage() {
       })
     }
 
-    if (question?.forum?.forum?.description) {
+    if (forum?.forum?.forum?.description) {
       initEditor()
     }
 
@@ -137,18 +162,195 @@ export function ForumPage() {
       editorRef?.current?.destroy()
       editorRef.current = null
     }
-  }, [question, parseDescription])
+  }, [forum, parseDescription])
+
+  useEffect(() => {
+    const initEditor = () => {
+      const editor = new EditorJS({
+        holder: 'editorjs-answer',
+        minHeight: 15,
+        onReady: () => {
+          editorRefAnswer.current = editor
+        },
+        tools: {
+          header: {
+            class: Header,
+            config: {
+              placeholder: 'Digite um título',
+              levels: [1, 2, 3, 4, 5, 6],
+              defaultLevel: 3,
+            },
+          },
+          list: {
+            class: List,
+            inlineToolbar: true,
+          },
+          embed: {
+            class: Embed,
+            inlineToolbar: true,
+            config: {
+              services: {
+                youtube: true,
+                coub: true,
+              },
+            },
+          },
+          image: {
+            class: Image,
+            config: {
+              endpoints: {
+                byFile: 'http://localhost:3333/images',
+                byUrl: 'http://localhost:3333/images',
+              },
+            },
+          },
+          table: {
+            class: Table,
+            inlineToolbar: true,
+          },
+          simpleImage: {
+            class: SimpleImage,
+            inlineToolbar: true,
+          },
+          quote: {
+            class: Quote,
+            inlineToolbar: true,
+            config: {
+              quotePlaceholder: 'Digite uma citação',
+              captionPlaceholder: 'Autor da citação',
+            },
+          },
+          warning: {
+            class: Warning,
+            inlineToolbar: true,
+            shortcut: 'CMD+SHIFT+W',
+            config: {
+              titlePlaceholder: 'Digite um título',
+              messagePlaceholder: 'Digite uma mensagem',
+            },
+          },
+          code: {
+            class: Code,
+            inlineToolbar: true,
+          },
+          linkTool: {
+            class: LinkTool,
+            config: {
+              endpoint: 'http://localhost:3333/images',
+            },
+          },
+          raw: {
+            class: Raw,
+            inlineToolbar: true,
+          },
+          marker: {
+            class: Marker,
+            shortcut: 'CMD+SHIFT+M',
+          },
+          delimiter: {
+            class: Delimiter,
+            shortcut: 'CMD+SHIFT+M',
+          },
+          inlineCode: {
+            class: InlineCode,
+            shortcut: 'CMD+SHIFT+M',
+          },
+          paragraph: {
+            class: Paragraph,
+            inlineToolbar: true,
+          },
+        },
+      })
+    }
+
+    if (editorRefAnswer.current === null) {
+      initEditor()
+    }
+
+    return () => {
+      editorRefAnswer?.current?.destroy()
+      editorRefAnswer.current = null
+    }
+  }, [])
 
   return (
     <Layout>
       <div className="bg-secondary relative container mx-auto rounded-md text-[#c4c4cc] p-6 mt-8">
         <div className="max-w-7xl bg-secondary rounded-lg p-4 text-[#c4c4cc]">
-          <h1 className="text-2xl text-quinary text-center font-semibold">
-            #{question?.forum?.forum?.title}
+          <h1 className="text-[#e1e1e6] text-4xl text-center font-semibold mb-2">
+            #{forum?.forum?.forum?.title}
           </h1>
           <div id="editorjs"></div>
         </div>
       </div>
+
+      <div className="bg-secondary relative container mx-auto rounded-md text-[#c4c4cc] p-6 mt-8">
+        <div className="max-w-7xl bg-secondary rounded-lg p-4 text-[#c4c4cc]">
+          <h1 className="text-[#e1e1e6] text-xl font-semibold mb-2">
+            Comentários
+          </h1>
+
+          <div className="flex flex-col">
+            <div
+              id="editorjs-answer"
+              className="mb-4 bg-main rounded-lg overflow-y-auto h-[calc(100vh-20rem)]"
+            ></div>
+            <button
+              type="button"
+              className="bg-quinary text-white rounded-lg px-4 py-2 text-lg font-semibold w-48 transitions hover:bg-opacity-80"
+            >
+              Enviar comentário
+            </button>
+          </div>
+
+          {/** RECURSIVE REACT COMPONENT FOR THE NESTED COMENTS */}
+          {forum?.forum?.forum?.answers?.map((answer: Answer) => (
+            <Comment key={answer.id} answer={answer} />
+          ))}
+        </div>
+      </div>
     </Layout>
+  )
+}
+
+const Comment = ({ answer }: { answer: Answer }) => {
+  return (
+    <div className="rounded-lg p-4 mt-4">
+      <div className="text-[#c4c4cc]">{answer.content}</div>
+      <div className="text-[#c4c4cc] mt-2">
+        <p>Created at: {answer.createdAt}</p>
+        {answer.student && (
+          <p className="flex items-center">
+            <span>{answer.student.name}</span>
+            {answer.student.avatar && (
+              <img
+                src={answer.student.avatar}
+                alt={answer.student.name}
+                className="w-8 h-8 ml-2 rounded-full object-cover"
+              />
+            )}
+          </p>
+        )}
+        {answer.instructor && (
+          <p className="flex items-center text-[#c4c4cc]">
+            <span>{answer.instructor.name}</span>
+            {answer.instructor.avatar && (
+              <img
+                src={answer.instructor.avatar}
+                alt={answer.instructor.name}
+                className="w-8 h-8 ml-2 rounded-full object-cover"
+              />
+            )}
+          </p>
+        )}
+      </div>
+      {answer.children && answer.children.length > 0 && (
+        <div className="mt-4 pl-4 border-l-2 border-[#e1e1e6]">
+          {answer.children.map((child) => (
+            <Comment key={child.id} answer={child} />
+          ))}
+        </div>
+      )}
+    </div>
   )
 }

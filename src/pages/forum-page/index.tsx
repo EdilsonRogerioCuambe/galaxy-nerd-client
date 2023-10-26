@@ -18,8 +18,7 @@ import Delimiter from '@editorjs/delimiter'
 import InlineCode from '@editorjs/inline-code'
 import Paragraph from '@editorjs/paragraph'
 import { useEffect, useRef, useState } from 'react'
-import { RiCloseCircleLine } from 'react-icons/ri'
-import { TiEdit } from 'react-icons/ti'
+import { FaAngleUp, FaAngleDown, FaReply } from 'react-icons/fa'
 
 interface Answer {
   answer: string
@@ -314,11 +313,38 @@ export function ForumPage() {
 }
 
 const Comment = ({ answer }: { answer: Answer }) => {
+  const [showChildren, setShowChildren] = useState<boolean>(false)
+  const [replying, setReplying] = useState<boolean>(false)
+  const [replyContent, setReplyContent] = useState<string>('')
+
+  const handleReplyClick = () => {
+    setReplying(!replying)
+  }
+
+  const handleReplyInputChange = (
+    e: React.ChangeEvent<HTMLTextAreaElement>,
+  ) => {
+    setReplyContent(e.target.value)
+  }
+
+  const handleReplySubmit = async () => {
+    // Lógica para enviar a resposta
+    // Use o CreateAnswerUseCase ou outra função apropriada para criar a resposta
+    // Certifique-se de fornecer os valores necessários, como forumId, parentId, studentId, etc.
+    // Limpe o campo de entrada após o envio
+    setReplyContent('')
+  }
   return (
-    <div className="rounded-lg p-4 mt-4">
+    <div className="rounded-lg p-4 mt-4 bg-main">
       <div className="text-[#c4c4cc]">{answer.content}</div>
       <div className="text-[#c4c4cc] mt-2">
-        <p>Created at: {answer.createdAt}</p>
+        <p>
+          {new Date(answer.createdAt).toLocaleDateString('pt-BR', {
+            day: 'numeric',
+            month: 'long',
+            year: 'numeric',
+          })}
+        </p>
         {answer.student && (
           <p className="flex items-center">
             <span>{answer.student.name}</span>
@@ -344,11 +370,51 @@ const Comment = ({ answer }: { answer: Answer }) => {
           </p>
         )}
       </div>
+      {replying ? (
+        <div className="flex mt-4 flex-col">
+          <textarea
+            placeholder="Digite sua resposta"
+            value={replyContent}
+            onChange={handleReplyInputChange}
+            className="bg-secondary rounded-lg p-4 w-full h-32"
+          ></textarea>
+          {/** PODER CANCELAR */}
+          <button
+            type="button"
+            onClick={handleReplySubmit}
+            className="bg-quinary text-white mt-4 rounded-lg px-4 py-2 text-lg font-semibold w-48 transitions hover:bg-opacity-80"
+          >
+            Enviar
+          </button>
+        </div>
+      ) : (
+        <button
+          title="Reply"
+          type="button"
+          onClick={handleReplyClick}
+          className="mt-4 text-[#c4c4cc] flex items-center"
+        >
+          <FaReply size={20} />
+        </button>
+      )}
       {answer.children && answer.children.length > 0 && (
         <div className="mt-4 pl-4 border-l-2 border-[#e1e1e6]">
-          {answer.children.map((child) => (
-            <Comment key={child.id} answer={child} />
-          ))}
+          <div
+            onClick={() => setShowChildren(!showChildren)}
+            className="cursor-pointer flex items-center"
+          >
+            {showChildren ? <FaAngleUp size={20} /> : <FaAngleDown size={20} />}
+            <span className="text-[#c4c4cc] ml-2">
+              {showChildren ? 'Hide Replies' : 'Show Replies'}
+            </span>
+          </div>
+          {showChildren && (
+            <div>
+              {answer.children.map((child) => (
+                <Comment key={child.id} answer={child} />
+              ))}
+            </div>
+          )}
         </div>
       )}
     </div>

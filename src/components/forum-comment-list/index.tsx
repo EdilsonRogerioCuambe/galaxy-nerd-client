@@ -8,7 +8,8 @@ import {
 import { FaAngleDown, FaAngleUp, FaReply } from 'react-icons/fa'
 import {
   useCreateAnswerMutation,
-  useUpdateAnswerMutation,
+  useUpvoteAnswerMutation,
+  useDownvoteAnswerMutation,
 } from '../../slices/answersSlices/answersApiSlice'
 import { message } from 'antd'
 
@@ -31,6 +32,14 @@ interface Answer {
   studentId: string
   updatedAt: string
   children: Answer[]
+  vote: [
+    {
+      studentId: string
+      instructorId: string
+      answerId: string
+      voteType: 'UPVOTE' | 'DOWNVOTE'
+    },
+  ]
 }
 
 const CommentList = ({
@@ -47,63 +56,27 @@ const CommentList = ({
   const [showChildren, setShowChildren] = useState<boolean>(false)
   const [replying, setReplying] = useState<boolean>(false)
   const [replyContent, setReplyContent] = useState<string>('')
-  const [upvoted, setUpvoted] = useState<boolean>(false)
-  const [downvoted, setDownvoted] = useState<boolean>(false)
+  const [upvoted, setUpvoted] = useState<boolean>(
+    answer.vote.some(
+      (vote) =>
+        vote.voteType === 'UPVOTE' &&
+        (vote.studentId === studentId || vote.instructorId === instructorId),
+    ),
+  )
+
+  const [downvoted, setDownvoted] = useState(
+    answer.vote.some(
+      (vote) =>
+        vote.voteType === 'DOWNVOTE' &&
+        (vote.studentId === studentId || vote.instructorId === instructorId),
+    ),
+  )
 
   const [createAnswer] = useCreateAnswerMutation()
-  const [updateAnswer] = useUpdateAnswerMutation()
+  const [upvoteAnswer] = useUpvoteAnswerMutation()
+  const [downvoteAnswer] = useDownvoteAnswerMutation()
 
-  const handleUpvoteClick = async () => {
-    try {
-      if (upvoted) {
-        await updateAnswer({
-          id: answer.id,
-          body: {
-            id: answer.id,
-            upvotes: answer.upvotes - 1,
-          },
-        }).unwrap()
-        setUpvoted(false)
-      } else {
-        await updateAnswer({
-          id: answer.id,
-          body: {
-            id: answer.id,
-            upvotes: answer.upvotes + 1,
-          },
-        }).unwrap()
-        setUpvoted(true)
-      }
-    } catch (error) {
-      console.error(error)
-    }
-  }
-
-  const handleDownvoteClick = async () => {
-    try {
-      if (downvoted) {
-        await updateAnswer({
-          id: answer.id,
-          body: {
-            id: answer.id,
-            downvotes: answer.downvotes - 1,
-          },
-        }).unwrap()
-        setDownvoted(false)
-      } else {
-        await updateAnswer({
-          id: answer.id,
-          body: {
-            id: answer.id,
-            downvotes: answer.downvotes + 1,
-          },
-        }).unwrap()
-        setDownvoted(true)
-      }
-    } catch (error) {
-      console.error(error)
-    }
-  }
+  console.log(answer)
 
   const handleReplyClick = () => {
     setReplying(!replying)
@@ -140,31 +113,51 @@ const CommentList = ({
       }
     }
   }
+
+  const handleUpvoteClick = async () => {
+    setUpvoted(!upvoted)
+    setDownvoted(false)
+
+    try {
+      await upvoteAnswer({
+        id: answer.id,
+        body: { studentId, instructorId, id: answer.id },
+      }).unwrap()
+    } catch (error) {
+      console.error(error)
+      if (typeof error === 'object' && error !== null && 'data' in error) {
+        const errorData = error.data as { message?: string; error?: string }
+        message.error(
+          errorData.message || errorData.error || 'An error occurred',
+        )
+      }
+    }
+  }
+
+  const handleDownvoteClick = async () => {
+    setDownvoted(!downvoted)
+    setUpvoted(false)
+
+    try {
+      await downvoteAnswer({
+        id: answer.id,
+        body: { studentId, instructorId, id: answer.id },
+      }).unwrap()
+    } catch (error) {
+      console.error(error)
+      if (typeof error === 'object' && error !== null && 'data' in error) {
+        const errorData = error.data as { message?: string; error?: string }
+        message.error(
+          errorData.message || errorData.error || 'An error occurred',
+        )
+      }
+    }
+  }
+
   return (
     <div className="rounded-lg p-4 mt-4 bg-main border border-[#e1e1e6]">
       <div className="text-[#c4c4cc] mt-2">
         <div className="flex items-center">
-          <button
-            title="Upvote"
-            type="button"
-            onClick={handleUpvoteClick}
-            className="text-[#c4c4cc] flex items-center"
-          >
-            {upvoted ? <BiSolidUpvote size={20} /> : <BiUpvote size={20} />}
-          </button>
-          <span className="text-[#c4c4cc] ml-2">{answer.upvotes}</span>
-          <button
-            title="Downvote"
-            type="button"
-            onClick={handleDownvoteClick}
-            className="text-[#c4c4cc] flex items-center ml-2"
-          >
-            {downvoted ? (
-              <BiSolidDownvote size={20} />
-            ) : (
-              <BiDownvote size={20} />
-            )}
-          </button>
           <img
             src={answer.student?.avatar || answer.instructor?.avatar}
             alt={answer.student?.name || answer.instructor?.name}
@@ -180,6 +173,39 @@ const CommentList = ({
         </div>
         <div className="flex items-center mt-2">
           <p className="text-[#e1e1e6] text-lg">{answer.content}</p>
+        </div>
+      </div>
+      <div className="flex items-center mt-4">
+        {/** VOTE PART */}
+        <div className="flex items-center">
+          <button
+            title="Upvote"
+            type="button"
+            onClick={handleUpvoteClick}
+            className="text-[#c4c4cc] flex items-center"
+          >
+            {upvoted ? (
+              <BiSolidUpvote size={20} />
+            ) : (
+              <BiUpvote size={20} className="hover:text-[#e1e1e6]" />
+            )}
+          </button>
+          <span className="text-[#c4c4cc] text-md ml-2">
+            {answer.vote.filter((vote) => vote.voteType === 'UPVOTE').length -
+              answer.vote.filter((vote) => vote.voteType === 'DOWNVOTE').length}
+          </span>
+          <button
+            title="Downvote"
+            type="button"
+            onClick={handleDownvoteClick}
+            className="text-[#c4c4cc] flex items-center ml-2"
+          >
+            {downvoted ? (
+              <BiSolidDownvote size={20} />
+            ) : (
+              <BiDownvote size={20} className="hover:text-[#e1e1e6]" />
+            )}
+          </button>
         </div>
       </div>
       {replying ? (

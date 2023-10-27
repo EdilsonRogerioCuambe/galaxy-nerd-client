@@ -27,6 +27,14 @@ interface Answer {
   studentId: string
   updatedAt: string
   children: Answer[]
+  vote: [
+    {
+      studentId: string
+      instructorId: string
+      answerId: string
+      voteType: 'UPVOTE' | 'DOWNVOTE'
+    },
+  ]
 }
 
 export function ForumPage() {

@@ -39,6 +39,24 @@ export const answersApiSlice = answerApiSlice.injectEndpoints({
       }),
       invalidatesTags: ['Answer'],
     }),
+    upvoteAnswer: builder.mutation({
+      query: ({ id, body }) => ({
+        url: `${ANSWERS_API_ENDPOINT}/${id}/upvote`,
+        method: 'POST',
+        credentials: 'include',
+        body,
+      }),
+      invalidatesTags: ['Answer'],
+    }),
+    downvoteAnswer: builder.mutation({
+      query: ({ id, body }) => ({
+        url: `${ANSWERS_API_ENDPOINT}/${id}/downvote`,
+        method: 'POST',
+        credentials: 'include',
+        body,
+      }),
+      invalidatesTags: ['Answer'],
+    }),
   }),
 })
 
@@ -49,4 +67,6 @@ export const {
   useUpdateAnswerMutation,
   useDeleteAnswerMutation,
   useGetChildrenAnswersQuery,
+  useUpvoteAnswerMutation,
+  useDownvoteAnswerMutation,
 } = answersApiSlice

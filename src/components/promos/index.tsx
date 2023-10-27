@@ -1,5 +1,7 @@
-import { FiUser } from 'react-icons/fi'
+import { Link } from 'react-router-dom'
 import banner1 from '../../assets/images/banner_1.png'
+import { AiOutlineUserAdd } from 'react-icons/ai'
+import { MdLogin } from 'react-icons/md'
 
 export function Promos() {
   return (
@@ -17,12 +19,20 @@ export function Promos() {
               30 dias.
             </p>
             <div className="flex gap-4 md:text-lg text-sm">
-              <div className="flex-colo text-[#c4c4cc] bg-quinary px-6 py-3 rounded font-bold">
-                HD 4K
-              </div>
-              <div className="flex-rows text-[#c4c4cc] bg-quinary px-6 py-3 rounded font-bold">
-                <FiUser className="w-5 h-5 m-auto" />4 Telas
-              </div>
+              <Link
+                to="/register"
+                className="bg-quinary text-white rounded-lg px-4 py-2 mt-4 text-lg font-semibold transitions hover:bg-opacity-80"
+              >
+                <AiOutlineUserAdd size={20} className="mr-2 inline-block" />
+                Cadastre-se
+              </Link>
+              <Link
+                to="/login"
+                className="bg-tertiary text-white rounded-lg px-4 py-2 mt-4 text-lg font-semibold transitions hover:bg-opacity-80"
+              >
+                <MdLogin size={20} className="mr-2 inline-block" />
+                Login
+              </Link>
             </div>
           </div>
           <div className="">

@@ -1,22 +1,9 @@
 import { Layout } from '../../layout'
 import { useParams } from 'react-router-dom'
 import { useGetQuestionBySlugQuery } from '../../slices/questionSlices/questionsApiSlice'
-import {
-  useCreateAnswerMutation,
-  useUpdateAnswerMutation,
-  useGetChildrenAnswersQuery,
-} from '../../slices/answersSlices/answersApiSlice'
-import { message } from 'antd'
-import { useState } from 'react'
-import { FaAngleUp, FaAngleDown, FaReply } from 'react-icons/fa'
+import { useGetChildrenAnswersQuery } from '../../slices/answersSlices/answersApiSlice'
 import { useSelector } from 'react-redux'
 import { RootState } from '../../store'
-import {
-  BiUpvote,
-  BiDownvote,
-  BiSolidUpvote,
-  BiSolidDownvote,
-} from 'react-icons/bi'
 import Editor from '../../components/editorjs'
 import CommentInForum from '../../components/comment-in-forum'
 import CommentList from '../../components/forum-comment-list'

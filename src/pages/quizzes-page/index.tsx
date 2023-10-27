@@ -4,19 +4,11 @@ import { useGetQuizzesByLessonIdQuery } from '../../slices/quizzesSlices/quizzes
 import { Layout } from '../../layout'
 import { useState } from 'react'
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa'
+import QuizAnimation from '../../components/quiz-animation'
 
 interface QuizOption {
   option: string
   isCorrect: boolean
-}
-
-interface QuizProps {
-  title: string
-  description: string
-  lessonId: string
-  answer: string
-  points: number
-  quizOptions: QuizOption[]
 }
 
 export function Quizzes() {
@@ -81,7 +73,15 @@ export function Quizzes() {
               {isAnswered && (
                 <div className="mt-4">
                   {quiz.quizOptions[selectedOption].isCorrect ? (
-                    <p className="text-green-300">Resposta correta!</p>
+                    <>
+                      <QuizAnimation
+                        show={
+                          isAnswered &&
+                          quiz.quizOptions[selectedOption].isCorrect
+                        }
+                      />
+                      <p className="text-green-300">Resposta correta!</p>
+                    </>
                   ) : (
                     <p className="text-red-300">Resposta incorreta.</p>
                   )}

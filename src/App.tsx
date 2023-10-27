@@ -25,6 +25,8 @@ import { RegisterStudent } from './pages/register/student'
 import { StudentLogin } from './pages/login/student'
 import { StudentAddNewQuestionPage } from './pages/add-question'
 import { ForumPage } from './pages/forum-page'
+import { AddQuiz } from './pages/add-quiz'
+import { Quizzes } from './pages/quizzes-page'
 
 const App = () => {
   Aos.init()
@@ -55,6 +57,7 @@ const App = () => {
 
         <Route path="/courses-list" element={<CoursesLists />} />
         <Route path="/categories" element={<Categories />} />
+        <Route path="/challenge/:slug" element={<Quizzes />} />
 
         <Route path="/" element={<AdminPrivateRoutes />}>
           <Route path="admin-dashboard" element={<AdminDashboard />} />
@@ -82,6 +85,7 @@ const App = () => {
             path="/instructor-add-lessons-to-course"
             element={<InstructorAddLessonsToCourse />}
           />
+          <Route path="instructor-add-quiz" element={<AddQuiz />} />
         </Route>
       </Routes>
     </>

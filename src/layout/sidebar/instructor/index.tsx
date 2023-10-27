@@ -3,7 +3,7 @@ import { FaList, FaUsers } from 'react-icons/fa'
 import { RiLockPasswordLine, RiMovie2Fill } from 'react-icons/ri'
 import { Layout } from '../..'
 import { NavLink } from 'react-router-dom'
-import { MdTopic, MdOutlineClass } from 'react-icons/md'
+import { MdTopic, MdOutlineClass, MdQuiz } from 'react-icons/md'
 
 export function InstructorSideBar({ children }: { children: React.ReactNode }) {
   const links = [
@@ -31,6 +31,11 @@ export function InstructorSideBar({ children }: { children: React.ReactNode }) {
       title: 'Add Aulas',
       link: '/instructor-add-lessons-to-course',
       icon: <MdOutlineClass className="w-6 h-6" />,
+    },
+    {
+      title: 'Add Quiz',
+      link: '/instructor-add-quiz',
+      icon: <MdQuiz className="w-6 h-6" />,
     },
     {
       title: 'Usuários',

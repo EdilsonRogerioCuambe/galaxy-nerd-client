@@ -67,6 +67,7 @@ interface LessonProps {
     title: string
     description: string
     videoUrl: string
+    slug: string
   }
 }
 
@@ -98,7 +99,7 @@ const LessonDetailsComponent: React.FC<LessonProps> = ({
           <div className="w-full h-14 mt-4 md:mt-4 py-4 px-2 border-green-300 border-2 rounded-lg flex justify-center items-center gap-2.5">
             <SiApachestorm className="w-6 h-6 text-green-300" />
             <Link
-              to="/challenge"
+              to={`/challenge/${lesson?.slug}`}
               className="text-green-300 text-sm font-bold uppercase leading-snug"
             >
               Acesse o desafio

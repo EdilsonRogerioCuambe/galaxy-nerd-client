@@ -8,6 +8,10 @@ export const questionsApiSlice = questionApiSlice.injectEndpoints({
       query: () => QUESTIONS_API_ENDPOINT,
       providesTags: ['Question'],
     }),
+    getQuestionsByLessonId: builder.query({
+      query: (lessonId) => `${QUESTIONS_API_ENDPOINT}/lesson/${lessonId}`,
+      providesTags: ['Question'],
+    }),
     getQuestion: builder.query({
       query: (id) => `${QUESTIONS_API_ENDPOINT}/${id}`,
       providesTags: ['Question'],
@@ -49,4 +53,5 @@ export const {
   useUpdateQuestionMutation,
   useDeleteQuestionMutation,
   useGetQuestionBySlugQuery,
+  useGetQuestionsByLessonIdQuery,
 } = questionsApiSlice

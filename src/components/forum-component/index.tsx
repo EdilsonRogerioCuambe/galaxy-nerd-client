@@ -9,9 +9,9 @@ interface Forum {
   id: string
   lessonId: string
   slug: string
-  student: {
-    avatar: string
-    name: string
+  student?: {
+    avatar?: string
+    name?: string
   }
   studentId: string
   title: string
@@ -26,12 +26,12 @@ export function ForumComponent({ question }: { question: Forum }) {
           <div className="flex items-center mb-2">
             <img
               className="w-10 h-10 rounded-full object-cover"
-              src={question.student.avatar}
-              alt={question.student.name}
+              src={question?.student?.avatar}
+              alt={question?.student?.name}
             />
             <div className="ml-3">
               <span className="font-extrabold text-md text-[#c4c4cc]">
-                {question.student.name}
+                {question?.student?.name}
               </span>
               <span className="text-sm ml-2 font-bold text-[#c4c4cc]">
                 {new Date(question.createdAt).toLocaleDateString('pt-BR', {

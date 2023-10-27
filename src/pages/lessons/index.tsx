@@ -4,6 +4,7 @@ import { BiArrowBack } from 'react-icons/bi'
 import { FaHeart } from 'react-icons/fa'
 import { useGetCourseBySlugQuery } from '../../slices/courseSlices/courseApiSlice'
 import { useGetLessonBySlugQuery } from '../../slices/lessonsSlices/lessonsApiSlice'
+import { useGetQuestionsByLessonIdQuery } from '../../slices/questionSlices/questionsApiSlice'
 import videojs from 'video.js'
 import 'video.js/dist/video-js.css'
 import { useRef, useEffect } from 'react'
@@ -22,9 +23,9 @@ interface Forum {
   id: string
   lessonId: string
   slug: string
-  student: {
-    avatar: string
-    name: string
+  student?: {
+    avatar?: string
+    name?: string
   }
   studentId: string
   title: string
@@ -35,6 +36,11 @@ export function Lessons() {
   const { slug, lesson } = useParams()
   const { data: course } = useGetCourseBySlugQuery(slug)
   const { data: lessonData } = useGetLessonBySlugQuery(lesson)
+  const { data: questions } = useGetQuestionsByLessonIdQuery(
+    lessonData?.lesson?.lesson?.id,
+  )
+  console.log(questions)
+
   const videoRef = useRef<HTMLDivElement | null>(null)
   const playerRef = useRef<videojs.Player | null>(null)
 
@@ -138,11 +144,9 @@ export function Lessons() {
           Nova pergunta
         </Link>
         <div className="mt-4">
-          {lessonData?.lesson?.lesson?.forum?.map(
-            (question: Forum, index: number) => (
-              <ForumComponent key={index} question={question} />
-            ),
-          )}
+          {questions?.forums?.forums?.map((question: Forum, index: number) => (
+            <ForumComponent key={index} question={question} />
+          ))}
           {lessonData?.lesson?.lesson?.forum?.length === 0 && (
             <div className="flex justify-center items-center h-[calc(100vh-17rem)]">
               <p className="text-[#c4c4cc] text-2xl font-semibold">

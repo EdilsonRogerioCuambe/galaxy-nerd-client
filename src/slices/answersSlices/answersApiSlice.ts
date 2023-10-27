@@ -12,6 +12,10 @@ export const answersApiSlice = answerApiSlice.injectEndpoints({
       query: (id) => `${ANSWERS_API_ENDPOINT}/${id}`,
       providesTags: ['Answer'],
     }),
+    getChildrenAnswers: builder.query({
+      query: (forumId) => `${ANSWERS_API_ENDPOINT}/${forumId}`,
+      providesTags: ['Answer'],
+    }),
     createAnswer: builder.mutation({
       query: (body) => ({
         url: `${ANSWERS_API_ENDPOINT}`,
@@ -44,4 +48,5 @@ export const {
   useCreateAnswerMutation,
   useUpdateAnswerMutation,
   useDeleteAnswerMutation,
+  useGetChildrenAnswersQuery,
 } = answersApiSlice

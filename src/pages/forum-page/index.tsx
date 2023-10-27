@@ -1,7 +1,11 @@
 import { Layout } from '../../layout'
 import { useParams } from 'react-router-dom'
 import { useGetQuestionBySlugQuery } from '../../slices/questionSlices/questionsApiSlice'
-import { useCreateAnswerMutation } from '../../slices/answersSlices/answersApiSlice'
+import {
+  useCreateAnswerMutation,
+  useUpdateAnswerMutation,
+  useGetChildrenAnswersQuery,
+} from '../../slices/answersSlices/answersApiSlice'
 import { message } from 'antd'
 import EditorJS from '@editorjs/editorjs'
 import Header from '@editorjs/header'
@@ -21,9 +25,14 @@ import InlineCode from '@editorjs/inline-code'
 import Paragraph from '@editorjs/paragraph'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { FaAngleUp, FaAngleDown, FaReply } from 'react-icons/fa'
-import { useFormik } from 'formik'
 import { useSelector } from 'react-redux'
 import { RootState } from '../../store'
+import {
+  BiUpvote,
+  BiDownvote,
+  BiSolidUpvote,
+  BiSolidDownvote,
+} from 'react-icons/bi'
 
 interface Answer {
   answer: string
@@ -49,11 +58,16 @@ interface Answer {
 export function ForumPage() {
   const { slug } = useParams<{ slug: string }>()
   const { data: forum } = useGetQuestionBySlugQuery(slug)
+
+  const { data: childrenAnswers } = useGetChildrenAnswersQuery(
+    forum?.forum?.forum?.id || '',
+  )
+
+  console.log(childrenAnswers)
+
   const editorRef = useRef<EditorJS | null>(null)
   const { student } = useSelector((state: RootState) => state.studentAuth)
   const { instructor } = useSelector((state: RootState) => state.instructorAuth)
-
-  console.log(instructor?.id)
 
   const parseDescription = JSON.parse(forum?.forum?.forum?.description || '{}')
 
@@ -191,7 +205,7 @@ export function ForumPage() {
             forumId={forum?.forum?.forum?.id}
           />
 
-          {forum?.forum?.forum?.answers?.map((answer: Answer) => (
+          {childrenAnswers?.answers?.answers?.map((answer: Answer) => (
             <CommentList
               key={answer.id}
               answer={answer}
@@ -286,7 +300,63 @@ const CommentList = ({
   const [showChildren, setShowChildren] = useState<boolean>(false)
   const [replying, setReplying] = useState<boolean>(false)
   const [replyContent, setReplyContent] = useState<string>('')
+  const [upvoted, setUpvoted] = useState<boolean>(false)
+  const [downvoted, setDownvoted] = useState<boolean>(false)
+
   const [createAnswer] = useCreateAnswerMutation()
+  const [updateAnswer] = useUpdateAnswerMutation()
+
+  const handleUpvoteClick = async () => {
+    try {
+      if (upvoted) {
+        await updateAnswer({
+          id: answer.id,
+          body: {
+            id: answer.id,
+            upvotes: answer.upvotes - 1,
+          },
+        }).unwrap()
+        setUpvoted(false)
+      } else {
+        await updateAnswer({
+          id: answer.id,
+          body: {
+            id: answer.id,
+            upvotes: answer.upvotes + 1,
+          },
+        }).unwrap()
+        setUpvoted(true)
+      }
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  const handleDownvoteClick = async () => {
+    try {
+      if (downvoted) {
+        await updateAnswer({
+          id: answer.id,
+          body: {
+            id: answer.id,
+            downvotes: answer.downvotes - 1,
+          },
+        }).unwrap()
+        setDownvoted(false)
+      } else {
+        await updateAnswer({
+          id: answer.id,
+          body: {
+            id: answer.id,
+            downvotes: answer.downvotes + 1,
+          },
+        }).unwrap()
+        setDownvoted(true)
+      }
+    } catch (error) {
+      console.error(error)
+    }
+  }
 
   const handleReplyClick = () => {
     setReplying(!replying)
@@ -325,41 +395,45 @@ const CommentList = ({
   }
   return (
     <div className="rounded-lg p-4 mt-4 bg-main border border-[#e1e1e6]">
-      <div className="text-[#c4c4cc]">
-        <p>{answer.content}</p>
-      </div>
       <div className="text-[#c4c4cc] mt-2">
-        <p>
-          {new Date(answer.createdAt).toLocaleDateString('pt-BR', {
-            day: 'numeric',
-            month: 'long',
-            year: 'numeric',
-          })}
-        </p>
-        {answer.student && (
-          <p className="flex items-center">
-            <span>{answer.student.name}</span>
-            {answer.student.avatar && (
-              <img
-                src={answer.student.avatar}
-                alt={answer.student.name}
-                className="w-8 h-8 ml-2 rounded-full object-cover"
-              />
+        <div className="flex items-center">
+          <button
+            title="Upvote"
+            type="button"
+            onClick={handleUpvoteClick}
+            className="text-[#c4c4cc] flex items-center"
+          >
+            {upvoted ? <BiSolidUpvote size={20} /> : <BiUpvote size={20} />}
+          </button>
+          <span className="text-[#c4c4cc] ml-2">{answer.upvotes}</span>
+          <button
+            title="Downvote"
+            type="button"
+            onClick={handleDownvoteClick}
+            className="text-[#c4c4cc] flex items-center ml-2"
+          >
+            {downvoted ? (
+              <BiSolidDownvote size={20} />
+            ) : (
+              <BiDownvote size={20} />
             )}
-          </p>
-        )}
-        {answer.instructor && (
-          <p className="flex items-center text-[#c4c4cc]">
-            <span>{answer.instructor.name}</span>
-            {answer.instructor.avatar && (
-              <img
-                src={answer.instructor.avatar}
-                alt={answer.instructor.name}
-                className="w-8 h-8 ml-2 rounded-full object-cover"
-              />
-            )}
-          </p>
-        )}
+          </button>
+          <img
+            src={answer.student?.avatar || answer.instructor?.avatar}
+            alt={answer.student?.name || answer.instructor?.name}
+            className="w-10 h-10 rounded-full object-cover"
+          />
+          <h1 className="text-[#e1e1e6] text-md font-semibold ml-2">
+            {answer.student?.name || answer.instructor?.name}
+          </h1>
+
+          <span className="text-[#c4c4cc] text-md ml-2">
+            {new Date(answer.createdAt).toLocaleDateString()}
+          </span>
+        </div>
+        <div className="flex items-center mt-2">
+          <p className="text-[#e1e1e6] text-lg">{answer.content}</p>
+        </div>
       </div>
       {replying ? (
         <div className="flex mt-4 flex-col">

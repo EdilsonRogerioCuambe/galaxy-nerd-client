@@ -156,58 +156,60 @@ const CommentList = ({
 
   return (
     <div className="rounded-lg p-4 mt-4 bg-main border border-[#e1e1e6]">
-      <div className="text-[#c4c4cc] mt-2">
-        <div className="flex items-center">
+      <div className="flex flex-col bg-secondary rounded p-4">
+        <div className="flex items-center mb-2">
           <img
             src={answer.student?.avatar || answer.instructor?.avatar}
             alt={answer.student?.name || answer.instructor?.name}
             className="w-10 h-10 rounded-full object-cover"
           />
-          <h1 className="text-[#e1e1e6] text-md font-semibold ml-2">
-            {answer.student?.name || answer.instructor?.name}
-          </h1>
-
-          <span className="text-[#c4c4cc] text-md ml-2">
-            {new Date(answer.createdAt).toLocaleDateString()}
-          </span>
+          <div className="ml-2">
+            <h1 className="text-[#c4c4cc] text-lg font-semibold">
+              {answer.student?.name || answer.instructor?.name}
+            </h1>
+            <span className="text-gray-400 text-md">
+              {new Date(answer.createdAt).toLocaleDateString()}
+            </span>
+          </div>
         </div>
-        <div className="flex items-center mt-2">
+        <div className="mt-2">
           <p className="text-[#e1e1e6] text-lg">{answer.content}</p>
         </div>
-      </div>
-      <div className="flex items-center mt-4">
-        {/** VOTE PART */}
-        <div className="flex items-center">
-          <button
-            title="Upvote"
-            type="button"
-            onClick={handleUpvoteClick}
-            className="text-[#c4c4cc] flex items-center"
-          >
-            {upvoted ? (
-              <BiSolidUpvote size={20} />
-            ) : (
-              <BiUpvote size={20} className="hover:text-[#e1e1e6]" />
-            )}
-          </button>
-          <span className="text-[#c4c4cc] text-md ml-2">
-            {answer.vote.filter((vote) => vote.voteType === 'UPVOTE').length -
-              answer.vote.filter((vote) => vote.voteType === 'DOWNVOTE').length}
-          </span>
-          <button
-            title="Downvote"
-            type="button"
-            onClick={handleDownvoteClick}
-            className="text-[#c4c4cc] flex items-center ml-2"
-          >
-            {downvoted ? (
-              <BiSolidDownvote size={20} />
-            ) : (
-              <BiDownvote size={20} className="hover:text-[#e1e1e6]" />
-            )}
-          </button>
+        <div className="flex items-center mt-4">
+          <div className="flex items-center">
+            <button
+              title="Upvote"
+              type="button"
+              onClick={handleUpvoteClick}
+              className="text-gray-400 flex items-center"
+            >
+              {upvoted ? (
+                <BiSolidUpvote size={20} />
+              ) : (
+                <BiUpvote size={20} className="hover:text-white" />
+              )}
+            </button>
+            <span className="text-gray-400 text-md ml-2">
+              {answer.vote.filter((vote) => vote.voteType === 'UPVOTE').length -
+                answer.vote.filter((vote) => vote.voteType === 'DOWNVOTE')
+                  .length}
+            </span>
+            <button
+              title="Downvote"
+              type="button"
+              onClick={handleDownvoteClick}
+              className="text-gray-400 flex items-center ml-2"
+            >
+              {downvoted ? (
+                <BiSolidDownvote size={20} />
+              ) : (
+                <BiDownvote size={20} className="hover:text-white" />
+              )}
+            </button>
+          </div>
         </div>
       </div>
+
       {replying ? (
         <div className="flex mt-4 flex-col">
           <form onSubmit={handleReplySubmit}>

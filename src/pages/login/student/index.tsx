@@ -67,7 +67,7 @@ export function StudentLogin() {
 
   return (
     <Layout>
-      <div className="max-w-5xl mx-auto px-2 mt-8 flex-colo">
+      <div className="max-w-2xl mx-auto px-2 mt-8 flex-colo">
         <div className="w-full 2xl:w-2/5 gap-8 flex-colo p-8 md:3/5 bg-secondary rounded-lg">
           <span className="uppercase text-[#c4c4cc] text-4xl font-extrabold">
             <FiLogIn className="inline-block mr-2" />

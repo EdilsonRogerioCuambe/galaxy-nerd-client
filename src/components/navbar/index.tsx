@@ -1,20 +1,29 @@
 import { Link, NavLink, useNavigate } from 'react-router-dom'
 import { BiLogOut, BiSearchAlt2 } from 'react-icons/bi'
-import { AiFillHeart } from 'react-icons/ai'
+import { AiFillHeart, AiFillFire } from 'react-icons/ai'
 import { FaUserAlt } from 'react-icons/fa'
 import logo from '../../assets/images/logo.png'
 import { useSelector, useDispatch } from 'react-redux'
 import { RootState } from '../../store'
 import { logout } from '../../slices/admin/authSlice'
+import { useGetStudentByIdQuery } from '../../slices/student/apiSlice/studentApiSlice'
+
+interface QuizScore {
+  score: number
+}
 
 export function NavigationBar() {
   const { instructor } = useSelector((state: RootState) => state.instructorAuth)
   const { student } = useSelector((state: RootState) => state.studentAuth)
   const { user: admin } = useSelector((state: RootState) => state.adminAuth)
 
+  const { data: studentData } = useGetStudentByIdQuery(student?.id || '')
+
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const hover = 'hover:text-[#c4c4cc] transition duration-300 ease-in-out'
+
+  console.log(studentData)
 
   const handleLogout = async () => {
     try {
@@ -62,12 +71,20 @@ export function NavigationBar() {
             <NavLink className={Hover} to="/courses">
               Cursos
             </NavLink>
-            <NavLink className={Hover} to="/about">
-              Sobre
-            </NavLink>
-            <NavLink className={Hover} to="/contact">
-              Contato
-            </NavLink>
+            {studentData?.student?.studentQuizScore?.length > 0 && (
+              <div className="flex items-center gap-2 px-2 py-1 rounded bg-main">
+                <span className="font-semibold text-base text-green-300">
+                  XP:
+                </span>
+                <span className="text-green-300 flex">
+                  {studentData.student.studentQuizScore.reduce(
+                    (total: number, score: QuizScore) => total + score.score,
+                    0,
+                  )}
+                  <AiFillFire className="text-orange-300" size={24} />
+                </span>
+              </div>
+            )}
             <NavLink className={`${Hover} relative`} to="/favorites">
               <AiFillHeart className="w-6 h-6 text-quinary" />
               <div className="absolute flex justify-center items-center bg-secondary text-white w-4 h-4 rounded-full -top-1 -right-1 text-xs">

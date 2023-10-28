@@ -39,6 +39,18 @@ export const studentApi = studentApiSlice.injectEndpoints({
         body,
       }),
     }),
+    addStudentScore: builder.mutation({
+      query: ({ studentId, body }) => ({
+        url: `${STUDENT_API_ENDPOINT}/${studentId}/scores`,
+        method: 'POST',
+        body,
+      }),
+      invalidatesTags: ['Student'],
+    }),
+    getStudentById: builder.query({
+      query: (id) => `${STUDENT_API_ENDPOINT}/${id}`,
+      providesTags: ['Student'],
+    }),
   }),
 })
 
@@ -48,4 +60,6 @@ export const {
   useUpdateStudentMutation,
   useDeleteStudentMutation,
   useLoginMutation,
+  useAddStudentScoreMutation,
+  useGetStudentByIdQuery,
 } = studentApi

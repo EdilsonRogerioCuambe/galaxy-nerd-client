@@ -2,9 +2,13 @@ import { useParams } from 'react-router-dom'
 import { useGetLessonBySlugQuery } from '../../slices/lessonsSlices/lessonsApiSlice'
 import { useGetQuizzesByLessonIdQuery } from '../../slices/quizzesSlices/quizzesApiSlices'
 import { Layout } from '../../layout'
-import { useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa'
 import QuizAnimation from '../../components/quiz-animation'
+import { motion } from 'framer-motion'
+import { useAddStudentScoreMutation } from '../../slices/student/apiSlice/studentApiSlice'
+import { useSelector } from 'react-redux'
+import { RootState } from '../../store'
 
 interface QuizOption {
   option: string
@@ -13,6 +17,7 @@ interface QuizOption {
 
 export function Quizzes() {
   const { slug } = useParams()
+  const { student } = useSelector((state: RootState) => state.studentAuth)
   const [currentQuizIndex, setCurrentQuizIndex] = useState(0)
   const [isAnswered, setIsAnswered] = useState(false)
   const [selectedOption, setSelectedOption] = useState(-1)
@@ -20,6 +25,7 @@ export function Quizzes() {
   const { data: quizzes } = useGetQuizzesByLessonIdQuery(
     lesson?.lesson?.lesson?.id,
   )
+  const [addStudentScore] = useAddStudentScoreMutation()
 
   const quiz = quizzes?.quizzes[currentQuizIndex]
 
@@ -44,6 +50,27 @@ export function Quizzes() {
     setIsAnswered(true)
   }
 
+  const handleAddStudentScore = useCallback(async () => {
+    try {
+      await addStudentScore({
+        studentId: student?.id,
+        body: {
+          studentId: student?.id,
+          quizId: quiz?.id,
+          score: quiz?.points,
+        },
+      }).unwrap()
+    } catch (error) {
+      console.log(error)
+    }
+  }, [addStudentScore, quiz, student?.id])
+
+  useEffect(() => {
+    if (isAnswered && quiz?.quizOptions[selectedOption].isCorrect) {
+      handleAddStudentScore()
+    }
+  }, [isAnswered, selectedOption, quiz, handleAddStudentScore])
+
   return (
     <Layout>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 bg-secondary rounded-md shadow-md h-full p-6 mt-10">
@@ -52,38 +79,69 @@ export function Quizzes() {
         </h1>
         <div className="text-[#e1e1e6] p-4 rounded-md">
           {quiz && (
-            <div>
-              <h2 className="text-xl font-semibold mb-4">{quiz.title}</h2>
+            <div key={quiz.id}>
+              <motion.h2
+                className="text-xl font-semibold mb-4"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.5 }}
+              >
+                {quiz.title}
+              </motion.h2>
+
               <p className="mb-4">{quiz.description}</p>
               {quiz.quizOptions.map((option: QuizOption, index: number) => (
-                <div
-                  key={index}
-                  className={`p-2 mb-2 border ${
-                    isAnswered && option.isCorrect
-                      ? 'bg-green-200 border-green-300 text-black'
-                      : selectedOption === index
-                      ? 'bg-red-200 border-red-300 text-black'
-                      : 'bg-main border-quaternary'
-                  } rounded-md cursor-pointer`}
-                  onClick={() => handleOptionClick(index)}
-                >
-                  {option.option}
-                </div>
+                <>
+                  <motion.div
+                    className={`p-2 mb-2 border ${
+                      isAnswered && option.isCorrect
+                        ? 'bg-green-200 border-green-300 text-black'
+                        : selectedOption === index
+                        ? 'bg-red-200 border-red-300 text-black'
+                        : 'bg-main border-quaternary'
+                    } rounded-md cursor-pointer`}
+                    onClick={() => handleOptionClick(index)}
+                    initial={{
+                      opacity: 0,
+                      transform: 'translateX(-50px)',
+                    }}
+                    animate={{
+                      opacity: 1,
+                      transform: 'translateX(0px)',
+                    }}
+                    transition={{
+                      duration: 0.5,
+                      delay: index * 0.1,
+                    }}
+                  >
+                    {option.option}
+                  </motion.div>
+                </>
               ))}
               {isAnswered && (
                 <div className="mt-4">
                   {quiz.quizOptions[selectedOption].isCorrect ? (
                     <>
-                      <QuizAnimation
-                        show={
-                          isAnswered &&
-                          quiz.quizOptions[selectedOption].isCorrect
-                        }
-                      />
-                      <p className="text-green-300">Resposta correta!</p>
+                      <div className="flex items-center justify-start">
+                        <QuizAnimation
+                          show={
+                            isAnswered &&
+                            quiz.quizOptions[selectedOption].isCorrect
+                          }
+                        />
+                      </div>
                     </>
                   ) : (
-                    <p className="text-red-300">Resposta incorreta.</p>
+                    <>
+                      <motion.div
+                        className="text-red-300"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ duration: 0.5 }}
+                      >
+                        Resposta incorreta! 😢
+                      </motion.div>
+                    </>
                   )}
                   <p className="mt-2">Explicação: {quiz.answer}</p>
                 </div>

@@ -15,7 +15,7 @@ const QuizAnimation = ({ show }: QuizAnimationProps) => {
 
   return (
     <animated.div style={animationProps} className="text-green-300">
-      +5
+      +5 pontos de experiência! 🎉 Resposta correta!
     </animated.div>
   )
 }

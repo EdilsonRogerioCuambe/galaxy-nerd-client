@@ -19,6 +19,30 @@ export function StudentProfile() {
     student?.id || '',
   )
 
+  console.log(studentData)
+
+  function generateCalendarData(lessonProgress: any) {
+    const startDate = new Date()
+    startDate.setFullYear(startDate.getFullYear() - 1)
+
+    const calendarData = Array(365)
+      .fill(0)
+      .map((_, index) => {
+        const date = new Date(startDate.getTime() + index * 24 * 60 * 60 * 1000)
+        const lesson =
+          lessonProgress && lessonProgress.length > index
+            ? lessonProgress[index]
+            : undefined
+        return {
+          month: date.getMonth(),
+          day: date.getDay(),
+          watched: lesson ? lesson.watched : false,
+        }
+      })
+
+    return calendarData
+  }
+
   return (
     <Layout>
       <div className="text-[#c4c4cc] max-w-7xl mx-auto">
@@ -115,146 +139,168 @@ export function StudentProfile() {
               <p className="prose text-[#c4c4cc] max-w-none">
                 {studentData?.student?.biography}
               </p>
+            </div>
 
-              {/* Experiências */}
-              <h2 className="text-lg font-bold mt-4">Experiências</h2>
-              <div className="flex flex-wrap gap-2">
-                {studentData?.student?.works?.map((name: string) => (
-                  <span
-                    key={name}
-                    className="bg-main text-[#e1e1e6] px-4 py-2 rounded-md"
+            <h2 className="text-lg font-bold mt-4">Experiências</h2>
+            <div className="flex flex-wrap gap-2">
+              {studentData?.student?.works?.map((name: string) => (
+                <span
+                  key={name}
+                  className="bg-secondary text-[#e1e1e6] px-4 py-2 rounded-md"
+                >
+                  {name}
+                </span>
+              ))}
+            </div>
+
+            <h2 className="text-lg font-bold mt-4">Social Media</h2>
+            <div className="flex flex-wrap gap-2">
+              <div className="flex items-center justify-center bg-secondary text-[#e1e1e6] px-6 py-3 rounded-lg shadow-md">
+                {studentData?.student?.facebook && (
+                  <Link
+                    to={studentData?.student?.facebook}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="text-[#c4c4cc] hover:text-[#e1e1e6] transition duration-300"
                   >
-                    {name}
-                  </span>
-                ))}
+                    <ImFacebook2 size={24} />
+                  </Link>
+                )}
               </div>
-
-              {/* Social Media */}
-              <h2 className="text-lg font-bold mt-4">Social Media</h2>
-              <div className="flex flex-wrap gap-2">
-                <div className="flex items-center justify-center bg-main text-[#e1e1e6] px-6 py-3 rounded-lg shadow-md">
-                  {studentData?.student?.facebook && (
-                    <Link
-                      to={studentData?.student?.facebook}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="text-[#c4c4cc] hover:text-[#e1e1e6] transition duration-300"
-                    >
-                      <ImFacebook2 size={24} />
-                    </Link>
-                  )}
-                </div>
-                <div className="flex items-center justify-center bg-main text-[#e1e1e6] px-6 py-3 rounded-lg shadow-md">
-                  {studentData?.student?.github && (
-                    <Link
-                      to={studentData?.student?.github}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="text-[#c4c4cc] hover:text-[#e1e1e6] transition duration-300"
-                    >
-                      <AiOutlineGithub size={24} />
-                    </Link>
-                  )}
-                </div>
-                <div className="flex items-center justify-center bg-main text-[#e1e1e6] px-6 py-3 rounded-lg shadow-md">
-                  {studentData?.student?.linkedin && (
-                    <Link
-                      to={studentData?.student?.linkedin}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="text-[#c4c4cc] hover:text-[#e1e1e6] transition duration-300"
-                    >
-                      <AiFillLinkedin size={24} />
-                    </Link>
-                  )}
-                </div>
-                <div className="flex items-center justify-center bg-main text-[#e1e1e6] px-6 py-3 rounded-lg shadow-md">
-                  {studentData?.student?.twitter && (
-                    <Link
-                      to={studentData?.student?.twitter}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="text-[#c4c4cc] hover:text-[#e1e1e6] transition duration-300"
-                    >
-                      <FaTwitter size={24} />
-                    </Link>
-                  )}
-                </div>
-                <div className="flex items-center justify-center bg-main text-[#e1e1e6] px-6 py-3 rounded-lg shadow-md">
-                  {studentData?.student?.youtube && (
-                    <Link
-                      to={studentData?.student?.youtube}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="text-[#c4c4cc] hover:text-[#e1e1e6] transition duration-300"
-                    >
-                      <FaYoutube size={24} />
-                    </Link>
-                  )}
-                </div>
-                <div className="flex items-center justify-center bg-main text-[#e1e1e6] px-6 py-3 rounded-lg shadow-md">
-                  {studentData?.student?.instagram && (
-                    <Link
-                      to={studentData?.student?.instagram}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="text-[#c4c4cc] hover:text-[#e1e1e6] transition duration-300"
-                    >
-                      <RiInstagramFill size={24} />
-                    </Link>
-                  )}
-                </div>
-                <div className="flex items-center justify-center bg-main text-[#e1e1e6] px-6 py-3 rounded-lg shadow-md">
-                  {studentData?.student?.website && (
-                    <Link
-                      to={studentData?.student?.website}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="text-[#c4c4cc] hover:text-[#e1e1e6] transition duration-300"
-                    >
-                      <CgWebsite size={24} />
-                    </Link>
-                  )}
-                </div>
+              <div className="flex items-center justify-center bg-secondary text-[#e1e1e6] px-6 py-3 rounded-lg shadow-md">
+                {studentData?.student?.github && (
+                  <Link
+                    to={studentData?.student?.github}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="text-[#c4c4cc] hover:text-[#e1e1e6] transition duration-300"
+                  >
+                    <AiOutlineGithub size={24} />
+                  </Link>
+                )}
               </div>
+              <div className="flex items-center justify-center bg-secondary text-[#e1e1e6] px-6 py-3 rounded-lg shadow-md">
+                {studentData?.student?.linkedin && (
+                  <Link
+                    to={studentData?.student?.linkedin}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="text-[#c4c4cc] hover:text-[#e1e1e6] transition duration-300"
+                  >
+                    <AiFillLinkedin size={24} />
+                  </Link>
+                )}
+              </div>
+              <div className="flex items-center justify-center bg-secondary text-[#e1e1e6] px-6 py-3 rounded-lg shadow-md">
+                {studentData?.student?.twitter && (
+                  <Link
+                    to={studentData?.student?.twitter}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="text-[#c4c4cc] hover:text-[#e1e1e6] transition duration-300"
+                  >
+                    <FaTwitter size={24} />
+                  </Link>
+                )}
+              </div>
+              <div className="flex items-center justify-center bg-secondary text-[#e1e1e6] px-6 py-3 rounded-lg shadow-md">
+                {studentData?.student?.youtube && (
+                  <Link
+                    to={studentData?.student?.youtube}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="text-[#c4c4cc] hover:text-[#e1e1e6] transition duration-300"
+                  >
+                    <FaYoutube size={24} />
+                  </Link>
+                )}
+              </div>
+              <div className="flex items-center justify-center bg-secondary text-[#e1e1e6] px-6 py-3 rounded-lg shadow-md">
+                {studentData?.student?.instagram && (
+                  <Link
+                    to={studentData?.student?.instagram}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="text-[#c4c4cc] hover:text-[#e1e1e6] transition duration-300"
+                  >
+                    <RiInstagramFill size={24} />
+                  </Link>
+                )}
+              </div>
+              <div className="flex items-center justify-center bg-secondary text-[#e1e1e6] px-6 py-3 rounded-lg shadow-md">
+                {studentData?.student?.website && (
+                  <Link
+                    to={studentData?.student?.website}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="text-[#c4c4cc] hover:text-[#e1e1e6] transition duration-300"
+                  >
+                    <CgWebsite size={24} />
+                  </Link>
+                )}
+              </div>
+            </div>
 
-              {/* Barra de progresso */}
-              <div className="mt-4">
-                <div className="relative pt-1 bg-main rounded-lg p-2">
-                  <div className="flex mb-2 items-center justify-between">
-                    <div>
-                      <span className="text-md font-semibold inline-block text-[#c4c4cc]">
-                        XP
-                      </span>
-                    </div>
-                    <div className="text-right">
-                      <span className="text-xs font-semibold inline-block text-green-300">
-                        {studentData?.student?.scores?.reduce(
+            <div className="mt-4">
+              <div className="relative pt-1 bg-secondary rounded-lg p-2">
+                <div className="flex mb-2 items-center justify-between">
+                  <div>
+                    <span className="text-md font-semibold inline-block text-[#c4c4cc]">
+                      XP
+                    </span>
+                  </div>
+                  <div className="text-right">
+                    <span className="text-xs font-semibold inline-block text-green-300">
+                      {studentData?.student?.scores?.reduce(
+                        (total: number, score: QuizScore) =>
+                          total + score.score,
+                        0,
+                      )}{' '}
+                      / 10000
+                    </span>
+                  </div>
+                </div>
+                <div className="overflow-hidden h-2 mb-4 text-xs flex rounded bg-[#e1e1e6]">
+                  <div
+                    style={{
+                      width: `${
+                        (studentData?.student?.scores?.reduce(
                           (total: number, score: QuizScore) =>
                             total + score.score,
                           0,
-                        )}{' '}
-                        / 10000
-                      </span>
-                    </div>
-                  </div>
-                  <div className="overflow-hidden h-2 mb-4 text-xs flex rounded bg-[#e1e1e6]">
-                    <div
-                      style={{
-                        width: `${
-                          (studentData?.student?.scores?.reduce(
-                            (total: number, score: QuizScore) =>
-                              total + score.score,
-                            0,
-                          ) /
-                            10000) *
-                          100
-                        }%`,
-                      }}
-                      className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-green-300"
-                    ></div>
-                  </div>
+                        ) /
+                          10000) *
+                        100
+                      }%`,
+                    }}
+                    className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-green-300"
+                  ></div>
                 </div>
+              </div>
+            </div>
+
+            <div className="mt-4">
+              <h2 className="text-lg font-bold">Aulas Assistidas</h2>
+              <div className="grid grid-cols-12 gap-2 mt-2">
+                {generateCalendarData(
+                  studentData?.student?.lessonProgress,
+                )?.map((day, index) => (
+                  <div
+                    key={index}
+                    className={`${
+                      day?.watched ? 'bg-green-300' : 'bg-secondary'
+                    } p-2 rounded cursor-pointer transitions hover:bg-main`}
+                    title={`Aulas assistidas: ${day?.watched ? 1 : 0}`}
+                  >
+                    {day?.day === 0 && (
+                      <span className="text-xs">
+                        {new Date(0, day?.month).toLocaleString('default', {
+                          month: 'short',
+                        })}
+                      </span>
+                    )}
+                  </div>
+                ))}
               </div>
             </div>
           </div>

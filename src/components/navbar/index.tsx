@@ -7,6 +7,8 @@ import { useSelector, useDispatch } from 'react-redux'
 import { RootState } from '../../store'
 import { logout } from '../../slices/admin/authSlice'
 import { useGetStudentByIdQuery } from '../../slices/student/apiSlice/studentApiSlice'
+import { useState, useEffect, useRef } from 'react'
+import { FiUser, FiSettings, FiFileText, FiLogOut } from 'react-icons/fi'
 
 interface QuizScore {
   score: number
@@ -16,11 +18,34 @@ export function NavigationBar() {
   const { instructor } = useSelector((state: RootState) => state.instructorAuth)
   const { student } = useSelector((state: RootState) => state.studentAuth)
   const { user: admin } = useSelector((state: RootState) => state.adminAuth)
-
   const { data: studentData } = useGetStudentByIdQuery(student?.id || '')
 
   const navigate = useNavigate()
   const dispatch = useDispatch()
+
+  const [isDropdownOpen, setDropdownOpen] = useState(false)
+  const dropdownRef = useRef<HTMLDivElement>(null)
+
+  const toggleDropdown = () => setDropdownOpen(!isDropdownOpen)
+
+  const closeDropdown = () => {
+    setDropdownOpen(false)
+  }
+
+  useEffect(() => {
+    const handleClickOutside = (event: any) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        closeDropdown()
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside)
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [])
+
   const hover = 'hover:text-[#c4c4cc] transition duration-300 ease-in-out'
 
   const handleLogout = async () => {
@@ -92,25 +117,64 @@ export function NavigationBar() {
 
             {student && (
               <>
-                <div className="flex items-center gap-2">
-                  <NavLink
-                    className={`${Hover} relative`}
-                    to="/student-dashboard"
-                  >
-                    <img
-                      src={student.avatar}
-                      alt="avatar"
-                      className="w-8 h-8 rounded-full object-cover"
-                    />
-                  </NavLink>
-                  <button
-                    title="Sair"
-                    type="button"
-                    onClick={handleLogout}
-                    className="text-[#c4c4cc] w-8 h-8 flex-colo rounded"
-                  >
-                    <BiLogOut className="w-6 h-6" />
-                  </button>
+                <div className="relative inline-block text-left">
+                  <div>
+                    <button
+                      type="button"
+                      className="inline-flex justify-center items-center border-2 border-quinary w-10 h-10 rounded-full"
+                      onClick={toggleDropdown}
+                    >
+                      <img
+                        src={student.avatar}
+                        alt="avatar"
+                        className="w-8 h-8 rounded-full object-cover"
+                      />
+                    </button>
+                  </div>
+
+                  {isDropdownOpen && (
+                    <div className="origin-top-right absolute bg-main right-0 mt-2 w-56 rounded-md shadow-lg ring-1 ring-black ring-opacity-5">
+                      <div className="py-1">
+                        <Link
+                          to="/profile"
+                          className="block px-4 py-2 text-sm text-[#c4c4cc] hover:bg-secondary hover:text-white transitions"
+                          role="menuitem"
+                        >
+                          <FiUser className="inline-block mr-2" />
+                          Meu Perfil
+                        </Link>
+                        <Link
+                          to="/my-courses"
+                          className="block px-4 py-2 text-sm text-[#c4c4cc] hover:bg-secondary hover:text-white transitions"
+                        >
+                          <FiUser className="inline-block mr-2" />
+                          Meus Dados
+                        </Link>
+                        <Link
+                          to="/my-certificates"
+                          className="block px-4 py-2 text-sm text-[#c4c4cc] hover:bg-secondary hover:text-white transitions"
+                        >
+                          <FiFileText className="inline-block mr-2" />
+                          Meus Certificados
+                        </Link>
+                        <Link
+                          to="/settings"
+                          className="block px-4 py-2 text-sm text-[#c4c4cc] hover:bg-secondary hover:text-white transitions"
+                        >
+                          <FiSettings className="inline-block mr-2" />
+                          Configurações
+                        </Link>
+                        <button
+                          type="button"
+                          onClick={handleLogout}
+                          className="block w-full text-left px-4 py-2 text-sm text-[#c4c4cc] hover:bg-secondary hover:text-white transitions"
+                        >
+                          <FiLogOut className="inline-block mr-2" />
+                          Sair
+                        </button>
+                      </div>
+                    </div>
+                  )}
                 </div>
               </>
             )}

@@ -1,6 +1,6 @@
 import { Layout } from '../../../layout'
 import { Input } from '../../../custom'
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { RootState } from '../../../store'

@@ -9,6 +9,10 @@ import { RiInstagramFill } from 'react-icons/ri'
 import { CgWebsite } from 'react-icons/cg'
 import { Link } from 'react-router-dom'
 
+interface QuizScore {
+  score: number
+}
+
 export function StudentProfile() {
   const { student } = useSelector((state: RootState) => state.studentAuth)
   const { data: studentData, isLoading } = useGetStudentByIdQuery(
@@ -20,18 +24,18 @@ export function StudentProfile() {
       <div className="text-[#c4c4cc] max-w-7xl mx-auto">
         <div className="flex flex-col md:flex-row">
           <div className="md:w-1/3 p-4">
-            <div className="bg-secondary p-6 rounded-lg relative">
+            <div className="bg-secondary rounded-lg relative">
               <img
                 src={studentData?.student?.banner}
                 alt={studentData?.student?.name}
-                className="w-full h-40 object-cover rounded-lg"
+                className="w-full h-40 object-cover rounded-t-lg"
               />
               <img
                 src={studentData?.student?.avatar}
                 alt={studentData?.student?.name}
-                className="w-24 h-24 object-cover rounded-lg border-4 border-purple-800 absolute left-1/2 transform -translate-x-1/2 -translate-y-1/2"
+                className="w-24 h-24 object-cover rounded-lg border-4 border-purple-800 absolute left-1/2 transform -translate-x-1/2 -translate-y-2/3"
               />
-              <div className="mt-14 text-center text-[#c4c4cc] prose prose-h2:text-[#c4c4cc]">
+              <div className="mt-10 text-center text-[#c4c4cc] prose prose-h2:text-[#c4c4cc] p-4">
                 <h2 className="text-xl font-bold mb-2">
                   {studentData?.student?.name}
                 </h2>
@@ -211,6 +215,45 @@ export function StudentProfile() {
                       <CgWebsite size={24} />
                     </Link>
                   )}
+                </div>
+              </div>
+
+              {/* Barra de progresso */}
+              <div className="mt-4">
+                <div className="relative pt-1 bg-main rounded-lg p-2">
+                  <div className="flex mb-2 items-center justify-between">
+                    <div>
+                      <span className="text-md font-semibold inline-block text-[#c4c4cc]">
+                        XP
+                      </span>
+                    </div>
+                    <div className="text-right">
+                      <span className="text-xs font-semibold inline-block text-green-300">
+                        {studentData?.student?.scores?.reduce(
+                          (total: number, score: QuizScore) =>
+                            total + score.score,
+                          0,
+                        )}{' '}
+                        / 10000
+                      </span>
+                    </div>
+                  </div>
+                  <div className="overflow-hidden h-2 mb-4 text-xs flex rounded bg-[#e1e1e6]">
+                    <div
+                      style={{
+                        width: `${
+                          (studentData?.student?.scores?.reduce(
+                            (total: number, score: QuizScore) =>
+                              total + score.score,
+                            0,
+                          ) /
+                            10000) *
+                          100
+                        }%`,
+                      }}
+                      className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-green-300"
+                    ></div>
+                  </div>
                 </div>
               </div>
             </div>

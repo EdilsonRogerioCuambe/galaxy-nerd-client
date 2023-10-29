@@ -2,30 +2,16 @@ import { Layout } from '../../layout'
 import { useGetLessonBySlugQuery } from '../../slices/lessonsSlices/lessonsApiSlice'
 import { useSelector } from 'react-redux'
 import { RootState } from '../../store'
-import EditorJS from '@editorjs/editorjs'
-import Header from '@editorjs/header'
-import List from '@editorjs/list'
-import Embed from '@editorjs/embed'
-import Image from '@editorjs/image'
-import Table from '@editorjs/table'
-import SimpleImage from '@editorjs/simple-image'
-import Quote from '@editorjs/quote'
-import Warning from '@editorjs/warning'
-import Code from '@editorjs/code'
-import LinkTool from '@editorjs/link'
-import Raw from '@editorjs/raw'
-import Marker from '@editorjs/marker'
-import Delimiter from '@editorjs/delimiter'
-import InlineCode from '@editorjs/inline-code'
-import Paragraph from '@editorjs/paragraph'
 import { message } from 'antd'
 import { useParams, useNavigate } from 'react-router-dom'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useCreateQuestionMutation } from '../../slices/questionSlices/questionsApiSlice'
+import MDEditor from '@uiw/react-md-editor'
 
 export function StudentAddNewQuestionPage() {
   const navigate = useNavigate()
   const [title, setTitle] = useState<string>('')
+  const [content, setContent] = useState<string | undefined>('')
   const { slug, lesson } = useParams<{
     slug: string
     lesson: string
@@ -35,119 +21,14 @@ export function StudentAddNewQuestionPage() {
   const { student } = useSelector((state: RootState) => state.studentAuth)
   const [createQuestion, { isLoading, isSuccess }] = useCreateQuestionMutation()
 
-  const editorRef = useRef<EditorJS | null>(null)
-
-  const initEditor = () => {
-    const editor = new EditorJS({
-      holder: 'editorjs',
-      minHeight: 150,
-      onReady: () => {
-        editorRef.current = editor
-      },
-      tools: {
-        header: {
-          class: Header,
-          config: {
-            placeholder: 'Digite um título',
-            levels: [1, 2, 3, 4, 5, 6],
-            defaultLevel: 3,
-          },
-        },
-        list: {
-          class: List,
-          inlineToolbar: true,
-        },
-        embed: {
-          class: Embed,
-          inlineToolbar: true,
-          config: {
-            services: {
-              youtube: true,
-              coub: true,
-            },
-          },
-        },
-        image: {
-          class: Image,
-          config: {
-            endpoints: {
-              byFile: 'http://localhost:3333/images',
-              byUrl: 'http://localhost:3333/images',
-            },
-          },
-        },
-        table: {
-          class: Table,
-          inlineToolbar: true,
-        },
-        simpleImage: {
-          class: SimpleImage,
-          inlineToolbar: true,
-        },
-        quote: {
-          class: Quote,
-          inlineToolbar: true,
-          config: {
-            quotePlaceholder: 'Digite uma citação',
-            captionPlaceholder: 'Autor da citação',
-          },
-        },
-        warning: {
-          class: Warning,
-          inlineToolbar: true,
-          shortcut: 'CMD+SHIFT+W',
-          config: {
-            titlePlaceholder: 'Digite um título',
-            messagePlaceholder: 'Digite uma mensagem',
-          },
-        },
-        code: {
-          class: Code,
-          inlineToolbar: true,
-        },
-        linkTool: {
-          class: LinkTool,
-          config: {
-            endpoint: 'http://localhost:3333/images',
-          },
-        },
-        raw: {
-          class: Raw,
-          inlineToolbar: true,
-        },
-        marker: {
-          class: Marker,
-          shortcut: 'CMD+SHIFT+M',
-        },
-        delimiter: {
-          class: Delimiter,
-          shortcut: 'CMD+SHIFT+M',
-        },
-        inlineCode: {
-          class: InlineCode,
-          shortcut: 'CMD+SHIFT+M',
-        },
-        paragraph: {
-          class: Paragraph,
-          inlineToolbar: true,
-        },
-      },
-    })
-  }
-
-  useEffect(() => {
-    if (editorRef.current === null) {
-      initEditor()
-    }
-
-    return () => {
-      editorRef?.current?.destroy()
-      editorRef.current = null
-    }
-  }, [])
-
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(e.target.value)
+  }
+
+  const handleContentChange = (value: string | undefined) => {
+    if (value) {
+      setContent(value)
+    }
   }
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -163,7 +44,7 @@ export function StudentAddNewQuestionPage() {
         studentId: student?.id,
         body: {
           title,
-          description: JSON.stringify(await editorRef.current?.save()),
+          description: content,
           lessonId: lessonData?.lesson?.lesson?.id,
           studentId: student?.id,
         },
@@ -214,8 +95,16 @@ export function StudentAddNewQuestionPage() {
             <label htmlFor="body" className="block text-sm font-medium">
               Corpo
             </label>
-            <div className="mt-1">
-              <div id="editorjs" className="bg-main rounded-md"></div>
+            <div className="mt-1 font-mono max-w-none">
+              <MDEditor
+                id="editor-container"
+                value={content}
+                onChange={handleContentChange}
+                height={400}
+                preview="edit"
+                className="rounded-lg p-4 text-[#c4c4cc] font-mono"
+                style={{ backgroundColor: '#121214' }}
+              />
             </div>
           </div>
           <div className="mt-6">

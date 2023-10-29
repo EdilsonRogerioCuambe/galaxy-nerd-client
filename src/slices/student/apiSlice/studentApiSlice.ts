@@ -51,6 +51,24 @@ export const studentApi = studentApiSlice.injectEndpoints({
       query: (id) => `${STUDENT_API_ENDPOINT}/${id}`,
       providesTags: ['Student'],
     }),
+    // /students/:studentId/lessons-progress
+    createLessonProgress: builder.mutation({
+      query: ({ studentId, body }) => ({
+        url: `${STUDENT_API_ENDPOINT}/${studentId}/lessons-progress`,
+        method: 'POST',
+        body,
+      }),
+      invalidatesTags: ['Student'],
+    }),
+    // /students/lessons-progress
+    updateLessonProgress: builder.mutation({
+      query: (body) => ({
+        url: `${STUDENT_API_ENDPOINT}/lessons-progress`,
+        method: 'PUT',
+        body,
+      }),
+      invalidatesTags: ['Student'],
+    }),
   }),
 })
 
@@ -62,4 +80,6 @@ export const {
   useLoginMutation,
   useAddStudentScoreMutation,
   useGetStudentByIdQuery,
+  useCreateLessonProgressMutation,
+  useUpdateLessonProgressMutation,
 } = studentApi

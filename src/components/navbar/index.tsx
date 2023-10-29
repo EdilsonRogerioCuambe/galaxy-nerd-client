@@ -23,8 +23,6 @@ export function NavigationBar() {
   const dispatch = useDispatch()
   const hover = 'hover:text-[#c4c4cc] transition duration-300 ease-in-out'
 
-  console.log(studentData)
-
   const handleLogout = async () => {
     try {
       dispatch(logout())
@@ -71,13 +69,13 @@ export function NavigationBar() {
             <NavLink className={Hover} to="/courses">
               Cursos
             </NavLink>
-            {studentData?.student?.studentQuizScore?.length > 0 && (
+            {studentData?.student?.scores?.length > 0 && (
               <div className="flex items-center gap-2 px-2 py-1 rounded bg-main">
                 <span className="font-semibold text-base text-green-300">
                   XP:
                 </span>
                 <span className="text-green-300 flex">
-                  {studentData.student.studentQuizScore.reduce(
+                  {studentData.student.scores.reduce(
                     (total: number, score: QuizScore) => total + score.score,
                     0,
                   )}

@@ -3,7 +3,7 @@ import { useGetLessonBySlugQuery } from '../../slices/lessonsSlices/lessonsApiSl
 import { useGetQuizzesByLessonIdQuery } from '../../slices/quizzesSlices/quizzesApiSlices'
 import { Layout } from '../../layout'
 import { useEffect, useState, useCallback } from 'react'
-import { FaChevronLeft, FaChevronRight } from 'react-icons/fa'
+import { FaChevronLeft, FaChevronRight, FaClock } from 'react-icons/fa'
 import QuizAnimation from '../../components/quiz-animation'
 import { motion } from 'framer-motion'
 import { useAddStudentScoreMutation } from '../../slices/student/apiSlice/studentApiSlice'

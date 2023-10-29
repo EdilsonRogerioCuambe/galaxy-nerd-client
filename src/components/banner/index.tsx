@@ -51,14 +51,14 @@ export function Banner() {
               alt={course.title}
               className="object-fill w-full"
             />
-            <div className="absolute linear-bg xl:pl-52 pl-8 top-0 bottom-0 flex flex-col justify-center right-0 left-0 lg:gap-8 md:gap-5 gap-4">
+            <div className="absolute linear-bg pl-6 top-0 bottom-0 flex flex-col justify-center right-0 left-0 lg:gap-8 md:gap-5 gap-4">
               <h1 className="xl:text-4xl truncate capitalize text-[#e1e1e6] sm:text-2xl text-xl font-extrabold">
-                {(course.title.substring(0, 50) + '...').toUpperCase()}
+                {(course.title.substring(0, 75) + '...').toUpperCase()}
               </h1>
               <div className="flex gap-5 items-center">
                 <p className="text-[#c4c4cc] font-medium text-lg">
                   {course.shortDescription.length > 200
-                    ? course.shortDescription.slice(0, 50) + '...'
+                    ? course.shortDescription.slice(0, 100) + '...'
                     : course.shortDescription}
                 </p>
               </div>

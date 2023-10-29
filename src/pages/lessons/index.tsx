@@ -5,6 +5,12 @@ import { FaHeart } from 'react-icons/fa'
 import { useGetCourseBySlugQuery } from '../../slices/courseSlices/courseApiSlice'
 import { useGetLessonBySlugQuery } from '../../slices/lessonsSlices/lessonsApiSlice'
 import { useGetQuestionsByLessonIdQuery } from '../../slices/questionSlices/questionsApiSlice'
+import {
+  useGetStudentByIdQuery,
+  useCreateLessonProgressMutation,
+  useUpdateLessonProgressMutation,
+} from '../../slices/student/apiSlice/studentApiSlice'
+
 import videojs from 'video.js'
 import 'video.js/dist/video-js.css'
 import { useRef, useEffect } from 'react'
@@ -15,6 +21,8 @@ import {
   WallpaperComponent,
   LessonDetailsComponent,
 } from '../../components/course-page-components'
+import { useSelector } from 'react-redux'
+import { RootState } from '../../store'
 
 interface Forum {
   answered: boolean
@@ -34,19 +42,25 @@ interface Forum {
 
 export function Lessons() {
   const { slug, lesson } = useParams()
+  const { student } = useSelector((state: RootState) => state.studentAuth)
   const { data: course } = useGetCourseBySlugQuery(slug)
   const { data: lessonData } = useGetLessonBySlugQuery(lesson)
   const { data: questions } = useGetQuestionsByLessonIdQuery(
     lessonData?.lesson?.lesson?.id,
   )
-  console.log(questions)
+  const { data: studentData } = useGetStudentByIdQuery(student?.id || '')
+
+  console.log(studentData)
+
+  const [createLessonProgress] = useCreateLessonProgressMutation()
+  const [updateLessonProgress] = useUpdateLessonProgressMutation()
 
   const videoRef = useRef<HTMLDivElement | null>(null)
   const playerRef = useRef<videojs.Player | null>(null)
 
   useEffect(() => {
     const options = {
-      autoplay: true,
+      autoplay: false,
       aspectRatio: '16:9',
       controls: true,
       fluid: true,
@@ -75,6 +89,34 @@ export function Lessons() {
       })
     }
   }, [lessonData?.lesson?.lesson?.videoUrl])
+
+  useEffect(() => {
+    if (playerRef.current) {
+      playerRef.current.on('timeupdate', () => {
+        if (playerRef.current) {
+          const percentageWatched =
+            playerRef.current.currentTime() / playerRef.current.duration()
+          if (percentageWatched > 0.75) {
+            createLessonProgress({
+              studentId: student?.id || '',
+              body: {
+                lessonId: lessonData?.lesson?.lesson?.id || '',
+                watched: true,
+                studentId: student?.id || '',
+              },
+            })
+            playerRef.current.off('timeupdate')
+          }
+        }
+      })
+    }
+  }, [
+    playerRef,
+    createLessonProgress,
+    lessonData?.lesson?.lesson?.id,
+    student?.id,
+    updateLessonProgress,
+  ])
 
   useEffect(() => {
     return () => {

@@ -74,7 +74,7 @@ select:focus {
 }
 
 h1.ce-header{
-  @apply text-3xl font-bold
+  @apply text-3xl font-bold text-[#c4c4cc]
 }
 h2.ce-header{
   @apply text-2xl font-semibold

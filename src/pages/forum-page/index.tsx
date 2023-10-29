@@ -4,9 +4,25 @@ import { useGetQuestionBySlugQuery } from '../../slices/questionSlices/questions
 import { useGetChildrenAnswersQuery } from '../../slices/answersSlices/answersApiSlice'
 import { useSelector } from 'react-redux'
 import { RootState } from '../../store'
-import Editor from '../../components/editorjs'
 import CommentInForum from '../../components/comment-in-forum'
 import CommentList from '../../components/forum-comment-list'
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
+import { dracula } from 'react-syntax-highlighter/dist/esm/styles/prism'
+import Markdown from 'react-markdown'
+
+const CodeBlock = ({
+  language,
+  value,
+}: {
+  language: string
+  value: string
+}) => {
+  return (
+    <SyntaxHighlighter language={language} style={dracula}>
+      {value}
+    </SyntaxHighlighter>
+  )
+}
 
 interface Answer {
   answer: string
@@ -47,16 +63,33 @@ export function ForumPage() {
   const { student } = useSelector((state: RootState) => state.studentAuth)
   const { instructor } = useSelector((state: RootState) => state.instructorAuth)
 
-  const parseDescription = JSON.parse(forum?.forum?.forum?.description || '{}')
-
   return (
     <Layout>
       <div className="bg-secondary relative container mx-auto rounded-md text-[#c4c4cc] p-6 mt-8">
         <div className="max-w-7xl bg-secondary rounded-lg p-4 text-[#c4c4cc]">
-          <h1 className="text-[#e1e1e6] text-4xl text-center font-semibold mb-2 mx-auto max-w-3xl">
+          <h1 className="text-[#e1e1e6] text-4xl text-center font-semibold mb-2 mx-auto max-w-5xl">
             #{forum?.forum?.forum?.title}
           </h1>
-          <Editor data={parseDescription} readOnly={true} />
+          <Markdown
+            components={{
+              code({ node, inline, className, children, ...props }: any) {
+                const match = /language-(\w+)/.exec(className || '')
+                return !inline && match ? (
+                  <CodeBlock
+                    language={match[1]}
+                    value={String(children).replace(/\n$/, '')}
+                    {...props}
+                  />
+                ) : (
+                  <code className={className} {...props}>
+                    {children}
+                  </code>
+                )
+              },
+            }}
+          >
+            {forum?.forum?.forum?.description}
+          </Markdown>
         </div>
       </div>
 

@@ -1,6 +1,7 @@
-import { useState } from 'react'
 import { useCreateAnswerMutation } from '../../slices/answersSlices/answersApiSlice'
 import { message } from 'antd'
+import MDEditor from '@uiw/react-md-editor'
+import { useState } from 'react'
 
 const CommentInForum = ({
   studentId,
@@ -14,6 +15,12 @@ const CommentInForum = ({
   const [createAnswer] = useCreateAnswerMutation()
   const [content, setContent] = useState<string>('')
 
+  const handleContentChange = (value: string | undefined) => {
+    if (value) {
+      setContent(value)
+    }
+  }
+
   const handleCommentSubmit = async (
     event: React.FormEvent<HTMLFormElement>,
   ) => {
@@ -24,10 +31,10 @@ const CommentInForum = ({
 
     try {
       await createAnswer({
-        content,
         studentId,
         instructorId,
         forumId,
+        content,
       }).unwrap()
 
       message.success('Comentário enviado com sucesso')
@@ -44,19 +51,20 @@ const CommentInForum = ({
   }
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col text-2xl">
       <form onSubmit={handleCommentSubmit}>
         <input type="hidden" value={studentId} />
         <input type="hidden" value={instructorId} />
         <input type="hidden" value={forumId} />
-        <textarea
-          placeholder="Digite seu comentário"
-          className="bg-main rounded-lg p-4 w-full resize-none h-72"
-          name="content"
-          itemID="content"
+        <MDEditor
+          id="editor-container"
           value={content}
-          onChange={(e) => setContent(e.target.value)}
-        ></textarea>
+          onChange={handleContentChange}
+          height={400}
+          preview="edit"
+          className="rounded-lg p-4 text-[#c4c4cc]"
+          style={{ backgroundColor: '#121214' }}
+        />
         <button
           type="submit"
           className="bg-quinary text-white rounded-lg px-4 py-2 mt-4 text-lg font-semibold w-32 transitions hover:bg-opacity-80"

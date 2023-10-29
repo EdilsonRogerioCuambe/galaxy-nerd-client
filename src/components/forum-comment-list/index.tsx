@@ -12,6 +12,24 @@ import {
   useDownvoteAnswerMutation,
 } from '../../slices/answersSlices/answersApiSlice'
 import { message } from 'antd'
+import MDEditor from '@uiw/react-md-editor'
+import Markdown from 'react-markdown'
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
+import { dracula } from 'react-syntax-highlighter/dist/esm/styles/prism'
+
+const CodeBlock = ({
+  language,
+  value,
+}: {
+  language: string
+  value: string
+}) => {
+  return (
+    <SyntaxHighlighter language={language} style={dracula}>
+      {value}
+    </SyntaxHighlighter>
+  )
+}
 
 interface Answer {
   answer: string
@@ -55,7 +73,7 @@ const CommentList = ({
 }) => {
   const [showChildren, setShowChildren] = useState<boolean>(false)
   const [replying, setReplying] = useState<boolean>(false)
-  const [replyContent, setReplyContent] = useState<string>('')
+  const [replyContent, setReplyContent] = useState<string | undefined>('')
   const [upvoted, setUpvoted] = useState<boolean>(
     answer.vote.some(
       (vote) =>
@@ -76,16 +94,14 @@ const CommentList = ({
   const [upvoteAnswer] = useUpvoteAnswerMutation()
   const [downvoteAnswer] = useDownvoteAnswerMutation()
 
-  console.log(answer)
-
   const handleReplyClick = () => {
     setReplying(!replying)
   }
 
-  const handleReplyInputChange = (
-    e: React.ChangeEvent<HTMLTextAreaElement>,
-  ) => {
-    setReplyContent(e.target.value)
+  const handleReplyInputChange = (value: string | undefined) => {
+    if (value) {
+      setReplyContent(value)
+    }
   }
 
   const handleReplySubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -155,8 +171,8 @@ const CommentList = ({
   }
 
   return (
-    <div className="rounded-lg p-4 mt-4 bg-main border border-[#e1e1e6]">
-      <div className="flex flex-col bg-secondary rounded p-4">
+    <div className="rounded-lg p-4 mt-4 border border-[#e1e1e6] bg-main">
+      <div className="flex flex-col rounded p-4">
         <div className="flex items-center mb-2">
           <img
             src={answer.student?.avatar || answer.instructor?.avatar}
@@ -172,8 +188,27 @@ const CommentList = ({
             </span>
           </div>
         </div>
-        <div className="mt-2">
-          <p className="text-[#e1e1e6] text-lg">{answer.content}</p>
+        <div className="mt-2 prose:text-white prose-code:text-quinary">
+          <Markdown
+            components={{
+              code({ node, inline, className, children, ...props }: any) {
+                const match = /language-(\w+)/.exec(className || '')
+                return !inline && match ? (
+                  <CodeBlock
+                    language={match[1]}
+                    value={String(children).replace(/\n$/, '')}
+                    {...props}
+                  />
+                ) : (
+                  <code className={className} {...props}>
+                    {children}
+                  </code>
+                )
+              },
+            }}
+          >
+            {answer.content}
+          </Markdown>
         </div>
         <div className="flex items-center mt-4">
           <div className="flex items-center">
@@ -217,12 +252,15 @@ const CommentList = ({
             <input type="hidden" value={studentId} />
             <input type="hidden" value={instructorId} />
             <input type="hidden" value={forumId} />
-            <textarea
-              placeholder="Digite sua resposta"
-              className="bg-secondary rounded-lg p-4 w-full resize-none h-72"
+            <MDEditor
+              id="editor-container"
               value={replyContent}
               onChange={handleReplyInputChange}
-            ></textarea>
+              height={400}
+              preview="edit"
+              className="rounded-lg p-4 text-[#c4c4cc]"
+              style={{ backgroundColor: '#121214' }}
+            />
             <button
               type="submit"
               className="bg-quinary text-white mt-4 rounded-lg px-4 py-2 text-lg font-semibold w-48 transitions hover:bg-opacity-80 resize-none"

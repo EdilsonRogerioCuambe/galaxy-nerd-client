@@ -91,3 +91,15 @@ h5.ce-header{
 h6.ce-header{
   @apply text-base font-semibold
 }
+
+@layer utilities {
+  .bg-level-1 {
+    @apply bg-green-200;
+  }
+  .bg-level-2 {
+    @apply bg-green-400;
+  }
+  .bg-level-3 {
+    @apply bg-green-700;
+  }
+}

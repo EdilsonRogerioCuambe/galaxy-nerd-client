@@ -8,40 +8,30 @@ import { FaTwitter, FaYoutube } from 'react-icons/fa'
 import { RiInstagramFill } from 'react-icons/ri'
 import { CgWebsite } from 'react-icons/cg'
 import { Link } from 'react-router-dom'
+import { useState } from 'react'
 
 interface QuizScore {
+  id: string
   score: number
 }
 
 export function StudentProfile() {
   const { student } = useSelector((state: RootState) => state.studentAuth)
-  const { data: studentData, isLoading } = useGetStudentByIdQuery(
-    student?.id || '',
+  const { data: studentData } = useGetStudentByIdQuery(student?.id || '')
+
+  const [date, setDate] = useState(new Date())
+  const daysInMonth = new Date(
+    date.getFullYear(),
+    date.getMonth() + 1,
+    0,
+  ).getDate()
+  const daysOfWeek = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb']
+  const days = Array.from({ length: daysInMonth }, (_, i) => i + 1)
+
+  const lessonsProgress = studentData?.student?.lessonProgress
+  const lessonDates = lessonsProgress?.map(
+    (lesson: any) => new Date(lesson.createdAt),
   )
-
-  console.log(studentData)
-
-  function generateCalendarData(lessonProgress: any) {
-    const startDate = new Date()
-    startDate.setFullYear(startDate.getFullYear() - 1)
-
-    const calendarData = Array(365)
-      .fill(0)
-      .map((_, index) => {
-        const date = new Date(startDate.getTime() + index * 24 * 60 * 60 * 1000)
-        const lesson =
-          lessonProgress && lessonProgress.length > index
-            ? lessonProgress[index]
-            : undefined
-        return {
-          month: date.getMonth(),
-          day: date.getDay(),
-          watched: lesson ? lesson.watched : false,
-        }
-      })
-
-    return calendarData
-  }
 
   return (
     <Layout>
@@ -280,28 +270,93 @@ export function StudentProfile() {
             </div>
 
             <div className="mt-4">
-              <h2 className="text-lg font-bold">Aulas Assistidas</h2>
-              <div className="grid grid-cols-12 gap-2 mt-2">
-                {generateCalendarData(
-                  studentData?.student?.lessonProgress,
-                )?.map((day, index) => (
-                  <div
-                    key={index}
-                    className={`${
-                      day?.watched ? 'bg-green-300' : 'bg-secondary'
-                    } p-2 rounded cursor-pointer transitions hover:bg-main`}
-                    title={`Aulas assistidas: ${day?.watched ? 1 : 0}`}
-                  >
-                    {day?.day === 0 && (
-                      <span className="text-xs">
-                        {new Date(0, day?.month).toLocaleString('default', {
-                          month: 'short',
-                        })}
-                      </span>
-                    )}
+              <div className="relative pt-1 bg-secondary rounded-lg p-2">
+                <div className="flex mb-2 items-center justify-between">
+                  <div>
+                    <span className="text-md font-semibold inline-block text-[#c4c4cc]">
+                      Aulas
+                    </span>
                   </div>
-                ))}
+                  <div className="text-right">
+                    <span className="text-xs font-semibold inline-block text-green-300">
+                      {lessonsProgress?.length} / 100
+                    </span>
+                  </div>
+                </div>
+                <div className="overflow-hidden h-2 mb-4 text-xs flex rounded bg-[#e1e1e6]">
+                  <div
+                    style={{
+                      width: `${(lessonsProgress?.length / 100) * 100}%`,
+                    }}
+                    className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-green-300"
+                  ></div>
+                </div>
               </div>
+            </div>
+
+            {/** CALENADRIO DOS DIAS DAS AULAS ASSISTIDAS */}
+            <div className="mt-4 grid grid-cols-7 gap-4 bg-secondary rounded-lg p-4">
+              <div className="col-span-7 flex justify-between items-center mb-4">
+                <button
+                  className="bg-main text-[#e1e1e6] px-4 py-2 rounded-md"
+                  type="button"
+                  onClick={() =>
+                    setDate(new Date(date.setMonth(date.getMonth() - 1)))
+                  }
+                >
+                  Mês Anterior
+                </button>
+                <input
+                  className="bg-secondary text-[#e1e1e6] px-4 py-2 rounded-md justify-center items-center"
+                  title="Ano"
+                  type="number"
+                  value={date.getFullYear()}
+                  onChange={(e) =>
+                    setDate(new Date(date.setFullYear(Number(e.target.value))))
+                  }
+                />
+                <button
+                  className="bg-main text-[#e1e1e6] px-4 py-2 rounded-md"
+                  type="button"
+                  onClick={() =>
+                    setDate(new Date(date.setMonth(date.getMonth() + 1)))
+                  }
+                >
+                  Próximo Mês
+                </button>
+              </div>
+              <div className="col-span-7 flex justify-center items-center mb-4">
+                {/** NOME DO MES ATUAL */}
+                <div className="text-2xl text-center font-extrabold">
+                  {date.toLocaleString('pt-BR', { month: 'long' })}
+                </div>
+              </div>
+              {daysOfWeek.map((day) => (
+                <div key={day} className="p-4">
+                  {day}
+                </div>
+              ))}
+              {days.map((day) => {
+                const isLessonDay = lessonDates?.some(
+                  (lessonDate: any) =>
+                    lessonDate.getFullYear() === date.getFullYear() &&
+                    lessonDate.getMonth() === date.getMonth() &&
+                    lessonDate.getDate() === day,
+                )
+
+                return (
+                  <div
+                    key={day}
+                    className={`p-4 rounded transitions cursor-pointer ${
+                      isLessonDay
+                        ? 'bg-green-300 text-main hover:bg-red-300'
+                        : 'hover:bg-main hover:text-[#e1e1e6]'
+                    }`}
+                  >
+                    {day}
+                  </div>
+                )
+              })}
             </div>
           </div>
         </div>

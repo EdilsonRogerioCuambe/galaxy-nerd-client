@@ -18,8 +18,9 @@ module.exports = {
         secondary: '#202024',
         tertiary: '#323238',
         quaternary: '#7c7c8a',
-        quinary: '#8257e6',
+        quinary: '#C81C6F',
         senary: '#996dff',
+
       },
     },
   },

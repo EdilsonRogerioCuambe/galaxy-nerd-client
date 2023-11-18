@@ -128,7 +128,7 @@ export function Footer() {
                 <img
                   src={logo}
                   alt="Logo Galaxy Nerd"
-                  className="w-2/4 object-cover"
+                  className="w-2/4 object-cover pb-2"
                 />
               </NavLink>
               <p className="leading-7 text-sm text-border">

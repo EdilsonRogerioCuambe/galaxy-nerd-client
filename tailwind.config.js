@@ -18,7 +18,7 @@ module.exports = {
         secondary: '#202024',
         tertiary: '#323238',
         quaternary: '#7c7c8a',
-        quinary: '#8257e6',
+        quinary: '#C81C6F',
         senary: '#996dff',
         'dark-layer-1': 'rgb(40,40,40)',
         'dark-layer-2': 'rgb(26,26,26)',

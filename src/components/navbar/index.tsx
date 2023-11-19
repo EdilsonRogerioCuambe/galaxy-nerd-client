@@ -68,10 +68,7 @@ export function NavigationBar() {
         <div className="container mx-auto py-6 px-2 lg:grid gap-10 grid-cols-7 justify-between items-center">
           <div className="col-span-1 hidden lg:flex justify-between items-center">
             <Link to="/" className="flex items-center">
-              <img src={logo} alt="logo" className="w-12 object-cover h-12" />
-              <span className="text-[#e1e1e6] font-extrabold uppercase text-xl ml-2">
-                G-NERD
-              </span>
+              <img src={logo} alt="logo" className="w-18 object-cover h-12" />
             </Link>
           </div>
           <div className="col-span-3">
@@ -79,7 +76,8 @@ export function NavigationBar() {
               <button
                 title="Pesquisar"
                 type="submit"
-                className="bg-quinary text-white w-12 h-12 flex-colo rounded"
+                className="bg-quinary
+                text-white w-12 h-12 flex-colo rounded"
               >
                 <BiSearchAlt2 className="w-6 h-6" />
               </button>

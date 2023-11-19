@@ -397,7 +397,7 @@ export function RegisterStudent() {
               onClick={() => selectTab(tabIndex + 1)}
               className="bg-purple-800 text-[#e1e1e6] rounded-lg px-4 py-2 my-4"
             >
-              Next
+              Próximo
             </button>
           </TabPanel>
           <TabPanel>
@@ -476,7 +476,7 @@ export function RegisterStudent() {
               onClick={() => selectTab(tabIndex + 1)}
               className="bg-purple-800 text-[#e1e1e6] rounded-lg px-4 py-2 my-4"
             >
-              Next
+              Próximo
             </button>
           </TabPanel>
           <TabPanel>
@@ -523,7 +523,7 @@ export function RegisterStudent() {
               onClick={() => selectTab(tabIndex + 1)}
               className="bg-purple-800 text-[#e1e1e6] rounded-lg px-4 py-2 my-4"
             >
-              Next
+              Próximo
             </button>
           </TabPanel>
           <TabPanel>
@@ -616,7 +616,7 @@ export function RegisterStudent() {
               onClick={() => selectTab(tabIndex + 1)}
               className="bg-purple-800 text-[#e1e1e6] rounded-lg px-4 py-2 my-4"
             >
-              Next
+              Próximo
             </button>
           </TabPanel>
           <TabPanel>

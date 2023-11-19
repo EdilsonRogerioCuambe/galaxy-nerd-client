@@ -3,7 +3,7 @@ import { Layout } from '../../layout'
 import { RootState } from '../../store'
 import { useGetStudentByIdQuery } from '../../slices/student/apiSlice/studentApiSlice'
 import { ImFacebook2 } from 'react-icons/im'
-import { AiOutlineGithub, AiFillLinkedin } from 'react-icons/ai'
+import { AiOutlineGithub, AiFillLinkedin, AiFillFire } from 'react-icons/ai'
 import { FaTwitter, FaYoutube } from 'react-icons/fa'
 import { RiInstagramFill } from 'react-icons/ri'
 import { CgWebsite } from 'react-icons/cg'
@@ -13,11 +13,20 @@ import { useState } from 'react'
 interface QuizScore {
   id: string
   score: number
+  quiz: {
+    id: string
+    title: string
+    description: string
+    answer: string
+    points: number
+  }
 }
 
 export function StudentProfile() {
   const { student } = useSelector((state: RootState) => state.studentAuth)
   const { data: studentData } = useGetStudentByIdQuery(student?.id || '')
+
+  console.log(studentData?.student?.scores)
 
   const [date, setDate] = useState(new Date())
   const daysInMonth = new Date(
@@ -294,7 +303,6 @@ export function StudentProfile() {
               </div>
             </div>
 
-            {/** CALENADRIO DOS DIAS DAS AULAS ASSISTIDAS */}
             <div className="mt-4 grid grid-cols-7 gap-4 bg-secondary rounded-lg p-4">
               <div className="col-span-7 flex justify-between items-center mb-4">
                 <button
@@ -347,16 +355,35 @@ export function StudentProfile() {
                 return (
                   <div
                     key={day}
-                    className={`p-4 rounded transitions cursor-pointer ${
+                    className={`p-4 rounded transitions cursor-pointer justify-center items-center ${
                       isLessonDay
-                        ? 'bg-green-300 text-main hover:bg-red-300'
+                        ? 'bg-secondary text-[#e1e1e6] hover:bg-red-300'
                         : 'hover:bg-main hover:text-[#e1e1e6]'
                     }`}
                   >
+                    {isLessonDay && (
+                      <AiFillFire className="text-orange-500 w-6 h-6" />
+                    )}
                     {day}
                   </div>
                 )
               })}
+            </div>
+
+            <div className="mt-4">
+              <h2 className="text-lg font-bold">Ultimos Quizzes</h2>
+              <div className="h-96 overflow-y-auto bg-secondary rounded-lg p-4">
+                {studentData?.student?.scores?.map(
+                  ({ id, score, quiz }: QuizScore) => (
+                    <div
+                      key={id}
+                      className="bg-main text-[#e1e1e6] px-4 py-2 rounded-md my-1"
+                    >
+                      {quiz.title} - {score}
+                    </div>
+                  ),
+                )}
+              </div>
             </div>
           </div>
         </div>

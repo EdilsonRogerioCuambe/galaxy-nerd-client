@@ -42,7 +42,7 @@ export function Banner() {
         autoplay={{ delay: 2000 }}
         modules={[Autoplay]}
         pagination={{ clickable: true }}
-        className="w-full xl:h-96 bg-secondary lg:h-64 h-60"
+        className="w-full xl:h-96 lg:h-64 h-60 sm:h-48 md:h-56 bg-secondary"
       >
         {courses?.courses.map((course: CoursesProps, index: number) => (
           <SwiperSlide key={index} className="relative rounded overflow-hidden">
@@ -52,7 +52,7 @@ export function Banner() {
               className="object-fill w-full"
             />
             <div className="absolute linear-bg pl-6 top-0 bottom-0 flex flex-col justify-center right-0 left-0 lg:gap-8 md:gap-5 gap-4">
-              <h1 className="xl:text-4xl truncate capitalize text-[#e1e1e6] sm:text-2xl text-xl font-extrabold">
+              <h1 className="xl:text-4xl sm:text-2xl text-xl font-extrabold truncate capitalize text-[#e1e1e6]">
                 {(course.title.substring(0, 75) + '...').toUpperCase()}
               </h1>
               <div className="flex gap-5 items-center">
@@ -74,7 +74,7 @@ export function Banner() {
                 </Link>
                 <button
                   title="Favoritar"
-                  className="bg-[#00b37e] transitions text-white px-4 py-2 rounded text-sm bg-opacity-30 hover:bg-opacity-80 transition duration-300 ease-in-out"
+                  className="bg-[#00b37e] text-white px-4 py-2 rounded text-sm bg-opacity-30 hover:bg-opacity-80 transition duration-300 ease-in-out"
                 >
                   <FaHeart className="inline-block w-6 h-6" />
                 </button>

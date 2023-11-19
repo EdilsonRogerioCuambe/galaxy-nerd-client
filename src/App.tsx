@@ -28,6 +28,7 @@ import { ForumPage } from './pages/forum-page'
 import { AddQuiz } from './pages/add-quiz'
 import { Quizzes } from './pages/quizzes-page'
 import { StudentProfile } from './pages/profile'
+import { CodeEditor } from './components/code-editor'
 
 const App = () => {
   Aos.init()
@@ -89,6 +90,7 @@ const App = () => {
           <Route path="instructor-add-quiz" element={<AddQuiz />} />
         </Route>
         <Route path="/profile" element={<StudentProfile />} />
+        <Route path="/code-editor" element={<CodeEditor />} />
       </Routes>
     </>
   )

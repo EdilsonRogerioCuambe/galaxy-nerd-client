@@ -1,4 +1,5 @@
 import { Banner } from '../../components/banner'
+import { GalaxySection } from '../../components/galaxy-section'
 import { MostRatedCourses } from '../../components/most-rated-courses'
 import { PopularCourses } from '../../components/popular-courses'
 import { Promos } from '../../components/promos'
@@ -10,6 +11,7 @@ export function Home() {
       <div className="bg-main mx-auto min-h-screen px-2">
         <Banner />
         <PopularCourses />
+        <GalaxySection />
         <Promos />
         <MostRatedCourses />
       </div>

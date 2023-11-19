@@ -223,7 +223,11 @@ export function RegisterStudent() {
   return (
     <Layout>
       <form onSubmit={handleSubmit}>
-        <Tabs className="bg-secondary max-w-7xl mx-auto px-4 mt-8 rounded-lg p-4 text-[#c4c4cc]">
+        <Tabs
+          selectedIndex={tabIndex}
+          onSelect={(index) => setTabIndex(index)}
+          className="bg-secondary max-w-7xl mx-auto px-4 mt-8 rounded-lg p-4 text-[#c4c4cc]"
+        >
           <TabList
             style={{ borderBottom: '1px solid #e1e1e6' }}
             className="flex flex-row gap-4"
@@ -388,6 +392,13 @@ export function RegisterStudent() {
                 </span>
               </div>
             </div>
+            <button
+              type="button"
+              onClick={() => selectTab(tabIndex + 1)}
+              className="bg-purple-800 text-[#e1e1e6] rounded-lg px-4 py-2 my-4"
+            >
+              Next
+            </button>
           </TabPanel>
           <TabPanel>
             <div>
@@ -460,6 +471,13 @@ export function RegisterStudent() {
                 />
               </div>
             </div>
+            <button
+              type="button"
+              onClick={() => selectTab(tabIndex + 1)}
+              className="bg-purple-800 text-[#e1e1e6] rounded-lg px-4 py-2 my-4"
+            >
+              Next
+            </button>
           </TabPanel>
           <TabPanel>
             <Input
@@ -500,6 +518,13 @@ export function RegisterStudent() {
                 ))}
               </div>
             </div>
+            <button
+              type="button"
+              onClick={() => selectTab(tabIndex + 1)}
+              className="bg-purple-800 text-[#e1e1e6] rounded-lg px-4 py-2 my-4"
+            >
+              Next
+            </button>
           </TabPanel>
           <TabPanel>
             <div className="flex flex-col gap-4 mt-4">
@@ -586,6 +611,13 @@ export function RegisterStudent() {
               label="Trabalhos"
               bg
             />
+            <button
+              type="button"
+              onClick={() => selectTab(tabIndex + 1)}
+              className="bg-purple-800 text-[#e1e1e6] rounded-lg px-4 py-2 my-4"
+            >
+              Next
+            </button>
           </TabPanel>
           <TabPanel>
             <Input

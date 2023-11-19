@@ -193,6 +193,7 @@ export function AddCourse() {
         image,
         thumbnail,
       }).unwrap()
+      window.location.href = 'instructor-add-topics-to-course'
     } catch (error) {
       console.error(error)
       if (typeof error === 'object' && error !== null && 'data' in error) {

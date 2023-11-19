@@ -65,6 +65,7 @@ export function LessonModal({ open, setOpen, topicId }: IModalTopicsProps) {
         duration,
         video,
       }).unwrap()
+      window.location.href = 'instructor-add-quiz'
     } catch (error) {
       message.error('Erro ao adicionar aula')
     }
@@ -74,7 +75,7 @@ export function LessonModal({ open, setOpen, topicId }: IModalTopicsProps) {
     <MainModal open={open} setOpen={setOpen}>
       <div className="inline-block sm:w-4/5 border border-border md:w-3/5 lg:w-2/5 align-middle w-full p-10 overflow-y-auto bg-main rounded-2xl h-96">
         <h2 className="text-3xl font-bold text-[#c4c4cc] mb-6">
-          Adicionar topico
+          Adicionar aula
         </h2>
 
         <form

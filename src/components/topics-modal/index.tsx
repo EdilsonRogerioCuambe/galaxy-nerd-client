@@ -45,6 +45,7 @@ export function TopicsModal({ open, setOpen, courseId }: IModalTopicsProps) {
         icon: topicIcon,
       }).unwrap()
       setOpen(false)
+      window.location.href = 'instructor-add-lessons-to-course'
     } catch (error) {
       console.error(error)
       if (typeof error === 'object' && error !== null && 'data' in error) {

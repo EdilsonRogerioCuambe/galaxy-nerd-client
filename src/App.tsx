@@ -87,6 +87,10 @@ const App = () => {
             path="/instructor-add-lessons-to-course"
             element={<InstructorAddLessonsToCourse />}
           />
+          <Route
+            path="instructor-courses-list"
+            element={<AdminCoursesLists />}
+          />
           <Route path="instructor-add-quiz" element={<AddQuiz />} />
         </Route>
         <Route path="/profile" element={<StudentProfile />} />

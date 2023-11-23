@@ -1,5 +1,6 @@
 import React from 'react'
 import { BsDiscord } from 'react-icons/bs'
+import { CiSquareQuestion } from 'react-icons/ci'
 import { FaBook, FaImage } from 'react-icons/fa'
 import { SiApachestorm } from 'react-icons/si'
 import { Link } from 'react-router-dom'
@@ -103,6 +104,15 @@ const LessonDetailsComponent: React.FC<LessonProps> = ({
               className="text-green-300 text-sm font-bold uppercase leading-snug"
             >
               Acesse o desafio
+            </Link>
+          </div>
+          <div className="w-full h-14 mt-4 md:mt-4 py-4 px-2 border-red-300 border-2 rounded-lg flex justify-center items-center gap-2.5">
+            <CiSquareQuestion className="w-6 h-6 text-red-300" />
+            <Link
+              to={`/lesson/${lesson?.slug}/problem`}
+              className="text-red-300 text-sm font-bold uppercase leading-snug"
+            >
+              Problem Set
             </Link>
           </div>
         </div>

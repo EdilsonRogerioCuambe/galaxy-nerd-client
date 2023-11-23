@@ -50,6 +50,8 @@
     "monaco-editor": "0.44.0",
     "monaco-editor-webpack-plugin": "7.1.0",
     "mpd-parser": "1.2.2",
+    "piston-api-client": "2.0.1",
+    "piston-client": "1.0.2",
     "react": "^18.2.0",
     "react-ace": "10.1.0",
     "react-ace-builds": "7.4.1",

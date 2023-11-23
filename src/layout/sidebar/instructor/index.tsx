@@ -4,6 +4,7 @@ import { RiLockPasswordLine, RiMovie2Fill } from 'react-icons/ri'
 import { Layout } from '../..'
 import { NavLink } from 'react-router-dom'
 import { MdTopic, MdOutlineClass, MdQuiz } from 'react-icons/md'
+import { CiSquareQuestion } from 'react-icons/ci'
 
 export function InstructorSideBar({ children }: { children: React.ReactNode }) {
   const links = [
@@ -36,6 +37,11 @@ export function InstructorSideBar({ children }: { children: React.ReactNode }) {
       title: 'Add Quiz',
       link: '/instructor-add-quiz',
       icon: <MdQuiz className="w-6 h-6" />,
+    },
+    {
+      title: 'Add Problemas',
+      link: '/instructor-add-problem-set',
+      icon: <CiSquareQuestion className="w-6 h-6" />,
     },
     {
       title: 'Usuários',

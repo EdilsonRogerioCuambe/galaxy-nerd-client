@@ -8,7 +8,6 @@ import {
 } from 'react-icons/ai'
 import { BsCheck2Circle } from 'react-icons/bs'
 import { TiStarOutline } from 'react-icons/ti'
-import { message } from 'antd'
 import RectangleSkeleton from '../skeletons/RectangleSkeleton'
 import CircleSkeleton from '../skeletons/CircleSkeleton'
 
@@ -49,10 +48,10 @@ export default function ProblemDescription({
       <div className="flex h-11 w-full items-center pt-2 bg-dark-layer-2 text-white overflow-x-hidden">
         <div
           className={
-            'bg-dark-layer-1 rounded-t-[5px] px-5 py-[10px] text-xs cursor-pointer'
+            'bg-dark-layer-1 rounded-t-[5px] px-5 py-[10px] text-md font-semibold cursor-pointer'
           }
         >
-          Description
+          Descrição
         </div>
       </div>
 

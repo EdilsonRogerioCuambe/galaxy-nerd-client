@@ -16,9 +16,14 @@ const Workspace: React.FC<WorkspaceProps> = ({ problem }) => {
 
   return (
     <Split className="split" minSize={0}>
-      <ProblemDescription problem={problem} _solved={solved} />
+      <ProblemDescription
+        key={problem?.id}
+        problem={problem}
+        _solved={solved}
+      />
       <div className="bg-dark-fill-2">
         <Playground
+          key={problem?.id}
           problem={problem}
           setSuccess={setSuccess}
           setSolved={setSolved}

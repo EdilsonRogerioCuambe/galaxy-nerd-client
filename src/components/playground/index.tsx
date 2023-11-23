@@ -4,10 +4,11 @@ import useLocalStorage from '../../hooks/useLocalStorage'
 import EditorFooter from '../editor-footer'
 import Split from 'react-split'
 import { message } from 'antd'
-import { problems } from '../../utils/problems'
 import { javascript } from '@codemirror/lang-javascript'
 import CodeMirror from '@uiw/react-codemirror'
 import { vscodeDark } from '@uiw/codemirror-theme-vscode'
+import axios from 'axios'
+import assert from 'assert'
 
 export type Example = {
   id: number
@@ -58,6 +59,8 @@ export default function Playground({
   setSuccess,
   setSolved,
 }: PlaygroundProps) {
+  const [compiledCode, setCompiledCode] = useState<string[]>([])
+  const [error, setError] = useState<string>('')
   const [activeTestCaseId, setActiveTestCaseId] = useState<number>(0)
   let [userCode, setUserCode] = useState<string>(problem?.starterCode)
 
@@ -81,7 +84,10 @@ export default function Playground({
     try {
       userCode = userCode.slice(userCode?.indexOf(problem?.starterFunctionName))
       const cb = new Function(`return ${userCode}`)()
-      const handler = problems[problem?.id]?.handlerFunction
+      const handler = new Function(
+        'assert',
+        `return ${problem?.handlerFunction}`,
+      )(assert)
 
       if (typeof handler === 'function') {
         const success = handler(cb)
@@ -106,6 +112,25 @@ export default function Playground({
       } else {
         message.error('Oops! Something went wrong')
       }
+    }
+  }
+
+  const handleCompileCode = async () => {
+    try {
+      const response = await axios.post('http://localhost:3333/compile', {
+        sourceCode: userCode,
+        language: 'javascript',
+        timeLimit: 1,
+        memoryLimit: 323244,
+      })
+
+      console.log(response.data.output)
+
+      if (response.status === 200) {
+        setCompiledCode(response.data.output)
+      }
+    } catch (error: any) {
+      console.log(error)
     }
   }
 
@@ -182,9 +207,19 @@ export default function Playground({
               {problem?.examples[activeTestCaseId]?.outputText}
             </div>
           </div>
+
+          <div className="font-semibold my-4">
+            <p className="text-sm font-medium mt-4 text-white">Compiled:</p>
+            <div className="w-full cursor-text rounded-lg border px-3 py-[10px] bg-dark-fill-3 border-transparent text-green-400 mt-2">
+              {compiledCode}
+            </div>
+          </div>
         </div>
       </Split>
-      <EditorFooter handleSubmit={handleSubmit} />
+      <EditorFooter
+        handleSubmit={handleSubmit}
+        handleCompileCode={handleCompileCode}
+      />
     </div>
   )
 }

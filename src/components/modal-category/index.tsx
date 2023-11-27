@@ -77,18 +77,15 @@ export function ModalCategory({
     event.preventDefault()
 
     try {
-      await updateCategory(
-        // id and body
-        {
-          id: categoryId,
-          body: {
-            categoryId,
-            name: categoryName,
-            icon: categoryIcon,
-            description: categoryDescription,
-          },
+      await updateCategory({
+        id: categoryId,
+        body: {
+          categoryId,
+          name: categoryName,
+          icon: categoryIcon,
+          description: categoryDescription,
         },
-      ).unwrap()
+      }).unwrap()
 
       resetFormAndCloseModal()
     } catch (error) {

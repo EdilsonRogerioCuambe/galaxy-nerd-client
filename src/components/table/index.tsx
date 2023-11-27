@@ -62,13 +62,13 @@ export function Lines({ course, index, admin, addTopics }: LinesProps) {
         <td className={`${Text} truncate`}>{course?.title}</td>
         <td className={`${Text}`}>{course?.instructor?.name}</td>
         {/** Mostrar os icones das categorias */}
-        <td className={`${Text}`}>
+        <td className={`text-sm text-[#c4c4cc] text-right leading-6 px-5 py-2`}>
           {course?.languages?.map((language, index) => (
             <img
               key={index}
               src={language.icon}
               alt={language.name}
-              className="w-8 h-8 object-cover inline-block mr-2"
+              className="w-8 h-8 object-cover inline-block rounded-md"
             />
           ))}
         </td>

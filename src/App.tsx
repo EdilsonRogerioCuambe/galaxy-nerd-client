@@ -30,6 +30,7 @@ import { Quizzes } from './pages/quizzes-page'
 import { StudentProfile } from './pages/profile'
 import { ProblemPage } from './pages/problem-page'
 import { InstructorAddProblemSet } from './pages/add-problem-set'
+import { InstructorCoursesLists } from './pages/courses-lists/instructor'
 
 const App = () => {
   Aos.init()
@@ -96,6 +97,10 @@ const App = () => {
         </Route>
         <Route path="/profile" element={<StudentProfile />} />
         <Route path="/lesson/:slug/problem" element={<ProblemPage />} />
+        <Route
+          path="/instructor-courses-list"
+          element={<InstructorCoursesLists />}
+        />
       </Routes>
     </>
   )

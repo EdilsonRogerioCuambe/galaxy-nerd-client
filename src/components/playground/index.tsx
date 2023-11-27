@@ -118,10 +118,14 @@ export default function Playground({
   const handleCompileCode = async () => {
     try {
       const response = await axios.post('http://localhost:3333/compile', {
-        sourceCode: userCode,
         language: 'javascript',
         timeLimit: 1,
         memoryLimit: 323244,
+        sourceCode: userCode
+          .replace(/"/g, "'")
+          .replace(/`/g, "'")
+          .replace(/\\n/g, '\n')
+          .replace(/\\t/g, '\t'),
       })
 
       console.log(response.data.output)
@@ -210,7 +214,7 @@ export default function Playground({
 
           <div className="font-semibold my-4">
             <p className="text-sm font-medium mt-4 text-white">Compiled:</p>
-            <div className="w-full cursor-text rounded-lg border px-3 py-[10px] bg-dark-fill-3 border-transparent text-green-400 mt-2">
+            <div className="w-full cursor-text rounded-lg border px-3 bg-dark-fill-3 border-transparent text-green-400 mt-2 h-[300px] overflow-auto">
               {compiledCode}
             </div>
           </div>

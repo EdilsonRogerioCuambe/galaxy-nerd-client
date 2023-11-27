@@ -12,33 +12,33 @@ export function AdminCategories() {
   const { user } = useSelector((state: RootState) => state.adminAuth)
   const navigate = useNavigate()
   const [open, setOpen] = useState(false)
-  const [category, setCategory] = useState('')
+  const [categoryId, setCategoryId] = useState('')
   const { data: categories } = useGetCategoriesQuery({})
 
   const handleEdit = useCallback(
     (id: string) => {
       setOpen(!open)
-      setCategory(id)
+      setCategoryId(id)
     },
     [open],
   )
 
   useEffect(() => {
     if (open === false) {
-      setCategory('')
+      setCategoryId('')
     }
   }, [open])
 
   useEffect(() => {
     if (!user) {
-      navigate('/admin')
+      navigate('/admin-login')
     }
   }, [user, navigate])
 
   return (
     <>
       <AdminSideBar>
-        <ModalCategory open={open} setOpen={setOpen} category={category} />
+        <ModalCategory open={open} setOpen={setOpen} categoryId={categoryId} />
         <div className="flex flex-col gap-6">
           <div className="flex-betweens gap-2">
             <h2 className="text-xl font-bold">Admin Categorias</h2>

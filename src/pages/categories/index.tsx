@@ -16,7 +16,7 @@ export function Categories() {
   return (
     <>
       <SideBar>
-        <ModalCategory open={open} setOpen={setOpen} category={category} />
+        <ModalCategory open={open} setOpen={setOpen} categoryId={category} />
         <div className="flex flex-col gap-6">
           <div className="flex-betweens gap-2">
             <h2 className="text-xl font-bold">Categorias</h2>

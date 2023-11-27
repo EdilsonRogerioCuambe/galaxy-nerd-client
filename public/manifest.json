@@ -1,19 +1,19 @@
 {
-  "short_name": "Galaxy Nerd",
-  "name": "Galaxy Nerd",
+  "short_name": "Digital College",
+  "name": "Digital College",
   "icons": [
     {
-      "src": "logo.png",
+      "src": "smalllogo.png",
       "sizes": "64x64 32x32 24x24 16x16",
       "type": "image/x-icon"
     },
     {
-      "src": "logo.png",
+      "src": "smalllogo.png",
       "type": "image/png",
       "sizes": "192x192"
     },
     {
-      "src": "logo.png",
+      "src": "smalllogo.png",
       "type": "image/png",
       "sizes": "512x512"
     }

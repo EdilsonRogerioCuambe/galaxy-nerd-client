@@ -20,6 +20,7 @@ import { InstructorPrivateRoutes } from './pages/private/instructor'
 import { InstructorDashboard } from './pages/dashboard/instructor'
 import { InstructorAddTopicsToCourse } from './pages/add-topic'
 import { InstructorAddLessonsToCourse } from './pages/add-lesson'
+import { InstructorUpdatePassword } from './pages/update-password/instructor'
 import { RegisterAdmin } from './pages/register/admin'
 import { RegisterStudent } from './pages/register/student'
 import { StudentLogin } from './pages/login/student'
@@ -30,6 +31,7 @@ import { Quizzes } from './pages/quizzes-page'
 import { StudentProfile } from './pages/profile'
 import { ProblemPage } from './pages/problem-page'
 import { InstructorAddProblemSet } from './pages/add-problem-set'
+import { StudantUpdatePassword } from './pages/update-password/studant'
 
 const App = () => {
   Aos.init()
@@ -61,7 +63,10 @@ const App = () => {
         <Route path="/courses-list" element={<CoursesLists />} />
         <Route path="/categories" element={<Categories />} />
         <Route path="/challenge/:slug" element={<Quizzes />} />
-
+        <Route
+          path="/studant-update-password"
+          element={<StudantUpdatePassword />}
+        />
         <Route path="/" element={<AdminPrivateRoutes />}>
           <Route path="admin-dashboard" element={<AdminDashboard />} />
           <Route path="admin-categories" element={<AdminCategories />} />
@@ -92,6 +97,10 @@ const App = () => {
           <Route
             path="instructor-add-problem-set"
             element={<InstructorAddProblemSet />}
+          />
+          <Route
+            path="instructor-update-password"
+            element={<InstructorUpdatePassword />}
           />
         </Route>
         <Route path="/profile" element={<StudentProfile />} />

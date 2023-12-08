@@ -51,20 +51,21 @@ export function InstructorUpdatePassword() {
     handlePasswordRequirements(event.target.value)
   }
 
+  console.log(instructor?.id)
+
   const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
 
     if (!password) {
       message.error('Preencha todos os campos')
     }
+
     try {
-      const formData = new FormData()
-
-      formData.append('password', password)
-
       const response = await updateInstructor({
         id: instructor?.id,
-        body: formData,
+        body: {
+          password,
+        },
       })
 
       if ('data' in response && response.data.instructor) {

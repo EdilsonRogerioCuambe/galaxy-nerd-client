@@ -23,8 +23,10 @@ interface ICourse {
 
 export function InstructorDashboard() {
   const { data: categories } = useGetCategoriesQuery({})
-  const { instructor } = useSelector((state: RootState) => state.instructorAuth)
-  const { data: instructorData } = useGetInstructorQuery(instructor?.id || '')
+  const { instructor } = useSelector(
+    (state: RootState) => state?.instructorAuth,
+  )
+  const { data: instructorData } = useGetInstructorQuery(instructor?.id)
 
   const data = [
     {
@@ -55,7 +57,9 @@ export function InstructorDashboard() {
   return (
     <InstructorSideBar>
       <div className="flex-betweens gap-2">
-        <h2 className="text-xl font-bold">Dashboard</h2>
+        <h2 className="text-xl font-bold">
+          Seja bem vindo, {instructor?.name}
+        </h2>
       </div>
       <div className="grid sm:grid-cols-2 lg:grid-col-3 gap-6 mt-4">
         {data.map((item, index) => (

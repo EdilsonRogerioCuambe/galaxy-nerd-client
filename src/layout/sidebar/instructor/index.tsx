@@ -44,23 +44,13 @@ export function InstructorSideBar({ children }: { children: React.ReactNode }) {
       icon: <CiSquareQuestion className="w-6 h-6" />,
     },
     {
-      title: 'Usuários',
-      link: '/admin-users',
-      icon: <FaUsers className="w-6 h-6" />,
-    },
-    {
       title: 'Atualizar Perfil',
       link: '/admin-update-profile',
       icon: <FaUsers className="w-6 h-6" />,
     },
-    // {
-    //   title: 'Favoritos',
-    //   link: '/admin-favoritos',
-    //   icon: <FaHeart className="w-6 h-6" />,
-    // },
     {
       title: 'Mudar Senha',
-      link: '/admin-update-password',
+      link: '/instructor-update-password',
       icon: <RiLockPasswordLine className="w-6 h-6" />,
     },
   ]

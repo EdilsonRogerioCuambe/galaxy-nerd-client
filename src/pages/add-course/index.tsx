@@ -25,6 +25,7 @@ import Select from 'react-select'
 import { message } from 'antd'
 import { useSelector } from 'react-redux'
 import { RootState } from '../../store'
+import axios from 'axios'
 
 interface ICategories {
   id: string
@@ -32,195 +33,247 @@ interface ICategories {
   name: string
 }
 
+const GOOGLE_CLIENT_ID =
+  '652659912678-el8asn8a25nrggdas194phv9710o9b43.apps.googleusercontent.com'
+const GOOGLE_CLIENT_SECRET = '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'
+
 export function AddCourse() {
-  const { instructor } = useSelector((state: RootState) => state.instructorAuth)
-  const [imagePreview, setImagePreview] = useState<string | null>(null)
-  const [thumbnailPreview, setThumbnailPreview] = useState<string | null>(null)
-  const { data: categories } = useGetCategoriesQuery({})
-  const [createCourse, { isLoading, isSuccess }] = useCreateCourseMutation({})
-  const [title, setTitle] = useState<string>('')
-  const [shortDescription, setShortDescription] = useState<string>('')
-  const [languages, setLanguages] = useState<string[]>([])
-  const [price, setPrice] = useState<string>('')
-  const [image, setImage] = useState<string | null>(null)
-  const [thumbnail, setThumbnail] = useState<string | null>(null)
-  const [level, setLevel] = useState<'Básico' | 'Intermediário' | 'Avançado'>(
-    'Básico',
+  const { instructor, instructorToken, googleToken } = useSelector(
+    (state: RootState) => state.instructorAuth,
   )
-  const [duration, setDuration] = useState<string>('')
-  const editorRef = useRef<EditorJS | null>(null)
+  // const [imagePreview, setImagePreview] = useState<string | null>(null)
+  // const [thumbnailPreview, setThumbnailPreview] = useState<string | null>(null)
+  // const { data: categories } = useGetCategoriesQuery({})
+  // const [createCourse, { isLoading, isSuccess }] = useCreateCourseMutation({})
+  // const [title, setTitle] = useState<string>('')
+  // const [shortDescription, setShortDescription] = useState<string>('')
+  // const [languages, setLanguages] = useState<string[]>([])
+  // const [price, setPrice] = useState<string>('')
+  // const [image, setImage] = useState<string | null>(null)
+  // const [thumbnail, setThumbnail] = useState<string | null>(null)
+  // const [level, setLevel] = useState<'Básico' | 'Intermediário' | 'Avançado'>(
+  //   'Básico',
+  // )
+  // const [duration, setDuration] = useState<string>('')
+  // const editorRef = useRef<EditorJS | null>(null)
 
-  const initEditor = () => {
-    const editor = new EditorJS({
-      holder: 'editorjs',
-      minHeight: 150,
-      onReady: () => {
-        editorRef.current = editor
-      },
-      tools: {
-        header: {
-          class: Header,
-          config: {
-            placeholder: 'Digite um título',
-            levels: [1, 2, 3, 4, 5, 6],
-            defaultLevel: 3,
-          },
-        },
-        list: {
-          class: List,
-          inlineToolbar: true,
-        },
-        embed: {
-          class: Embed,
-          inlineToolbar: true,
-          config: {
-            services: {
-              youtube: true,
-              coub: true,
-            },
-          },
-        },
-        image: {
-          class: Image,
-          config: {
-            endpoints: {
-              byFile: 'http://localhost:3333/images',
-              byUrl: 'http://localhost:3333/images',
-            },
-          },
-        },
-        table: {
-          class: Table,
-          inlineToolbar: true,
-        },
-        simpleImage: {
-          class: SimpleImage,
-          inlineToolbar: true,
-        },
-        quote: {
-          class: Quote,
-          inlineToolbar: true,
-          config: {
-            quotePlaceholder: 'Digite uma citação',
-            captionPlaceholder: 'Autor da citação',
-          },
-        },
-        warning: {
-          class: Warning,
-          inlineToolbar: true,
-          shortcut: 'CMD+SHIFT+W',
-          config: {
-            titlePlaceholder: 'Digite um título',
-            messagePlaceholder: 'Digite uma mensagem',
-          },
-        },
-        code: {
-          class: Code,
-          inlineToolbar: true,
-        },
-        linkTool: {
-          class: LinkTool,
-          config: {
-            endpoint: 'http://localhost:3333/images',
-          },
-        },
-        raw: {
-          class: Raw,
-          inlineToolbar: true,
-        },
-        marker: {
-          class: Marker,
-          shortcut: 'CMD+SHIFT+M',
-        },
-        delimiter: {
-          class: Delimiter,
-          shortcut: 'CMD+SHIFT+M',
-        },
-        inlineCode: {
-          class: InlineCode,
-          shortcut: 'CMD+SHIFT+M',
-        },
-        paragraph: {
-          class: Paragraph,
-          inlineToolbar: true,
-        },
-      },
-    })
-  }
+  const [description, setDescription] = useState<string>('')
+  const [descriptionHeading, setDescriptionHeading] = useState<string>('')
+  const [room, setRoom] = useState<string>('')
+  const [ownerId, setOwnerId] = useState<string>(instructor?.id)
+  const [courseState, setCourseState] = useState<string>('')
+  const [name, setName] = useState<string>('')
 
-  useEffect(() => {
-    if (editorRef.current === null) {
-      initEditor()
-    }
+  // name: z.string(),
+  //   section: z.string(),
+  //   descriptionHeading: z.string(),
+  //   description: z.string(),
+  //   room: z.string(),
+  //   ownerId: z.string(),
+  //   courseState: z.string(),
 
-    return () => {
-      editorRef?.current?.destroy()
-      editorRef.current = null
-    }
-  }, [])
+  // const initEditor = () => {
+  //   const editor = new EditorJS({
+  //     holder: 'editorjs',
+  //     minHeight: 150,
+  //     onReady: () => {
+  //       editorRef.current = editor
+  //     },
+  //     tools: {
+  //       header: {
+  //         class: Header,
+  //         config: {
+  //           placeholder: 'Digite um título',
+  //           levels: [1, 2, 3, 4, 5, 6],
+  //           defaultLevel: 3,
+  //         },
+  //       },
+  //       list: {
+  //         class: List,
+  //         inlineToolbar: true,
+  //       },
+  //       embed: {
+  //         class: Embed,
+  //         inlineToolbar: true,
+  //         config: {
+  //           services: {
+  //             youtube: true,
+  //             coub: true,
+  //           },
+  //         },
+  //       },
+  //       image: {
+  //         class: Image,
+  //         config: {
+  //           endpoints: {
+  //             byFile: 'http://localhost:3333/images',
+  //             byUrl: 'http://localhost:3333/images',
+  //           },
+  //         },
+  //       },
+  //       table: {
+  //         class: Table,
+  //         inlineToolbar: true,
+  //       },
+  //       simpleImage: {
+  //         class: SimpleImage,
+  //         inlineToolbar: true,
+  //       },
+  //       quote: {
+  //         class: Quote,
+  //         inlineToolbar: true,
+  //         config: {
+  //           quotePlaceholder: 'Digite uma citação',
+  //           captionPlaceholder: 'Autor da citação',
+  //         },
+  //       },
+  //       warning: {
+  //         class: Warning,
+  //         inlineToolbar: true,
+  //         shortcut: 'CMD+SHIFT+W',
+  //         config: {
+  //           titlePlaceholder: 'Digite um título',
+  //           messagePlaceholder: 'Digite uma mensagem',
+  //         },
+  //       },
+  //       code: {
+  //         class: Code,
+  //         inlineToolbar: true,
+  //       },
+  //       linkTool: {
+  //         class: LinkTool,
+  //         config: {
+  //           endpoint: 'http://localhost:3333/images',
+  //         },
+  //       },
+  //       raw: {
+  //         class: Raw,
+  //         inlineToolbar: true,
+  //       },
+  //       marker: {
+  //         class: Marker,
+  //         shortcut: 'CMD+SHIFT+M',
+  //       },
+  //       delimiter: {
+  //         class: Delimiter,
+  //         shortcut: 'CMD+SHIFT+M',
+  //       },
+  //       inlineCode: {
+  //         class: InlineCode,
+  //         shortcut: 'CMD+SHIFT+M',
+  //       },
+  //       paragraph: {
+  //         class: Paragraph,
+  //         inlineToolbar: true,
+  //       },
+  //     },
+  //   })
+  // }
 
-  const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setTitle(event.target.value)
-  }
+  // useEffect(() => {
+  //   if (editorRef.current === null) {
+  //     initEditor()
+  //   }
 
-  const handleShortDescriptionChange = (
-    event: React.ChangeEvent<HTMLTextAreaElement>,
+  //   return () => {
+  //     editorRef?.current?.destroy()
+  //     editorRef.current = null
+  //   }
+  // }, [])
+
+  // const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  //   setTitle(event.target.value)
+  // }
+
+  // const handleShortDescriptionChange = (
+  //   event: React.ChangeEvent<HTMLTextAreaElement>,
+  // ) => {
+  //   setShortDescription(event.target.value)
+  // }
+
+  // const handlePriceChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  //   setPrice(event.target.value)
+  // }
+
+  // const handleDurationChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  //   setDuration(event.target.value)
+  // }
+
+  // const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+  //   event.preventDefault()
+
+  //   try {
+  //     // await createCourse({
+  //     //   instructorId: instructor?.id,
+  //     //   title,
+  //     //   shortDescription,
+  //     //   description: JSON.stringify(await editorRef.current?.save()),
+  //     //   price,
+  //     //   duration,
+  //     //   level,
+  //     //   languages,
+  //     //   image,
+  //     //   thumbnail,
+  //     // }).unwrap()
+  //     // window.location.href = 'instructor-add-topics-to-course'
+  //     // get google token from local storage
+  //     // console.log(res)
+  //   } catch (error) {
+  //     console.error(error)
+  //     if (typeof error === 'object' && error !== null && 'data' in error) {
+  //       const errorData = error.data as { message?: string; error?: string }
+  //       message.error(
+  //         errorData.message || errorData.error || 'An error occurred',
+  //       )
+  //     }
+  //   }
+  // }
+
+  // if (isLoading) {
+  //   message.loading('Carregando...')
+  // }
+
+  // if (isSuccess) {
+  //   message.success('Curso criado com sucesso!')
+  // }
+
+  // create course in classroom
+
+  const handleCreateCourse = async (
+    event: React.FormEvent<HTMLFormElement>,
   ) => {
-    setShortDescription(event.target.value)
-  }
-
-  const handlePriceChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setPrice(event.target.value)
-  }
-
-  const handleDurationChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setDuration(event.target.value)
-  }
-
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
 
     try {
-      await createCourse({
-        instructorId: instructor?.id,
-        title,
-        shortDescription,
-        description: JSON.stringify(await editorRef.current?.save()),
-        price,
-        duration,
-        level,
-        languages,
-        image,
-        thumbnail,
-      }).unwrap()
-      window.location.href = 'instructor-add-topics-to-course'
+      const res = await axios.post(
+        'http://localhost:3333/classroom/create-course',
+        {
+          name,
+          section: '2021.2',
+          descriptionHeading,
+          description,
+          room,
+          ownerId,
+          courseState,
+          googleToken,
+        },
+      )
+      console.log(res)
     } catch (error) {
       console.error(error)
-      if (typeof error === 'object' && error !== null && 'data' in error) {
-        const errorData = error.data as { message?: string; error?: string }
-        message.error(
-          errorData.message || errorData.error || 'An error occurred',
-        )
-      }
     }
-  }
-
-  if (isLoading) {
-    message.loading('Carregando...')
-  }
-
-  if (isSuccess) {
-    message.success('Curso criado com sucesso!')
   }
 
   return (
     <>
       <InstructorSideBar>
         <div className="flex flex-col gap-2">
-          <h2 className="text-xl font-bold">Adicionar curso</h2>
+          <h2 className="text-xl font-bold">
+            {instructor?.name} adicionar curso
+          </h2>
           <div className="w-full grid md:grid-cols-1 gap-6">
-            <form onSubmit={handleSubmit}>
-              <div className="flex flex-row gap-4 my-2">
+            <form className="flex flex-col gap-4" onSubmit={handleCreateCourse}>
+              {/** <div className="flex flex-row gap-4 my-2">
                 <input
                   type="file"
                   title="Imagem"
@@ -417,6 +470,60 @@ export function AddCourse() {
                     )
                   }
                 }}
+              /> */}
+              <Input
+                type="text"
+                placeholder="Nome"
+                value={name}
+                onChange={(event) => setName(event.target.value)}
+                bg
+                label="Nome"
+                name="name"
+              />
+              <Input
+                type="text"
+                placeholder="Título da descrição"
+                value={descriptionHeading}
+                onChange={(event) => setDescriptionHeading(event.target.value)}
+                bg
+                label="Título da descrição"
+                name="descriptionHeading"
+              />
+              <Input
+                type="text"
+                placeholder="Descrição"
+                value={description}
+                onChange={(event) => setDescription(event.target.value)}
+                bg
+                label="Descrição"
+                name="description"
+              />
+              <Input
+                type="text"
+                placeholder="Sala"
+                value={room}
+                onChange={(event) => setRoom(event.target.value)}
+                bg
+                label="Sala"
+                name="room"
+              />
+              <Input
+                type="text"
+                placeholder="Id do dono"
+                value={ownerId}
+                onChange={(event) => setOwnerId(event.target.value)}
+                bg
+                label="Id do dono"
+                name="ownerId"
+              />
+              <Input
+                type="text"
+                placeholder="Estado do curso"
+                value={courseState}
+                onChange={(event) => setCourseState(event.target.value)}
+                bg
+                label="Estado do curso"
+                name="courseState"
               />
               <button
                 type="submit"

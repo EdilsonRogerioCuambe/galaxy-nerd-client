@@ -48,6 +48,12 @@ export const adminsApiSlice = adminApiSlice.injectEndpoints({
         method: 'PATCH',
       }),
     }),
+    authenticateUsingGoogle: builder.mutation({
+      query: () => ({
+        url: `${ADMINS_API_ENDPOINT}/auth/google`,
+        method: 'POST',
+      }),
+    }),
   }),
 })
 
@@ -59,4 +65,5 @@ export const {
   useDeleteAdminMutation,
   useLoginMutation,
   useRefreshTokenMutation,
+  useAuthenticateUsingGoogleMutation,
 } = adminsApiSlice

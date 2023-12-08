@@ -9,6 +9,10 @@ import { setCredentials } from '../../../slices/admin/authSlice'
 import { RootState } from '../../../store'
 import { useFormik } from 'formik'
 import { message } from 'antd'
+import { useGoogleLogin } from '@react-oauth/google'
+import logo from '../../../assets/images/logo.png'
+import axios from 'axios'
+import googleLogo from '../../../assets/images/google.png'
 
 interface FormValues {
   email: string
@@ -20,6 +24,39 @@ export function AdminLogin() {
   const navigate = useNavigate()
   const [login, { isLoading, isSuccess }] = useLoginMutation()
   const { user } = useSelector((state: RootState) => state.adminAuth)
+
+  const googleLogin = useGoogleLogin({
+    flow: 'auth-code',
+    onSuccess: async (codeResponse: any) => {
+      try {
+        const tokens = await axios.post(
+          'http://localhost:3333/admin/auth/google',
+          {
+            code: codeResponse.code,
+          },
+        )
+
+        console.log(tokens.data.token)
+
+        dispatch(
+          setCredentials({
+            token: tokens.data.token,
+            user: tokens.data.admin,
+          }),
+        )
+
+        navigate('/')
+      } catch (err) {
+        console.error(err)
+        if (typeof err === 'object' && err !== null && 'data' in err) {
+          const errorData = err.data as { message?: string; error?: string }
+          message.error(
+            errorData.message || errorData.error || 'An error occurred',
+          )
+        }
+      }
+    },
+  })
 
   useEffect(() => {
     if (user?.ROLE === 'ADMIN') {
@@ -35,7 +72,6 @@ export function AdminLogin() {
     onSubmit: async (values) => {
       try {
         const response = await login(values).unwrap()
-
         dispatch(
           setCredentials({
             token: response.token,
@@ -71,8 +107,7 @@ export function AdminLogin() {
       <div className="max-w-5xl mx-auto px-2 mt-8 flex-colo">
         <div className="w-full 2xl:w-2/5 gap-8 flex-colo p-8 md:3/5 bg-secondary rounded-lg">
           <span className="uppercase text-[#c4c4cc] text-4xl font-extrabold">
-            <FiLogIn className="inline-block mr-2" />
-            GALAXY NERD
+            <img src={logo} alt="Digital College" className="w-40" />
           </span>
           <Input
             name="email"
@@ -97,10 +132,27 @@ export function AdminLogin() {
             }}
             disabled={isLoading}
             type="submit"
-            className="bg-quinary text-[#e1e1e6] w-full py-2 rounded-lg hover:bg-senary transitions duration-300"
+            className="bg-quinary text-[#e1e1e6] w-full py-2 rounded-lg hover:bg-pink-400 transitions duration-300"
           >
             Entrar
           </button>
+          <div className="flex items-center justify-between">
+            <button
+              onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
+                e.preventDefault()
+                googleLogin()
+              }}
+              type="submit"
+              className="bg-white text-[#29292e] w-full py-2 px-2 rounded-lg transitions duration-300 align-middle flex items-center justify-center hover:bg-[#e1e1e6]"
+            >
+              <img
+                src={googleLogo}
+                alt="Google"
+                className="w-5 mr-2 inline-block"
+              />
+              Entrar com o Google
+            </button>
+          </div>
           <p className="text-[#c4c4cc]">
             Novo por aqui?{' '}
             <Link to="/register" className="text-quinary">

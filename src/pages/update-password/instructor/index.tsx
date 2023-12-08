@@ -51,8 +51,6 @@ export function InstructorUpdatePassword() {
     handlePasswordRequirements(event.target.value)
   }
 
-  console.log(instructor?.id)
-
   const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
 

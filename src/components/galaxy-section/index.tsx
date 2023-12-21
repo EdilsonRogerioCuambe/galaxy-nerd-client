@@ -11,11 +11,11 @@ export function GalaxySection() {
       <div className="rounded-lg bg-secondary">
         <div className="flex flex-col items-center justify-center py-10 px-4">
           <h2 className="text-2xl font-bold capitalize text-center text-[#e1e1e6]">
-            O que nós temos para você
+            O Que Você Vai Aprender
           </h2>
           <Swiper
             spaceBetween={30}
-            slidesPerView={3}
+            slidesPerView={1}
             loop={true}
             speed={2500}
             autoplay={{ delay: 2000 }}

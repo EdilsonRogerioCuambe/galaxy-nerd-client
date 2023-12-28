@@ -9,7 +9,7 @@ export function GalaxySection() {
   return (
     <>
       <div className="rounded-lg bg-secondary">
-        <div className="flex flex-col items-center justify-center py-10 px-4">
+        <div className="flex flex-col items-center justify-center py-10 px-4 ">
           <h2 className="text-2xl font-bold capitalize text-center text-[#e1e1e6]">
             O Que Você Vai Aprender
           </h2>
@@ -20,7 +20,7 @@ export function GalaxySection() {
             speed={2500}
             autoplay={{ delay: 2000 }}
             modules={[Autoplay]}
-            className="w-full mt-10 justify-center flex gap-10"
+            className="w-full mt-10 justify-center flex gap-10 "
           >
             {categories?.categories?.map((category: any) => (
               <SwiperSlide key={category.id}>

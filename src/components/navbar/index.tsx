@@ -65,30 +65,16 @@ export function NavigationBar() {
   return (
     <>
       <div className="bg-secondary shadow-md sticky top-0 z-20">
-        <div className="container mx-auto py-6 px-2 lg:grid gap-10 grid-cols-7 justify-between items-center">
+        <div className="container mx-auto py-6 px-2 lg:grid gap-10 grid-cols-5 justify-between items-center border-b-2 border-quinary pb-10">
           <div className="col-span-1 hidden lg:flex justify-between items-center">
             <Link to="/" className="flex items-center">
               <img src={logo} alt="logo" className="w-18 object-cover h-12" />
             </Link>
           </div>
-          <div className="col-span-3">
-            <form className="w-full text-sm bg-main rounded flex-betweens gap-4">
-              <button
-                title="Pesquisar"
-                type="submit"
-                className="bg-quinary
-                text-white w-12 h-12 flex-colo rounded"
-              >
-                <BiSearchAlt2 className="w-6 h-6" />
-              </button>
-              <input
-                type="text"
-                placeholder="Pesquise por cursos, categorias ou instrutores..."
-                className="font-medium placeholder:text-[#c4c4cc] text-sm w-11/12 h-12 bg-transparent focus:outline-none text-[#c4c4cc]"
-              />
-            </form>
-          </div>
-          <div className="col-span-3 uppercase text-md text-[#e1e1e6] font-extrabold hidden xl:gap-14 2xl:gap-20 justify-between lg:flex xl:justify-end items-center">
+          <div className="col-span-4 uppercase text-md text-[#e1e1e6] font-extrabold hidden xl:gap-14 2xl:gap-20 justify-end lg:flex xl:justify-end items-center">
+            <NavLink className={Hover} to="https://calendar.google.com/">
+              calendario
+            </NavLink>
             <NavLink className={Hover} to="/courses">
               Cursos
             </NavLink>

@@ -301,7 +301,7 @@ export function AddCourse() {
                 Descrição curta
               </label>
               <textarea
-                className="w-full mt-2 px-6 py-4 border bg-main border-none rounded text-text resize-none h-32"
+                className="w-full mt-2 px-6 py-4  bg-main -none rounded text-text resize-none h-32"
                 placeholder="Descrição curta"
                 value={shortDescription}
                 onChange={handleShortDescriptionChange}
@@ -313,7 +313,7 @@ export function AddCourse() {
               </label>
               <div
                 id="editorjs"
-                className="text-[#c4c4cc] h-96 overflow-y-auto bg-main border border-border rounded p-4"
+                className="text-[#c4c4cc] h-96 overflow-y-auto bg-main  - rounded p-4"
               />
               <Input
                 type="text"
@@ -337,7 +337,7 @@ export function AddCourse() {
                 Nível
               </label>
               <select
-                className="w-full mt-2 px-6 py-4 border bg-main border-border rounded text-text"
+                className="w-full mt-2 px-6 py-4  bg-main - rounded text-text"
                 onChange={(event) => {
                   const value = event.target.value
                   if (
@@ -373,9 +373,7 @@ export function AddCourse() {
                     ...base,
                     backgroundColor: 'transparent',
                     color: '#C4C4CC',
-                    border: '1px solid #3C3C3C',
                     marginTop: '0.5rem',
-                    borderRadius: '0.5rem',
                     minHeight: '3rem',
                   }),
                   menu: (base) => ({

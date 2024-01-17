@@ -88,7 +88,7 @@ export const Input = ({
           placeholder={placeholder}
           defaultValue={defaultValue}
           onChange={onChange}
-          className={`w-full text-sm mt-2 p-4 rounded text-[#c4c4cc] border-quaternary border-2 ${
+          className={`w-full text-sm mt-2 p-4 rounded text-[#c4c4cc]  ${
             bg ? 'bg-main' : 'bg-secondary'
           }`}
         />

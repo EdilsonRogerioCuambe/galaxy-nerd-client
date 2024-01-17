@@ -61,6 +61,8 @@ export function AddQuiz() {
   const { data: instructorData } = useGetInstructorQuery(instructor?.id || '')
   const { data: course } = useGetCourseQuery(selectedCourse)
 
+  const isFormValid = selectedCourse && selectedTopic && selectedLesson
+
   return (
     <InstructorSideBar>
       <div className="flex flex-col gap-6">
@@ -124,15 +126,17 @@ export function AddQuiz() {
           </div>
 
           <div className="flex flex-col gap-2">
-            <button
-              type="button"
-              title="Adicionar aula"
-              className="flex items-center gap-2 bg-main text-[#c4c4cc] px-4 py-2 rounded-lg"
-              onClick={() => setOpen(true)}
-            >
-              <FaPlus />
-              Adicionar Quiz
-            </button>
+            {isFormValid && (
+              <button
+                type="button"
+                title="Adicionar Quiz"
+                className="flex items-center gap-2 bg-main text-[#c4c4cc] px-4 py-2 rounded-lg "
+                onClick={() => setOpen(true)}
+              >
+                <FaPlus />
+                Adicionar Quiz
+              </button>
+            )}
           </div>
 
           <QuizModal open={open} setOpen={setOpen} lessonId={selectedLesson} />

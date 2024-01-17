@@ -9,11 +9,8 @@ export function Home() {
   return (
     <Layout>
       <div className="bg-main mx-auto min-h-screen px-2">
-        <Banner />
-        <PopularCourses />
         <GalaxySection />
-        <Promos />
-        <MostRatedCourses />
+        <PopularCourses />
       </div>
     </Layout>
   )

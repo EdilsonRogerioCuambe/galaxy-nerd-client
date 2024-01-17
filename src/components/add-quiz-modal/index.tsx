@@ -81,6 +81,9 @@ export function QuizModal({ open, setOpen, lessonId }: IModalTopicsProps) {
   if (isSuccess) {
     message.success('Quiz adicionado com sucesso!')
     setOpen(false)
+    setTimeout(() => {
+      location.reload()
+    }, 1000)
   }
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -145,7 +148,7 @@ export function QuizModal({ open, setOpen, lessonId }: IModalTopicsProps) {
 
           <div className="flex flex-col gap-2">
             <Input
-              label="Resposta do quiz"
+              label="comentario do professor"
               name="answer"
               type="text"
               placeholder="Resposta"
@@ -159,7 +162,7 @@ export function QuizModal({ open, setOpen, lessonId }: IModalTopicsProps) {
               label="Pontos"
               name="points"
               type="number"
-              placeholder="Pontos"
+              placeholder="selecione quantos pontos o aluno vai ganhar ao acertar o quiz"
               value={points}
               onChange={handlePoints}
             />
@@ -174,7 +177,7 @@ export function QuizModal({ open, setOpen, lessonId }: IModalTopicsProps) {
               name="quizOptions"
               id="quizOptions"
               placeholder="Opções"
-              className="border border-border rounded-lg px-4 py-2 bg-main text-[#c4c4cc]"
+              className=" rounded-lg px-4 py-2 bg-main text-[#c4c4cc]"
               value={newQuizOption}
               onChange={(e) => setNewQuizOption(e.target.value)}
             />
@@ -206,7 +209,7 @@ export function QuizModal({ open, setOpen, lessonId }: IModalTopicsProps) {
           <div className="flex flex-col gap-2">
             <button
               type="submit"
-              title="Adicionar aula"
+              title="Adicionar quiz"
               className="flex items-center gap-2 bg-main text-[#c4c4cc] px-4 py-2 rounded-lg"
             >
               Adicionar Quiz
